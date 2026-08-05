@@ -1,0 +1,82 @@
+# Rollen-Registry v0 (Sprint 0) — Besetzungstyp je Rolle und Aufgaben-Typ.
+# Besetzung: script | ki | mensch. Eskalationskette je Aufgabe: script -> ki -> mensch.
+# Status: draft = Rollenkarte noch nicht erstellt, active = einsatzbereit.
+
+roles:
+  PL:
+    name: Projektleiter
+    processes: [MAN.3]
+    besetzung: ki
+    model_tier: strong        # Planung/Priorisierung braucht Urteilsvermögen
+    status: draft             # Rollenkarte v1 in Sprint 1
+  CM:
+    name: Konfigurationsmanager
+    processes: [SUP.8]
+    besetzung: ki
+    model_tier: standard
+    script_tasks: [baseline-manifest, repo-sync, backup-check, template-sync]
+    status: draft
+  COACH:
+    name: Prozess-Coach
+    processes: [PIM.3, MAN.6]
+    besetzung: ki
+    model_tier: strong
+    script_tasks: [kpi-erhebung, feedback-zuordnung]
+    status: draft
+  RM:
+    name: Requirements-Manager
+    processes: [SYS.1, SWE.1]
+    besetzung: ki
+    model_tier: strong
+    status: planned           # Sprint 2
+  QM:
+    name: Qualitätsmanager
+    processes: [SUP.1]
+    besetzung: ki
+    model_tier: strong
+    status: planned           # Sprint 2
+  PROB:
+    name: Problemmanager
+    processes: [SUP.9]
+    besetzung: ki
+    model_tier: standard
+    script_tasks: [ticket-routing, trend-report]
+    status: planned           # Sprint 2
+  CHG:
+    name: Change-Manager
+    processes: [SUP.10]
+    besetzung: ki
+    model_tier: standard
+    status: planned           # Sprint 2
+  ARCH:
+    name: Architekt
+    processes: [SWE.2]
+    besetzung: ki
+    model_tier: strong
+    status: planned           # Sprint 3
+  DEV:
+    name: Entwickler
+    processes: [SWE.3]
+    besetzung: ki
+    model_tier: strong
+    status: planned           # Sprint 3
+  TEST:
+    name: Verifikationsingenieur
+    processes: [SWE.4, SWE.5, SWE.6]
+    besetzung: ki
+    model_tier: standard
+    script_tasks: [testlauf, coverage-report]
+    status: planned           # Sprint 3
+  REL:
+    name: Release-Manager
+    processes: [SPL.2]
+    besetzung: ki
+    wahrgenommen_durch: CM    # Stufe 1
+    script_tasks: [release-paket, katalog-eintrag]
+    status: planned           # Sprint 5
+  MENSCH:
+    name: Auftraggeber / Eskalationsinstanz
+    besetzung: mensch
+    kontakt: geraldine.john90@gmail.com
+    gates: [G0, G1, G2, G3, G4]
+    status: active

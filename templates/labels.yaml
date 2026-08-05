@@ -1,0 +1,52 @@
+# Label-Schema für alle Projekt-Repos (Sync per Skript über GitLab-API)
+
+type:
+  - { name: "type::task",            color: "#428BCA" }
+  - { name: "type::problem",         color: "#D9534F" }   # SUP.9
+  - { name: "type::change-request",  color: "#F0AD4E" }   # SUP.10
+  - { name: "type::decision-request", color: "#7057FF" }  # HITL
+  - { name: "type::clarification",   color: "#00B4D8" }
+  - { name: "type::finding",         color: "#E83E8C" }   # SUP.1
+  - { name: "type::feedback",        color: "#5CB85C" }
+  - { name: "type::skriptifizierung", color: "#6C757D" }
+
+prozess:
+  - { name: "prozess::man3",  color: "#1F6FEB" }
+  - { name: "prozess::sup1",  color: "#E83E8C" }
+  - { name: "prozess::sup8",  color: "#8250DF" }
+  - { name: "prozess::sup9",  color: "#D9534F" }
+  - { name: "prozess::sup10", color: "#F0AD4E" }
+  - { name: "prozess::swe1",  color: "#2DA44E" }
+  - { name: "prozess::swe2",  color: "#2DA44E" }
+  - { name: "prozess::swe3",  color: "#2DA44E" }
+  - { name: "prozess::swe4",  color: "#2DA44E" }
+  - { name: "prozess::swe5",  color: "#2DA44E" }
+  - { name: "prozess::swe6",  color: "#2DA44E" }
+  - { name: "prozess::spl2",  color: "#8250DF" }
+  - { name: "prozess::sys",   color: "#57606A" }
+  - { name: "prozess::pim3",  color: "#57606A" }
+
+status:
+  - { name: "status::in-analysis", color: "#BFD4F2" }
+  - { name: "status::in-progress", color: "#428BCA" }
+  - { name: "status::in-review",   color: "#F0AD4E" }
+  - { name: "status::blocked",     color: "#D9534F" }
+
+rolle:
+  - { name: "rolle::pl",    color: "#0B5394" }
+  - { name: "rolle::rm",    color: "#0B5394" }
+  - { name: "rolle::arch",  color: "#0B5394" }
+  - { name: "rolle::dev",   color: "#0B5394" }
+  - { name: "rolle::test",  color: "#0B5394" }
+  - { name: "rolle::qm",    color: "#0B5394" }
+  - { name: "rolle::cm",    color: "#0B5394" }
+  - { name: "rolle::prob",  color: "#0B5394" }
+  - { name: "rolle::chg",   color: "#0B5394" }
+  - { name: "rolle::coach", color: "#0B5394" }
+  - { name: "rolle::mensch", color: "#7057FF" }
+
+prio:
+  - { name: "prio::kritisch", color: "#B60205" }
+  - { name: "prio::hoch",     color: "#D93F0B" }
+  - { name: "prio::mittel",   color: "#FBCA04" }
+  - { name: "prio::gering",   color: "#C2E0C6" }
