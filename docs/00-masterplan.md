@@ -1,6 +1,6 @@
 # Umsetzungsplan: Halb-autonomes ASPICE-Projektteam („Virtual Engineering Team")
 
-**Version:** 0.4 (Entwurf; +Arbeitsteam, Lernzyklus, Rollen-Registry, Live-Sicht, Produktkatalog, Feedbackschleifen, verteilte Infrastruktur) · **Datum:** 2026-08-05 · **Autor:** Claude (Cowork) · **Auftraggeber:** Engelchen John
+**Version:** 0.6 (G0 erteilt; F1–F4 entschieden; +LLM-Provider-Modell Claude/Copilot/Ollama) · **Datum:** 2026-08-05 · **Autor:** Claude (Cowork) · **Auftraggeber:** Engelchen John
 **Status:** Zur Review durch den Auftraggeber
 
 ---
@@ -26,7 +26,7 @@ Zentrale Eigenschaften des Zielbilds:
 
 | # | Entscheidung | Gewählt | Begründung |
 |---|---|---|---|
-| E1 | Agent-Runtime | **Claude Agent SDK** (Python/TypeScript) | Rollen als Agent-Definitionen mit eigenem System-Prompt, Skills und Tools; Subagents und Hooks passen exakt zum Rollenmodell. Prozessbeschreibungen können als Skills hinterlegt und vom Team selbst weiterentwickelt werden. |
+| E1 | Agent-Runtime | **Claude Agent SDK** als Orchestrierungs-Backbone, darunter ein **LLM-Gateway mit drei Providern**: (1) Claude/Claude Code, (2) GitHub Copilot CLI, (3) Ollama (lokales LLM) — Details Kap. 5.8 | Rollen als Agent-Definitionen mit System-Prompt, Skills und Tools; die Ausführung je Aufgabe ist provider-agnostisch und wird nach Qualität, Kosten, Vertraulichkeit und Verfügbarkeit geroutet. |
 | E2 | Daten-/Tool-Backbone | **Bestehende Tools: Git + GitLab** (Repos, Issues, Merge Requests, CI/CD, Releases) | Baselines, Reviews, Traceability und Audit-Trail über bewährte Mechanismen; das Team baut Orchestrierung und Visualisierung *darüber*, nicht alles neu. |
 | E3 | ASPICE-Scope Stufe 1 | **SWE.1–SWE.6 + MAN.3, SUP.1, SUP.8, SUP.9, SUP.10** (+ SPL.2 leichtgewichtig); SYS.1/SYS.2 als Stub über die Systemrolle | Fokus Software-Entwicklung; System-Ebene wird als schlanke Durchreiche realisiert und später voll ausgeprägt. |
 | E4 | Dokumentationsform | Markdown im Claude-Projekt „Product Developer" + Git | Maschinen- und menschenlesbar, versionierbar, baseline-fähig. |
@@ -212,6 +212,24 @@ Sichten für den Menschen: (1) Projektübersicht mit Ampelstatus, Sprint-Fortsch
 
 **Betriebsregeln (CM verantwortet):** Geräteregister mit Inventar und Rechten ist Teil der CM-Tool-/Storage-Übersicht (SUP.8); neue Geräte werden per dokumentiertem Onboarding-Skript aufgenommen (Freigabe durch den Menschen als Gate — kein Gerät nimmt unbemerkt teil); Nodes patchen/aktualisieren sich über den Runner selbst; die Retro bewertet Auslastung und Engpässe der Nodes (KPI: Wartezeit von Aufgaben auf passende Nodes).
 
+### 5.8 LLM-Provider-Modell: Claude, GitHub Copilot CLI und Ollama
+
+Es gibt drei LLM-Arten im System — jede mit eigener Rolle im Gesamtbild, alle hinter einer gemeinsamen Schnittstelle:
+
+| Provider | Art | Stärken | Typischer Einsatz |
+|---|---|---|---|
+| **Claude** (Agent SDK / Claude Code) | Cloud-API, voll agentisch (Tools, Subagents, Skills, große Kontexte) | Höchste Qualität und Urteilsvermögen | Standardweg im Hub: PL-Planung, ARCH, QM-Bewertungen, RM, schwierige DEV-/TEST-Aufgaben; alles Gate-/Baseline-Relevante |
+| **GitHub Copilot CLI** | Cloud, agentisch im Repo/Terminal, **Abo-Flatrate** | Coding-Arbeit ohne API-Kosten pro Token; entlastet das Claude-Budget | DEV-Routineaufgaben auf Team-Nodes: Implementierung nach klarer Spezifikation, Refactorings, Testcode, Doku-Gerüste |
+| **Ollama** (lokales LLM auf Team-Nodes) | Lokal, offline-fähig, kostenlos, Daten verlassen das Gerät nicht | Datenschutz, Null-Kosten, Verfügbarkeit auch ohne Internet/Budget | Mechanische Textarbeit: Ticket-Vorklassifikation, Zusammenfassungen, Entwurfsprosa, Log-Analyse; vertrauliche Inhalte (F10) |
+
+**LLM-Gateway (platform/):** Einheitliche Schnittstelle `execute(rolle, aufgabe, kontext) → ergebnis` mit drei Executor-Plugins: `claude` (Agent SDK, headless), `copilot` (Copilot CLI im programmatischen Modus auf einem Repo-Checkout des Team-Nodes), `ollama` (lokale HTTP-API; text-only oder mit minimalem Tool-Loop). Jeder Executor liefert dasselbe Format zurück (Ergebnis, Artefakte/MR, Log, Kosten) — für Orchestrator, Tickets und Run-Registry ist der Provider nur ein Attribut.
+
+**Capability-Klassen und Routing-Kette:** Die Rollen-Registry gibt je Aufgaben-Typ die nötige Fähigkeitsklasse und eine Provider-Präferenzkette an: *agentic-full* (nur Claude), *agentic-repo* (Copilot oder Claude), *text-only* (Ollama, dann günstiges Claude-Modell). Beispiele: QM-Bewertung → Claude only; DEV-Task nach Spezifikation → Copilot → Claude; Ticket-Vorklassifikation → Ollama → Claude-cheap. Die vollständige Pyramide lautet damit: **Skript → Ollama (lokal, frei) → Copilot (Flatrate) → Claude (API-Budget) → Mensch.** Ist ein Provider nicht verfügbar (Node offline, Budget erschöpft, Abo fehlt), greift die Kette automatisch weiter — ein Budget-Stopp bedeutet keinen Stillstand: mechanische Arbeit läuft lokal weiter, nur urteilsintensive Arbeit wartet.
+
+**Team-Node-Integration:** Nodes melden ihre Provider als Fähigkeiten (Copilot CLI authentifiziert? Ollama installiert, mit welchen Modellen/VRAM?); der Orchestrator plant providerbezogen — eine Copilot-Aufgabe geht nur an einen Node mit gh-Login, eine Ollama-Aufgabe nur an einen Node mit passendem Modell. Der Hub selbst nutzt primär Claude.
+
+**Qualitätssicherung provider-unabhängig:** Es gelten dieselben DoD, Reviews und QM-Checks, egal welcher Provider gearbeitet hat — ein Copilot- oder Ollama-Ergebnis wird wie jedes andere durch eine andere Rolle reviewt (Review-Instanz läuft auf Claude oder beim Menschen). Die Leistung je Provider und Aufgaben-Typ wird gemessen (First-Pass-Yield, Nacharbeit, Kosten) und über Gold-Beispiele verglichen; die Routing-Ketten werden datenbasiert per Prozess-CR nachgeschärft — Provider-Wahl ist Lernzyklus-Gegenstand, kein Dogma.
+
 ## 6. Human-in-the-Loop-Konzept
 
 ### 6.1 Feste Gates (Mensch muss freigeben)
@@ -274,6 +292,7 @@ Detaillierte P0-Beschreibung: `02-initialprojekt-p0.md`.
 10. **F10 Vertraulichkeit:** Dürfen Projektinhalte in Cloud-Dienste (GitLab.com, Anthropic API), oder gibt es Inhalte, die lokal bleiben müssen?
 11. **F11 Arbeitsteam:** Für welche Fachdomäne(n) ist das spätere Mensch/KI-Arbeitsteam gedacht, und in welchem Verhältnis steht es zum ASPICE-Team — nutzt es (a) die entwickelten Produkte fachlich, (b) dieselbe Plattform für eigene (Nicht-Entwicklungs-)Projekte, oder (c) beides? Und welche menschlichen Experten außer dir sollen Rollen übernehmen können?
 12. **F12 Geräte-Landschaft:** Welche Geräte sollen als Team-Nodes mitwirken (wie viele Laptops/PCs, Betriebssysteme, besondere Fähigkeiten wie GPU oder angeschlossene Hardware)? Gibt es ein Gerät, das als dauerhaft laufender Hub dienen kann (Heimserver/NAS), oder soll der Hub in die Cloud (vgl. F1)? Und sollen die Geräte über ein VPN (z.B. Tailscale/WireGuard) verbunden werden?
+13. **F13 Provider-Zugänge:** Besteht ein GitHub-Copilot-Abo (welcher Plan — Pro/Business?), und auf welchem Gerät ist die Copilot CLI eingeloggt? Für Ollama: Welches Gerät hat wie viel RAM/VRAM (bestimmt die nutzbaren Modellgrößen), und gibt es Modell-Präferenzen (z.B. Llama, Qwen, Mistral)?
 
 ## 11. Was im ursprünglichen Konzept fehlte (Lücken-Analyse)
 

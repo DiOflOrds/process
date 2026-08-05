@@ -1,6 +1,6 @@
 # Team-Playbook: Arbeitsweise des virtuellen ASPICE-Teams
 
-**Version:** 0.4 (Entwurf) · **Datum:** 2026-08-05 · **Gültig für:** alle Projekte des Teams
+**Version:** 0.5 (Entwurf) · **Datum:** 2026-08-05 · **Gültig für:** alle Projekte des Teams
 **Pflege:** Dieses Dokument gehört dem Prozess-Coach (COACH); Änderungen laufen als Change Request (SUP.10) über Review.
 
 ---
@@ -208,6 +208,18 @@ Ziel: Jede KI-Rolle (ASPICE-Team wie Arbeitsteam) wird messbar besser in ihrer A
 
 **Regeln:** Kein Projektzustand auf Geräten (lokale Arbeitskopien sind Wegwerf-Material); Nodes kommunizieren nur ausgehend zum Hub (HTTPS/WebSocket, optional VPN); rechenintensive Arbeit (Builds, Testläufe, Simulationen) gehört auf fähige Nodes, nicht auf den Hub; Smartphone-Nutzung ist auf HMI-Funktionen beschränkt (Entscheidungen, Reviews, Feedback, Statuseinsicht — auch das Beantworten eines Gates von unterwegs ist ein vollwertiger Beitrag). KPI: Wartezeit von Aufgaben auf passende Nodes; Engpässe sind Retro-Thema.
 
+## 14. LLM-Provider-Einsatz (Claude, Copilot CLI, Ollama)
+
+Drei LLM-Arten hinter einem Gateway (Masterplan Kap. 5.8); für die tägliche Arbeit gelten diese Regeln:
+
+**Erweiterte Automatisierungspyramide:** Skript → **Ollama** (lokal, kostenlos) → **Copilot CLI** (Abo-Flatrate, Coding auf Team-Nodes) → **Claude** (API-Budget, höchste Qualität) → Mensch. Jede Aufgabe läuft auf der günstigsten Stufe, die ihre Fähigkeitsklasse erfüllt; die Rollen-Registry definiert je Aufgaben-Typ die Präferenzkette, der Orchestrator wendet sie an und protokolliert den gewählten Provider am Ticket.
+
+**Feste Zuordnungen:** Gate-/Baseline-relevante Bewertungen (QM, Architektur-Entscheidungen, DR-Qualifizierung) laufen ausschließlich auf Claude. DEV-Routineaufgaben mit klarer Spezifikation bevorzugt auf Copilot CLI. Vorklassifikation, Zusammenfassungen, Entwürfe und als vertraulich markierte Inhalte bevorzugt auf Ollama.
+
+**Provider-unabhängige Qualität:** DoD, Reviews und QM-Checks sind für alle Provider identisch — wer geliefert hat, ist für die Prüfschärfe irrelevant. Fällt ein Provider aus (offline, Budget, Abo), greift automatisch die nächste Stufe der Kette; nur wenn keine Stufe die Fähigkeitsklasse erfüllt, wartet die Aufgabe (blocked mit Grund).
+
+**Messen statt glauben:** First-Pass-Yield, Nacharbeitsquote und Kosten je Provider und Aufgaben-Typ sind KPIs; Gold-Beispiele werden periodisch auf allen verfügbaren Providern verglichen. Routing-Ketten werden nur datenbasiert per Prozess-CR geändert.
+
 ---
 
-*Änderungshistorie: 0.1 initialer Entwurf; 0.2 +Automatisierungspyramide, besetzungs-agnostische Rollen, Lernzyklus, Live-Transparenz; 0.3 +Produktkatalog-Nutzung und Feedbackschleifen; 0.4 +Ortstransparenz und verteilter Betrieb (Claude, 2026-08-05).*
+*Änderungshistorie: 0.1 initialer Entwurf; 0.2 +Automatisierungspyramide, besetzungs-agnostische Rollen, Lernzyklus, Live-Transparenz; 0.3 +Produktkatalog-Nutzung und Feedbackschleifen; 0.4 +Ortstransparenz und verteilter Betrieb; 0.5 +LLM-Provider-Einsatz (Claude, 2026-08-05).*

@@ -1,5 +1,8 @@
 # Rollen-Registry v0 (Sprint 0) — Besetzungstyp je Rolle und Aufgaben-Typ.
 # Besetzung: script | ki | mensch. Eskalationskette je Aufgabe: script -> ki -> mensch.
+# KI-Ausführung über das LLM-Gateway mit drei Providern (guardrails.yaml: routing):
+#   Pyramide: script -> ollama (lokal, frei) -> copilot (Flatrate) -> claude (API) -> mensch.
+# provider_chain je Rolle = Default; einzelne Aufgaben-Typen können abweichen (ab Sprint 1 verfeinert).
 # Status: draft = Rollenkarte noch nicht erstellt, active = einsatzbereit.
 
 roles:
@@ -8,12 +11,14 @@ roles:
     processes: [MAN.3]
     besetzung: ki
     model_tier: strong        # Planung/Priorisierung braucht Urteilsvermögen
+    provider_chain: [claude]  # gate-relevant: nur Claude
     status: draft             # Rollenkarte v1 in Sprint 1
   CM:
     name: Konfigurationsmanager
     processes: [SUP.8]
     besetzung: ki
     model_tier: standard
+    provider_chain: [claude]
     script_tasks: [baseline-manifest, repo-sync, backup-check, template-sync]
     status: draft
   COACH:
@@ -21,6 +26,7 @@ roles:
     processes: [PIM.3, MAN.6]
     besetzung: ki
     model_tier: strong
+    provider_chain: [claude]  # Kuratierung/Retro = Urteilsarbeit; Entwürfe/Zusammenfassungen dürfen ollama nutzen (Aufgaben-Typ-Ebene, Sprint 1)
     script_tasks: [kpi-erhebung, feedback-zuordnung]
     status: draft
   RM:
@@ -28,18 +34,21 @@ roles:
     processes: [SYS.1, SWE.1]
     besetzung: ki
     model_tier: strong
+    provider_chain: [claude]
     status: planned           # Sprint 2
   QM:
     name: Qualitätsmanager
     processes: [SUP.1]
     besetzung: ki
     model_tier: strong
+    provider_chain: [claude]
     status: planned           # Sprint 2
   PROB:
     name: Problemmanager
     processes: [SUP.9]
     besetzung: ki
     model_tier: standard
+    provider_chain: [ollama, claude]
     script_tasks: [ticket-routing, trend-report]
     status: planned           # Sprint 2
   CHG:
@@ -47,24 +56,28 @@ roles:
     processes: [SUP.10]
     besetzung: ki
     model_tier: standard
+    provider_chain: [claude]
     status: planned           # Sprint 2
   ARCH:
     name: Architekt
     processes: [SWE.2]
     besetzung: ki
     model_tier: strong
+    provider_chain: [claude]
     status: planned           # Sprint 3
   DEV:
     name: Entwickler
     processes: [SWE.3]
     besetzung: ki
     model_tier: strong
+    provider_chain: [copilot, claude]
     status: planned           # Sprint 3
   TEST:
     name: Verifikationsingenieur
     processes: [SWE.4, SWE.5, SWE.6]
     besetzung: ki
     model_tier: standard
+    provider_chain: [copilot, claude]
     script_tasks: [testlauf, coverage-report]
     status: planned           # Sprint 3
   REL:
