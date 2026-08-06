@@ -4,13 +4,14 @@ Prozessziel (ASPICE 4.0): Projekt definieren, planen, überwachen und steuern; R
 
 ## Mapping auf Basispraktiken (PAM 4.0)
 
-Arbeits-Mapping (Kurznamen; Wortlaut-Verifikation gegen das lizenzierte PAM: COACH-Ticket Sprint 2):
+Arbeits-Mapping (Kurznamen). Plausibilitäts-Review gegen die öffentliche PAM-4.0-Prozessstruktur: T-0017 (2026-08-06). Konformitätsanspruch pragmatisch (D010) — ein Wortlaut-Abgleich mit dem lizenzierten PAM wird nicht beansprucht:
 
 | BP (Kurzname) | Umsetzung im Team |
 |---|---|
 | Arbeitsumfang definieren | Projektauftrag + Backlog (`p0/backlog.md`); Sprint-Ziel je Sprint |
 | Lebenszyklus/Vorgehen festlegen | Sprint-Zyklus 1 Woche, Ticks, Gates G0–G4 (Playbook Kap. 4) |
 | Machbarkeit bewerten | je Sprint-Planning: Kapazität = Kosten-Budget vs. Backlog-Schätzung |
+| Aktivitäten definieren, überwachen, anpassen | Sprint-Backlog als Tickets (Rolle, Prio, blocked_by); Sync-Ticks = Überwachung/Neuverteilung *(ergänzt T-0017)* |
 | Aufwände/Ressourcen schätzen und verfolgen | Schätzung je Ticket (Kostenklasse), Ist aus Run-Registry |
 | Fähigkeiten/Wissen sicherstellen | Rollen-Registry (Besetzung, Provider-Kette), Wissensbasen |
 | Schnittstellen/Commitments verfolgen | Blocker-Links (`blocked_by`), Review-Zuordnungen, DR-Fristen |

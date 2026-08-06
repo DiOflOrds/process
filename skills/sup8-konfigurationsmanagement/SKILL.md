@@ -4,7 +4,7 @@ Prozessziel (ASPICE 4.0): Integrität aller Arbeitsergebnisse über den Lebenszy
 
 ## Mapping auf Basispraktiken (PAM 4.0)
 
-Arbeits-Mapping (Kurznamen; Wortlaut-Verifikation gegen das lizenzierte PAM: COACH-Ticket Sprint 2):
+Arbeits-Mapping (Kurznamen). Plausibilitäts-Review gegen die öffentliche PAM-4.0-Prozessstruktur: T-0017 (2026-08-06). Konformitätsanspruch pragmatisch (D010) — ein Wortlaut-Abgleich mit dem lizenzierten PAM wird nicht beansprucht:
 
 | BP (Kurzname) | Umsetzung im Team |
 |---|---|
@@ -15,6 +15,7 @@ Arbeits-Mapping (Kurznamen; Wortlaut-Verifikation gegen das lizenzierte PAM: COA
 | Änderungen kontrollieren | Nur via Ticket + PR; Commits referenzieren Ticket-IDs |
 | Baselines etablieren | Git-Tag(s) + Manifest je Anlass (Playbook Kap. 9) |
 | Konfigurationsstatus berichten | BOARD.md + Baseline-Manifeste; Abschnitt im Sprint-Report |
+| CM-Informationen verifizieren | board.py --check je Push (CI, T-0015); Prüfstatus im Baseline-Manifest; QM-Mitzeichnung *(ergänzt T-0017)* |
 | Ablage/Backup verwalten | Storage-Locations-Tabelle, Backup-/Restore-Runbook mit Testnachweis |
 
 ## Arbeitsschritte je Ticket-Typ

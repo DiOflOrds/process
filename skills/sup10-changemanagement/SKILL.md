@@ -4,7 +4,7 @@ Prozessziel (ASPICE 4.0): Änderungswünsche kontrolliert aufnehmen, analysieren
 
 ## Mapping auf Basispraktiken (PAM 4.0)
 
-Arbeits-Mapping (Kurznamen; Wortlaut-Verifikation gegen das lizenzierte PAM: COACH-Ticket Sprint 2):
+Arbeits-Mapping (Kurznamen). Plausibilitäts-Review gegen die öffentliche PAM-4.0-Prozessstruktur: T-0017 (2026-08-06). Konformitätsanspruch pragmatisch (D010) — ein Wortlaut-Abgleich mit dem lizenzierten PAM wird nicht beansprucht:
 
 | BP (Kurzname) | Umsetzung im Team |
 |---|---|
