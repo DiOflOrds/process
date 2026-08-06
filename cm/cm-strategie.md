@@ -22,6 +22,7 @@
 | Tickets + Board | `p0/tickets/`, `p0/BOARD.md` | PL | BOARD.md wird generiert (board.py), nie von Hand |
 | Requirements (Stakeholder, Software) | `p0/requirements/` | RM | Englisch (D011); Baseline via G1 |
 | Run-Registry | `p0/management/runs/run-registry.jsonl` | Orchestrator | append-only, jede Agent-Aktion mit Kosten |
+| Übungsprodukt datakonv (Reqs, Architektur, Code, Tests) | Repo `produkt-datakonv` (D016) | RM/ARCH/DEV/TEST | eigenes Produkt-Repo, eigener Baseline-/Release-Zyklus (G1/G3); CI je Push (T-0042) |
 
 ## Branching-Modell
 
