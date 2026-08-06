@@ -1,61 +1,61 @@
-# CM-Strategie (v1)
+# CM-Strategie (v1.1)
+
+*v1.1 (Sprint 2, T-0018, CM): Review-Nacharbeit zu T-0010 — Konfigurationselemente, Rollen und Storage-Locations an die reale Struktur angeglichen (Rollen aus `roles/registry.yaml`, Landkarte aus Playbook Kap. 3, reale Repos process/platform/p0). v1 entstand autonom via ollama/gemma3:27b (Sprint 1).*
 
 ## Konfigurationselemente
 
 | Item-Typ | Repo/Pfad | Eigentümer | Beschreibung |
 |---|---|---|---|
-| Projektplan | `project/` | PL | Gesamtplanung, Meilensteine |
-| Anforderungsdokument | `requirements/` | RE | Detaillierte Anforderungen |
-| Architekturdesign | `architecture/` | ARCH | Systemarchitektur und Designentscheidungen |
-| Code (Backend) | `backend/` | DEV | Backend-Implementierung |
-| Code (Frontend) | `frontend/` | DEV | Frontend-Implementierung |
-| CI/CD Pipeline Definitionen | `.github/workflows/` | CM | GitHub Actions Workflows |
-| Dokumentation | `docs/` | TECHWRITER | Benutzerhandbücher, API-Dokumentation |
-| Testfälle | `tests/` | QA | Unit-, Integrations- und Systemtests |
-| Infrastruktur als Code (IaC) | `infrastructure/` | PROB | Terraform oder ähnliche Konfigurationen |
-| Baseline Manifeste | `baselines/` | CM | Beschreibt den Inhalt jeder Baseline |
-| Geräteregister | `process/cm/geraeteregister.md` | CM | Liste aller Team-Geräte und deren Konfiguration |
+| Prozess-Baseline-Dokumente (Masterplan, Playbook, P0) | `process/docs/` | COACH | Verfassung des Teams; Änderung nur per CR |
+| Rollenkarten + Rollen-Registry | `process/roles/` | COACH | Rollen v1: PL, CM, COACH, QM, RM, PROB, CHG (aktiv); ARCH, DEV, TEST, REL (geplant) |
+| Prozess-Skills | `process/skills/` | COACH | je Prozessgebiet (MAN.3, SUP.1, SUP.8, SUP.9, SUP.10, SWE.1) |
+| Wissensbasen (Lessons, Heuristiken, Gold-Beispiele) | `process/knowledge/<rolle>/` | COACH (kuratiert) | Updates nur per Prozess-CR + Regressionstest (Playbook Kap. 11) |
+| Issue-Templates + Label-Schema | `process/templates/` | COACH | 8 Ticket-Typen |
+| DoD-Checklisten | `process/checklists/` | COACH/QM | je Information-Item-Typ |
+| CM-Artefakte (diese Strategie, Geräteregister, Runbook) | `process/cm/` | CM | Runbook folgt Sprint 3 |
+| Baseline-Manifeste | `process/baselines/` | CM | je Baseline ein Manifest (Playbook Kap. 9) |
+| Gateway, Orchestrator, Skripte | `platform/gateway/`, `platform/orchestrator/`, `platform/scripts/` | DEV (bis aktiv: Session-Kontext) | LLM-Gateway, Tick-Loop, board.py |
+| Guardrails-Konfiguration | `platform/orchestrator/config/guardrails.yaml` | CM | Änderung nur per CR + Mensch-Freigabe |
+| CI-Workflows | `platform/.github/workflows/`, `p0/.github/workflows/` | CM | board-check + Unit-Tests (T-0015) |
+| Unit-Tests | `platform/tests/` | DEV | 62+ Tests, CI-Pflicht |
+| Projektführung (Plan, Reports, Risikoliste, Decision Log) | `p0/management/` | PL | Decision Log append-only |
+| Tickets + Board | `p0/tickets/`, `p0/BOARD.md` | PL | BOARD.md wird generiert (board.py), nie von Hand |
+| Requirements (Stakeholder, Software) | `p0/requirements/` | RM | Englisch (D011); Baseline via G1 |
+| Run-Registry | `p0/management/runs/run-registry.jsonl` | Orchestrator | append-only, jede Agent-Aktion mit Kosten |
 
 ## Branching-Modell
 
-*   **main:** Geschützter Zweig für stabile Releases. Direkte Commits nicht erlaubt.
-*   **feature/\<T-xxxx>-<kurzname>:**  Entwicklungszweige für neue Features oder Bugfixes. Benannt nach Ticket-ID und einer kurzen Beschreibung.
-*   **release/\<projekt>-v\<x.y>:** Vorbereitungszweig für Releases. Wird aus `main` erstellt, enthält Release-spezifische Änderungen (Versionsnummern etc.).
-*   **hotfix/\<T-xxxx>-<kurzbeschreibung>:** Für kritische Bugfixes in Produktion. Wird direkt aus `main` erstellt und nach dem Fix wieder gemerged.
-
-**Merge Requests/Pull Requests (PR):**  Alle Änderungen müssen über PRs erfolgen, um Code Reviews zu ermöglichen. Ausnahmen sind nur mit Skript-Routing möglich (siehe Tool-Liste).
+- **main:** geschützter Zweig; Merge nur per PR mit Review (Reviewer ≠ Autor). Ausnahme Bootstrap-/Session-Engineering: direkte Commits mit Ticket-ID, nachreviewt im Sprint-Review (G4) — läuft aus, sobald PR-Fluss auf dem Team-Node etabliert ist.
+- **feature/t-xxxx-<kurzname>:** Arbeits-/Tick-Branches je Ticket (Kleinschreibung, wie vom Orchestrator erzeugt).
+- **hotfix/t-xxxx-<kurzname>:** kritische Fixes aus `main`, zurück per PR.
+- Release-Branches: erst ab echten Produkt-Releases (Stufe 2); bis dahin genügen Baselines (Tags).
 
 ## Namenskonventionen
 
-*   **Tickets:** T-nnnn (n = fortlaufende Nummer)
-*   **Baselines:** `<projekt>-v<major.minor>` (z.B. `myproject-v1.0`)
-*   **Branches:** Siehe Branching-Modell.
-*   **Commits:**  Beginnen mit der Ticket-ID (z.B. `T-0010: Fix bug in user authentication`).
+- **Tickets:** `T-nnnn` (vierstellig, fortlaufend über alle Sprints).
+- **Baselines:** `genesis-v<major.minor>` für die Prozess-/Plattform-Baseline (P0); Produkt-Baselines später `<produkt>-v<major.minor>`.
+- **Branches:** siehe Branching-Modell. **Commits:** beginnen mit Ticket-ID(s), z.B. `T-0018: CM-Strategie v1.1`.
+- **Anforderungen:** `STK-xxx` (Stakeholder), `SWR-xxx` (Software), dreistellig.
 
-## Storage-Locations
+## Storage-Locations und Backup
 
-| Item-Typ | Speicherort | Zugriff | Backup |
+| Was | Wo | Zugriff | Backup/Redundanz |
 |---|---|---|---|
-| Code, Dokumentation, Tests | GitHub Repository (`D005`) | Teammitglieder mit entsprechenden Rechten | GitHub + Lokale Klone (siehe Backup-/Restore-Konzept) |
-| Infrastruktur als Code | GitHub Repository (`D005`) | PROB, CM | GitHub + Lokale Klone |
-| Baseline Manifeste | `baselines/` im jeweiligen Repository | CM, QM | GitHub + Lokale Klone |
-| Geräteregister | `process/cm/geraeteregister.md` im Repository | CM, PL | GitHub + Lokale Klone |
+| Alle drei Repos (Single Source of Truth) | github.com/DiOflOrds/{process, platform, p0} (privat) | Mensch (Owner); Team via Token; Cowork-Sandbox nur lesend (D007) | GitHub-Hosting + lokale Klone |
+| Lokale Arbeitskopien | Team-Node 1 (User-PC): `Downloads\aspice-team-repos-final\` | Mensch + autonome Ticks (D007) | Push nach GitHub nach jeder Session |
+| Run-Registry, Board | im p0-Repo (versioniert) | wie Repos | wie Repos |
+| Secrets (GitHub-Token, künftig ANTHROPIC_API_KEY, PLATFORM_READ_TOKEN) | Windows Credential Manager bzw. GitHub Actions Secrets | nur Mensch | **nie im Repo**; Referenz im Geräteregister |
+
+**Restore-Konzept:** Wiederherstellung = frisches Klonen von GitHub; lokale Klone dienen umgekehrt als Kopie, falls GitHub nicht verfügbar. **Restore-Test: noch offen** — geplant mit dem Betriebs-Runbook (Sprint 3); bis dahin gilt der doppelte Bestand (GitHub + Team-Node) als Mindestabsicherung.
 
 ## Tool-Liste
 
-*   **Git:** Versionskontrolle
-*   **GitHub (D005):** Git Hosting und Kollaboration
-*   **board.py:** Ticket-Management und Reporting
-*   **CI System:** Automatisierte Builds, Tests und Deployments (Details in separater Dokumentation)
-*   **Skript-Routing für PRs:**  Automatisierung von PR-Reviews basierend auf Commit-Nachrichten/Ticket-IDs. Konfiguration in `.github/workflows/`.
-
-## Backup-/Restore-Konzept
-
-*   **GitHub:** GitHub bietet automatische Backups und Disaster Recovery.
-*   **Lokale Klone:** Jedes Teammitglied sollte eine lokale Kopie des Repositories haben, um im Notfall schnell wiederherstellen zu können.
-*   **Regelmäßige Backups:**  Automatisierte Skripte erstellen regelmäßig Backups der wichtigsten Konfigurationselemente und speichern sie an einem sicheren Ort (Details in `process/cm/runbook.md`).
-*   **Restore-Test:** Das Restore-Konzept wird regelmäßig getestet, um sicherzustellen, dass es funktioniert.
+- **Git + GitHub** (D005): Versionierung, PRs, Actions.
+- **board.py** (`platform/scripts/`): Ticket-Validierung + BOARD.md-Generierung — Skript-Route, läuft je Tick und in CI.
+- **tick.py** (`platform/orchestrator/`): autonomer Tick-Loop (Preconditions, Gateway, Guardrails, Run-Registry).
+- **GitHub Actions** (T-0015): `platform` Unit-Tests, `p0` board-check je Push/PR.
+- **LLM-Gateway** (`platform/gateway/`): Provider-Ketten ollama/session/claude (copilot ab Sprint 6).
 
 ## Geräteregister-Verweis
 
-Siehe `process/cm/geraeteregister.md`.
+`process/cm/geraeteregister.md` — Neuaufnahme von Geräten nur mit Mensch-Freigabe (guardrails: device_onboarding).
