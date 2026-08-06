@@ -1,4 +1,4 @@
-# Rollen-Registry v1 (Sprint 1, T-0003) — Besetzung und Provider-Kette je Rolle und Aufgaben-Typ.
+# Rollen-Registry v1.1 (Sprint 2, T-0019: QM/RM/PROB/CHG aktiv) — Besetzung und Provider-Kette je Rolle und Aufgaben-Typ.
 #
 # Schema:
 #   roles.<ROLLE>:
@@ -62,14 +62,23 @@ roles:
     besetzung: ki
     model_tier: strong
     provider_chain: [claude]
-    status: planned           # Sprint 2
+    script_tasks: [trace-report]
+    aufgaben_typen:
+      requirements-set:     { chain: [session, claude], tier: strong }   # API-frei möglich (Session-Engineering)
+      clarification-buendelung: { chain: [ollama, claude], tier: cheap } # ollama ab Sprint 6
+      g1-vorlage:           { chain: [claude], tier: strong, gate_relevant: true }
+    status: active            # Rollenkarte v1 (T-0019)
   QM:
     name: Qualitätsmanager
     processes: [SUP.1]
     besetzung: ki
     model_tier: strong
     provider_chain: [claude]  # gate-relevant: nur Claude
-    status: planned           # Sprint 2
+    script_tasks: [checklisten-check, link-check]
+    aufgaben_typen:
+      finding-bewertung:    { chain: [claude], tier: strong, gate_relevant: true }
+      artefakt-review:      { chain: [session, claude], tier: standard }
+    status: active            # Rollenkarte v1 (T-0019)
   PROB:
     name: Problemmanager
     processes: [SUP.9]
@@ -77,14 +86,20 @@ roles:
     model_tier: standard
     provider_chain: [ollama, claude]
     script_tasks: [ticket-routing, trend-report]
-    status: planned           # Sprint 2
+    aufgaben_typen:
+      problem-klassifikation: { chain: [ollama, session, claude], tier: standard }
+      ursachenanalyse:      { chain: [claude], tier: strong }
+    status: active            # Rollenkarte v1 (T-0019)
   CHG:
     name: Change-Manager
     processes: [SUP.10]
     besetzung: ki
     model_tier: standard
     provider_chain: [claude]
-    status: planned           # Sprint 2 (bis dahin: COACH für Prozess-CRs, PL für Projekt-CRs)
+    aufgaben_typen:
+      cr-erfassung:         { chain: [ollama, session, claude], tier: cheap }
+      impact-analyse:       { chain: [claude], tier: strong }
+    status: active            # Rollenkarte v1 (T-0019)
   ARCH:
     name: Architekt
     processes: [SWE.2]
