@@ -31,7 +31,7 @@ Zentrale Eigenschaften des Zielbilds:
 | E3 | ASPICE-Scope Stufe 1 | **SWE.1–SWE.6 + MAN.3, SUP.1, SUP.8, SUP.9, SUP.10** (+ SPL.2 leichtgewichtig); SYS.1/SYS.2 als Stub über die Systemrolle | Fokus Software-Entwicklung; System-Ebene wird als schlanke Durchreiche realisiert und später voll ausgeprägt. |
 | E4 | Dokumentationsform | Markdown im Claude-Projekt „Product Developer" + Git | Maschinen- und menschenlesbar, versionierbar, baseline-fähig. |
 | E5 | Betriebsumgebung Hub (F1) | **Cloud-VM** (z.B. Hetzner, Docker Compose) — Beschaffung bis Sprint 3; Sprint 0–2 laufen in Cowork-Sessions | Immer erreichbar, kein Heimnetz-Aufwand; entschieden 2026-08-05 (G0). |
-| E6 | Git-Backbone (F2) | **gitlab.com** (kostenloser Account, eigene Gruppe) | Sofort startklar ohne Betriebsaufwand; Umzug auf self-hosted bleibt möglich; entschieden 2026-08-05 (G0). |
+| E6 | Git-Backbone (F2) | ~~gitlab.com~~ → **GitHub** (kostenloser Account; Repos, Issues, Labels, Milestones, Actions-CI, Releases) | Revidiert per D005: gitlab.com ist aus der Cowork-Cloud-Sandbox nicht erreichbar, GitHub verifiziert voll erreichbar — damit können Agenten-Ticks ab Sprint 1 direkt aufs Board. Umzug auf self-hosted GitLab später möglich; entschieden 2026-08-05 (DR-001/D005). |
 | E7 | API-Budget (F3) | **Testphase zuerst:** Sprint 0–1 mit Mini-Budget (~20 €), Ist-Kosten messen, dann Budget datenbasiert festlegen (Review in Sprint 2) | Datenbasierte Entscheidung statt Schätzung; hartes Limit mit Abschaltung gilt ab dem ersten Tick; entschieden 2026-08-05 (G0). |
 | E8 | Benachrichtigung (F4) | **E-Mail** (geraldine.john90@gmail.com) + Frontend-Decision-Inbox | E-Mail ab sofort (übergangsweise via Sprint-Report), Inbox ab Sprint 3; entschieden 2026-08-05 (G0). |
 
