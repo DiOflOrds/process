@@ -1,0 +1,12 @@
+products:
+  datakonv:
+    capabilities: CSV->JSON (typed array of objects) and JSON->CSV (flat), files +
+      stdin/stdout, configurable delimiter, --indent, UTF-8 with BOM tolerance, exit
+      codes 0/1/2/3
+    doc: produkt-datakonv/README.md + RELEASE-NOTES.md
+    interface: CLI (datakonv / python -m datakonv)
+    limitations: flat structures only; in-memory; UTF-8 only
+    project: p0
+    released: '2026-08-07'
+    repo: produkt-datakonv
+    version: 1.0.0
