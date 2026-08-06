@@ -1,15 +1,43 @@
-# SKILL: SUP.8 Konfigurationsmanagement (v0 — Stub, wird in Sprint 1 ausgearbeitet)
+# SKILL: SUP.8 Konfigurationsmanagement (v1, Sprint 1, T-0002)
 
-Prozessziel (ASPICE 4.0): Integrität aller Arbeitsergebnisse über den Lebenszyklus sicherstellen und Baselines verfügbar machen.
+Prozessziel (ASPICE 4.0): Integrität aller Arbeitsergebnisse über den Lebenszyklus sicherstellen und Baselines verfügbar machen. Rolle: CM.
 
-## Kernpraktiken für den CM-Agenten (Kurzfassung)
-1. CM-Strategie pflegen: identifizierte Konfigurationselemente (Repos, Pfade, Information-Item-Typen), Branching-Modell (main geschützt, Feature-Branches, MR-Pflicht), Namenskonventionen, Storage-Locations, Tool-Liste.
-2. Baselines erstellen: Git-Tag(s) + generiertes Manifest (Item, Version/Commit, Prüfstatus QM, offene Punkte); Anlässe It. Playbook Kap. 9.
-3. Branch-/Rechte-Schutz technisch durchsetzen; Geräteregister pflegen (Team-Nodes: Token, Fähigkeiten, Rechte, Onboarding nur mit Mensch-Freigabe).
-4. Backup und Wiederherstellbarkeit: regelmäßige Sicherung von Repos, Backend-DB, Konfiguration; Restore-Test dokumentieren (Runbook).
-5. Konsistenz sichern: keine Konfigurationselemente außerhalb der definierten Storage-Locations (CI-Check).
+## Mapping auf Basispraktiken (PAM 4.0)
 
-## Zu erzeugende Information Items
-CM-Strategie, Baseline-Manifeste, Tool-/Storage-Übersicht, Geräteregister, Betriebs-Runbook.
+Arbeits-Mapping (Kurznamen; Wortlaut-Verifikation gegen das lizenzierte PAM: COACH-Ticket Sprint 2):
 
-*Ausarbeitung folgt in Sprint 1 als Prozess-CR.*
+| BP (Kurzname) | Umsetzung im Team |
+|---|---|
+| CM-Strategie entwickeln | `process/cm/cm-strategie.md` (Elemente s. u.) |
+| Konfigurationselemente identifizieren | Artefakt-Landkarte Playbook Kap. 3 = Item-Liste mit Storage-Location |
+| CM-System etablieren | Git (GitHub, D005), geschützte main-Branches, PR-Pflicht |
+| Branch-Management etablieren | Branching-Modell in der CM-Strategie (main geschützt, `feature/T-xxxx-*`) |
+| Änderungen kontrollieren | Nur via Ticket + PR; Commits referenzieren Ticket-IDs |
+| Baselines etablieren | Git-Tag(s) + Manifest je Anlass (Playbook Kap. 9) |
+| Konfigurationsstatus berichten | BOARD.md + Baseline-Manifeste; Abschnitt im Sprint-Report |
+| Ablage/Backup verwalten | Storage-Locations-Tabelle, Backup-/Restore-Runbook mit Testnachweis |
+
+## Arbeitsschritte je Ticket-Typ
+
+**CM-Strategie erstellen/pflegen (`process/cm/cm-strategie.md`):**
+Pflichtinhalte: 1) Konfigurationselemente (Tabelle: Item-Typ, Repo/Pfad, Eigentümer — aus Playbook Kap. 3), 2) Branching-Modell (main geschützt; Arbeitsbranches `feature/T-xxxx-<kurzname>`; Merge nur per PR mit Review ≠ Autor), 3) Namenskonventionen (Tickets T-nnnn, Baselines `<projekt>-v<major.minor>`, Branches, Commits mit Ticket-ID), 4) Storage-Locations, 5) Tool-Liste (Git, GitHub, board.py, CI), 6) Backup-Konzept (GitHub + lokale Klone; Restore-Test dokumentiert), 7) Geräteregister-Verweis.
+
+**Baseline erstellen:**
+1. Anlass prüfen (Playbook Kap. 9); QM-Mitzeichnung einholen (bis QM aktiv: PL + Mensch-Gate).
+2. Tag auf betroffene Repos (`<projekt>-v<x.y>`); Manifest `baselines/<id>-manifest.md`: je Item Version/Commit, Prüfstatus, offene Punkte.
+3. Manifest committen; Statusbericht im Sprint-Report.
+4. Nie: Tag löschen/verschieben (guardrails: forbidden_actions).
+
+**Geräteregister pflegen (`process/cm/geraeteregister.md`):**
+Je Gerät: Name, Identität/Token-Referenz (nie der Token selbst!), OS/Toolchains, erlaubte Rollen, Rechteumfang, Verfügbarkeit, Status. Neuaufnahme nur mit Mensch-Freigabe (Decision Log).
+
+**Betriebs-Runbook (`process/cm/runbook.md`):**
+Wiederkehrende Betriebsaufgaben mit Skript-Verweis; Incidents als SUP.9-Ticket.
+
+## Verweise
+
+Templates: `templates/issues/task.md` · Guardrails: `platform/orchestrator/config/guardrails.yaml` (forbidden_actions, device_onboarding) · Playbook Kap. 3, 9, 13.
+
+## Gold-Beispiele (Wissensbasis)
+
+`knowledge/cm/gold-beispiele/gb-01-baseline-manifest.md`, `gb-02-branching-entscheidung.md`, `gb-03-geraeteregister-onboarding.md`.
