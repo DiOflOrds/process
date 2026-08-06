@@ -1,34 +1,61 @@
-# Rollen-Registry v0 (Sprint 0) — Besetzungstyp je Rolle und Aufgaben-Typ.
-# Besetzung: script | ki | mensch. Eskalationskette je Aufgabe: script -> ki -> mensch.
-# KI-Ausführung über das LLM-Gateway mit drei Providern (guardrails.yaml: routing):
-#   Pyramide: script -> ollama (lokal, frei) -> copilot (Flatrate) -> claude (API) -> mensch.
-# provider_chain je Rolle = Default; einzelne Aufgaben-Typen können abweichen (ab Sprint 1 verfeinert).
-# Status: draft = Rollenkarte noch nicht erstellt, active = einsatzbereit.
+# Rollen-Registry v1 (Sprint 1, T-0003) — Besetzung und Provider-Kette je Rolle und Aufgaben-Typ.
+#
+# Schema:
+#   roles.<ROLLE>:
+#     name, processes, besetzung (script|ki|mensch), status (draft|active|planned)
+#     model_tier: strong|standard|cheap  (Default-Modellstufe, guardrails.yaml: providers.claude.models)
+#     provider_chain: [..]               (Default-Kette der Rolle; Pyramide: script -> ollama -> copilot -> claude -> mensch)
+#     script_tasks: [..]                 (Aufgaben-Typen mit Skript-Route — IMMER vor LLM prüfen)
+#     aufgaben_typen:                    (v1: Feinsteuerung je Aufgaben-Typ; überschreibt Default)
+#       <typ>: { chain: [..], tier: .., gate_relevant: true|false }
+#   Auflösung durch den Orchestrator:
+#     1. Aufgaben-Typ in script_tasks?           -> Skript-Route, kein LLM.
+#     2. aufgaben_typen.<typ> vorhanden?         -> dessen chain/tier.
+#     3. sonst                                   -> provider_chain + model_tier der Rolle.
+#   gate_relevant: true erzwingt routing.gate_relevant aus guardrails.yaml (nur claude.strong).
+#   Nicht verfügbare Provider (status planned, offline, Budget) -> nächste Stufe der Kette (on_unavailable).
 
 roles:
   PL:
     name: Projektleiter
     processes: [MAN.3]
     besetzung: ki
-    model_tier: strong        # Planung/Priorisierung braucht Urteilsvermögen
-    provider_chain: [claude]  # gate-relevant: nur Claude
-    status: draft             # Rollenkarte v1 in Sprint 1
+    model_tier: strong
+    provider_chain: [claude]
+    script_tasks: [board-hygiene, kosten-report]
+    aufgaben_typen:
+      sprint-planning:      { chain: [claude], tier: strong }
+      dr-qualifizierung:    { chain: [claude], tier: strong, gate_relevant: true }
+      sprint-report:        { chain: [claude], tier: standard }
+      risikoliste-pflege:   { chain: [claude], tier: standard }
+      status-zusammenfassung: { chain: [ollama, claude], tier: cheap }   # ollama ab Sprint 6
+    status: active            # Rollenkarte v1 (T-0001)
   CM:
     name: Konfigurationsmanager
     processes: [SUP.8]
     besetzung: ki
     model_tier: standard
     provider_chain: [claude]
-    script_tasks: [baseline-manifest, repo-sync, backup-check, template-sync]
-    status: draft
+    script_tasks: [baseline-manifest, repo-sync, backup-check, template-sync, board-generierung]
+    aufgaben_typen:
+      cm-strategie:         { chain: [ollama, session, claude], tier: standard }  # API-frei möglich (T-0011/T-0012)
+      baseline-freigabe:    { chain: [claude], tier: strong, gate_relevant: true }
+      runbook-pflege:       { chain: [ollama, claude], tier: cheap }     # ollama ab Sprint 6
+      geraete-onboarding:   { chain: [claude], tier: standard }          # Mensch-Gate via guardrails
+    status: active            # Rollenkarte v1 (T-0001)
   COACH:
     name: Prozess-Coach
     processes: [PIM.3, MAN.6]
     besetzung: ki
     model_tier: strong
-    provider_chain: [claude]  # Kuratierung/Retro = Urteilsarbeit; Entwürfe/Zusammenfassungen dürfen ollama nutzen (Aufgaben-Typ-Ebene, Sprint 1)
+    provider_chain: [claude]
     script_tasks: [kpi-erhebung, feedback-zuordnung]
-    status: draft
+    aufgaben_typen:
+      retro-moderation:     { chain: [claude], tier: strong }
+      wissensbasis-kuratierung: { chain: [claude], tier: strong }
+      prozess-cr:           { chain: [claude], tier: standard }
+      entwurf-zusammenfassung: { chain: [ollama, claude], tier: cheap }  # ollama ab Sprint 6
+    status: active            # Rollenkarte v1 (T-0001)
   RM:
     name: Requirements-Manager
     processes: [SYS.1, SWE.1]
@@ -41,7 +68,7 @@ roles:
     processes: [SUP.1]
     besetzung: ki
     model_tier: strong
-    provider_chain: [claude]
+    provider_chain: [claude]  # gate-relevant: nur Claude
     status: planned           # Sprint 2
   PROB:
     name: Problemmanager
@@ -57,7 +84,7 @@ roles:
     besetzung: ki
     model_tier: standard
     provider_chain: [claude]
-    status: planned           # Sprint 2
+    status: planned           # Sprint 2 (bis dahin: COACH für Prozess-CRs, PL für Projekt-CRs)
   ARCH:
     name: Architekt
     processes: [SWE.2]
@@ -71,7 +98,7 @@ roles:
     besetzung: ki
     model_tier: strong
     provider_chain: [copilot, claude]
-    status: planned           # Sprint 3
+    status: planned           # Sprint 3 (Sprint 1: DEV-Tickets laufen in der Cowork-Session)
   TEST:
     name: Verifikationsingenieur
     processes: [SWE.4, SWE.5, SWE.6]
