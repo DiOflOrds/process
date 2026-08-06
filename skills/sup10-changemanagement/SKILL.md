@@ -1,6 +1,6 @@
-# SKILL: SUP.10 Change Request Management (v1, Sprint 1, T-0002)
+# SKILL: SUP.10 Change Request Management (v1.1, Sprint 2, T-0020)
 
-Prozessziel (ASPICE 4.0): Änderungswünsche kontrolliert aufnehmen, analysieren, entscheiden, umsetzen und verfolgen. Rolle: CHG (bis aktiv: COACH für Prozess-CRs, PL für Projekt-CRs).
+Prozessziel (ASPICE 4.0): Änderungswünsche kontrolliert aufnehmen, analysieren, entscheiden, umsetzen und verfolgen. Rolle: CHG (aktiv seit Sprint 2, T-0019).
 
 ## Mapping auf Basispraktiken (PAM 4.0)
 
