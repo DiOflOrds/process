@@ -1,4 +1,4 @@
-# Rollen-Registry v1.1 (Sprint 2, T-0019: QM/RM/PROB/CHG aktiv) — Besetzung und Provider-Kette je Rolle und Aufgaben-Typ.
+# Rollen-Registry v1.2 (Sprint 3, T-0028: ARCH/DEV/TEST aktiv) — Besetzung und Provider-Kette je Rolle und Aufgaben-Typ.
 #
 # Schema:
 #   roles.<ROLLE>:
@@ -105,23 +105,38 @@ roles:
     processes: [SWE.2]
     besetzung: ki
     model_tier: strong
-    provider_chain: [claude]
-    status: planned           # Sprint 3
+    provider_chain: [session, claude]
+    aufgaben_typen:
+      architektur-entwurf:  { chain: [session, claude], tier: strong }
+      adr:                  { chain: [session, claude], tier: strong }
+      g2-vorlage:           { chain: [claude], tier: strong, gate_relevant: true }
+      machbarkeits-review:  { chain: [session, claude], tier: standard }
+    status: active            # Rollenkarte v1 (T-0028)
   DEV:
     name: Entwickler
     processes: [SWE.3]
     besetzung: ki
     model_tier: strong
-    provider_chain: [copilot, claude]
-    status: planned           # Sprint 3 (Sprint 1: DEV-Tickets laufen in der Cowork-Session)
+    provider_chain: [session, claude]   # copilot-Kettenstufe folgt mit PoC Sprint 6 (F13)
+    script_tasks: [formatierung, lint]
+    aufgaben_typen:
+      implementierung:      { chain: [session, claude], tier: strong }
+      bugfix:               { chain: [session, claude], tier: standard }
+      code-review:          { chain: [session, claude], tier: standard }
+      entwurf-zusammenfassung: { chain: [ollama, session, claude], tier: cheap }
+    status: active            # Rollenkarte v1 (T-0028); Sprint 1-2: DEV-Tickets liefen im Session-Kontext
   TEST:
     name: Verifikationsingenieur
     processes: [SWE.4, SWE.5, SWE.6]
     besetzung: ki
     model_tier: standard
-    provider_chain: [copilot, claude]
-    script_tasks: [testlauf, coverage-report]
-    status: planned           # Sprint 3
+    provider_chain: [session, claude]   # copilot-Kettenstufe folgt mit PoC Sprint 6 (F13)
+    script_tasks: [testlauf, coverage-report, trace-matrix]
+    aufgaben_typen:
+      testfall-ableitung:   { chain: [session, claude], tier: standard }
+      verifikationsstrategie: { chain: [claude], tier: strong }
+      testbericht:          { chain: [ollama, session, claude], tier: cheap }
+    status: active            # Rollenkarte v1 (T-0028)
   REL:
     name: Release-Manager
     processes: [SPL.2]
