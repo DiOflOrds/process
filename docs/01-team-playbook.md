@@ -1,6 +1,6 @@
 # Team-Playbook: Arbeitsweise des virtuellen ASPICE-Teams
 
-**Version:** 0.5 (Entwurf) · **Datum:** 2026-08-05 · **Gültig für:** alle Projekte des Teams
+**Version:** 0.6 (Entwurf) · **Datum:** 2026-08-06 · **Gültig für:** alle Projekte des Teams
 **Pflege:** Dieses Dokument gehört dem Prozess-Coach (COACH); Änderungen laufen als Change Request (SUP.10) über Review.
 
 ---
@@ -117,6 +117,8 @@ Typisierte Issue-Templates: **Task** (Arbeitsauftrag, Label nach Prozessgebiet),
 
 Status-Workflow (einheitlich): `open → in_analysis → in_progress → in_review → done` (+ `blocked`, `rejected`). Regeln: `in_review` erfordert benannten Reviewer ≠ Autor; `done` bei Problem/CR nur nach Verifikation; `blocked` erfordert Verweis auf Blocker (Ticket oder DR).
 
+**Requirements-first (ab Sprint 3, T-0025):** Jedes neue Ticket, das Plattform- oder Produkt-Code erzeugt oder ändert, referenziert im Ticket-Body mindestens eine SWR-ID (Feld „SWR-Bezug") oder den auslösenden CR. Implementierung ohne Anforderungsbezug ist ein QM-Finding (SUP.1). Reine Prozess-/Doku-Tickets sind ausgenommen. Fehlt die passende Anforderung, entsteht sie zuerst (SWE.1, RM) — nicht der Code.
+
 ## 6. Definition of Done und QM-Checklisten
 
 Je Information-Item-Typ existiert eine DoD-Checkliste in `process/checklists/` (abgeleitet aus den Information Item Characteristics des PAM 4.0). Beispiele:
@@ -222,4 +224,4 @@ Drei LLM-Arten hinter einem Gateway (Masterplan Kap. 5.8); für die tägliche Ar
 
 ---
 
-*Änderungshistorie: 0.1 initialer Entwurf; 0.2 +Automatisierungspyramide, besetzungs-agnostische Rollen, Lernzyklus, Live-Transparenz; 0.3 +Produktkatalog-Nutzung und Feedbackschleifen; 0.4 +Ortstransparenz und verteilter Betrieb; 0.5 +LLM-Provider-Einsatz (Claude, 2026-08-05).*
+*Änderungshistorie: 0.1 initialer Entwurf; 0.2 +Automatisierungspyramide, besetzungs-agnostische Rollen, Lernzyklus, Live-Transparenz; 0.3 +Produktkatalog-Nutzung und Feedbackschleifen; 0.4 +Ortstransparenz und verteilter Betrieb; 0.5 +LLM-Provider-Einsatz (Claude, 2026-08-05); 0.6 +Requirements-first-Regel Kap. 5 (T-0025, CHG, 2026-08-06).*
