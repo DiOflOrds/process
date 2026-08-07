@@ -282,7 +282,7 @@ Detaillierte P0-Beschreibung: `02-initialprojekt-p0.md`.
 
 ## 10. Offene Fragen an dich
 
-~~F1–F4 wurden am 2026-08-05 im Rahmen von Gate G0 entschieden — siehe E5–E8 in Kapitel 2 und Decision Log D001–D004 im P0-Repo.~~ Offen bleiben (Antworten bis Ende Sprint 2 erbeten):
+~~F1–F4 wurden am 2026-08-05 im Rahmen von Gate G0 entschieden — siehe E5–E8 in Kapitel 2 und Decision Log D001–D004 im P0-Repo.~~ F5/F7 entschieden 2026-08-06 (D010/D011); **F6/F8/F12/F13 entschieden 2026-08-07 (D023):** Zielprodukte = SW und später Embedded, Projekte parallel von Anfang an, weitere Team-Node-Geräte geplant, Copilot-Abo vorhanden. Offen bleiben nur noch F9–F11 (Erhebung beim P1-Intake):
 
 5. **F5 Sprache der Workproducts:** Deutsch, Englisch oder gemischt (Empfehlung: Englisch für Requirements/Code-Artefakte — assessment- und tool-üblich; Deutsch für Berichte an dich)?
 6. **F6 Zielprodukte:** Reine Software (Libraries, Apps, Services) oder auch Embedded mit Cross-Compiler/Target-Hardware? (Beeinflusst CI und Test-Infrastruktur erheblich.)
