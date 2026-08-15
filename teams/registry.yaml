@@ -31,7 +31,7 @@ teams:
     typ: pm
     profil: wiederkehrend
     repo: pm
-    status: in_gruendung   # P5-E4 (Sprint 1); Gründungsbeleg: p0/D027
+    status: aktiv          # Gründung vollzogen P5-E4 (2026-08-15); Gründungsbeleg: p0/D027
     gegruendet: 2026-08-15 (p0/D027)
     rollen: [PL, QM, COACH]   # Startbesetzung; Feinzuschnitt bei E4
     datenklasse: intern
