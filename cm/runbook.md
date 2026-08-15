@@ -67,3 +67,13 @@ Je neues Gerät: (1) Mensch-Freigabe (guardrails: device_onboarding), (2) Toolch
 ## 9. Team-Node-Gate (P2/T-0015, Lehre aus T-0002/T-0013)
 
 **Regel:** Ein G4-/Abnahme-DR wird erst gestellt bzw. beantwortet, wenn `abschluss.cmd` auf dem **Team-Node** (Windows, echte Env) grün durchgelaufen ist — Sandbox-/CI-Grün allein genügt nicht. Begründung: Beide Sprint-1-Probleme (Tests mit Mail-Seiteneffekt, CI ohne Tags) waren nur in der jeweils ungetesteten Umgebung sichtbar. Der abschluss.cmd-Lauf des Auftraggebers ist damit formell Teil des Gates, nicht nur Transportweg.
+
+## 11. Auto-Abschluss (pm/N-0001, 2026-08-15)
+
+**Muster:** Die Session pusht weiterhin nie selbst (Guardrail). Stattdessen: Session schreibt bei jedem Abschluss-/Sprint-Ende-Punkt die Datei **`PUSH-ANFORDERUNG.txt`** in den Arbeitsordner (Inhalt: Zeitpunkt + Anlass). Die Windows-Aufgabenplanung startet alle 15 Min `abschluss-auto.cmd`: liegt keine Anforderung → sofortiges Ende; liegt eine → `abschluss.cmd` läuft mit `MC_AUTO=1` (keine Pausen, keine Browserfenster), Protokoll `abschluss-auto.log`. Erfolg → Anforderung gelöscht; Fehler → bleibt liegen, nächster Versuch in 15 Min. Einrichtung (einmalig): `schtasks /Create /TN "ASPICE-AutoAbschluss" /TR "\"<Arbeitsordner>\abschluss-auto.cmd\"" /SC MINUTE /MO 15 /F`. Team-Node-Gate (Kap. 9) bleibt unberührt — der grüne Lauf passiert jetzt nur automatisch. **Session-Pflicht:** Anforderung an jedem Abschlusspunkt schreiben (Playbook-Routine).
+
+**Repos ohne Remote:** Repos mit Datei `.kein-remote` (Datenklasse sensibel, Playbook Kap. 16) überspringt der Push-Schritt gewollt mit Hinweis.
+
+## 12. team-mail: IMAP-Lesezugriff (TG-a, 2026-08-15)
+
+Nur-lesender Zugriff, Werte nie in Git: Google App-Passwort erzeugen (Konto → Sicherheit → App-Passwörter), dann `setx MAIL_IMAP_HOST imap.gmail.com`, `setx MAIL_IMAP_USER <postfach>`, `setx MAIL_IMAP_PASS <app-passwort>`. Test in neuem Fenster: `python team-mail\tools\mail_digest.py --tage 1`. Das Skript erzwingt `readonly=True` (nie löschen/verschieben/markieren/senden — Guardrail 1). Rohdaten und Digests bleiben im lokalen Repo `team-mail` (kein Remote, `.kein-remote`). Widerruf: App-Passwort im Google-Konto löschen + `setx MAIL_IMAP_PASS ""`.

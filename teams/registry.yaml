@@ -36,4 +36,13 @@ teams:
     rollen: [PL, QM, COACH]   # Startbesetzung; Feinzuschnitt bei E4
     datenklasse: intern
     wissensbasis: process/knowledge/pl/
-  # team-mail: geplant — Pilot-Team „Mail-Zusammenfassung" (F16/D027), Gründung als P6 (Klasse A).
+  team-mail:
+    name: team-mail (Mail-Zusammenfassung)
+    typ: projekt
+    profil: wiederkehrend
+    repo: team-mail        # LOKAL-ONLY: Datenklasse sensibel -> kein GitHub-Remote (.kein-remote)
+    status: aktiv
+    gegruendet: 2026-08-15 (pm/T-0004 TG-a, pm/D000; F16-Pilot, Vorgehen pm/B002)
+    rollen: [MAIL-RED]
+    datenklasse: sensibel
+    wissensbasis: team-mail/docs/
