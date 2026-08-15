@@ -1,6 +1,6 @@
-# Genesis 2.0 — Organisationskonzept (ENTWURF v0.1, zur Diskussion vor dem Intake)
+# Genesis 2.0 — Organisationskonzept (v1.0 — F14–F17 entschieden, Input für P5-G0)
 
-*2026-08-15, PL/ARCH/COACH gemeinsam. Anlass: Auftraggeber-Update (Diagramm + Beschreibungen Projektmanagement/Projekt-Teams). Ziel: aus dem Ein-Team-Betrieb (ASPICE-Team + Projekte) wird eine Organisation mit drei Team-Arten. Dieses Dokument schlägt die Struktur vor und benennt die Lücken der Aufgabenstellung ehrlich — es ist Input für den G0 des Umsetzungsprojekts, keine beschlossene Wahrheit.*
+*2026-08-15, PL/ARCH/COACH gemeinsam. Anlass: Auftraggeber-Update (Diagramm + Beschreibungen Projektmanagement/Projekt-Teams). Ziel: aus dem Ein-Team-Betrieb (ASPICE-Team + Projekte) wird eine Organisation mit drei Team-Arten. v0.1 war Entwurf; die vier Kernfragen F14–F17 sind am 2026-08-15 vom Auftraggeber entschieden (p0/D027) — siehe Abschnitt 5.*
 
 ## 1. Zielbild (aus dem Diagramm übersetzt)
 
@@ -72,9 +72,9 @@ produkt-*/ Produkte (wie bisher)
 2. **P6 „Pilot-Team":** EIN risikoarmes Team real gründen und 2 Wochen betreiben — Empfehlung: **Mail-Zusammenfassung** (klarer Nutzen, L2 klein, L3 unkritisch, Profil `wiederkehrend` wird real erprobt inkl. L6-Mechanik durch ASPICE).
 3. **P7+:** weitere Teams nach Pilot-Lehren; Trading/Steuer erst nach L2–L4-Guardrails (Klasse-A-Beschlüsse).
 
-## 5. Offene F-Fragen an den Auftraggeber (Fortsetzung F14 ff.)
+## 5. F-Fragen — ENTSCHIEDEN (Auftraggeber, 2026-08-15, p0/D027)
 
-- **F14 (L1):** Ausführungsmodell für Daueraufgaben — nur Session-Takt (0 €), + Aufgabenplanung/Ollama (0 €, begrenzte Qualität), oder + Claude-API mit Budget-Deckel (€)?
-- **F15 (L5):** Entscheidungsklassen A/B/C wie vorgeschlagen — darf PM Klasse B allein?
-- **F16 (P6):** Pilot-Team = Mail-Zusammenfassung? (Alternative benennen.)
-- **F17 (L3/L4):** Bestätigung der harten Guardrails: KI handelt nie mit Geld/Abgaben/Versand; sensible Daten nie zu GitHub.
+- **F14 (L1) → Session-Takt (0 €):** Daueraufgaben laufen im Session-Rhythmus („Briefkasten zuerst"-Muster, Session-Agenda durch PM). Kein Autopilot; Aufgabenplanung/Ollama oder Claude-API später per CR mit eigener Freigabe.
+- **F15 (L5) → Klasse B an PM:** PM entscheidet Priorisierung, Staffing und Routine-Abnahmen allein — jede Klasse-B-Entscheidung landet im PM-Decision-Log und ist im Cockpit sichtbar, Einspruch jederzeit. Klasse A (Geld, Recht, Außenwirkung, Team-Gründung, Projektabnahmen) bleibt immer beim Menschen.
+- **F16 (P6) → Pilot-Team = Mail-Zusammenfassung** (Profil `wiederkehrend`; IMAP-Lesezugriff wird als L2-Freigabe-Gate im Pilot geklärt).
+- **F17 (L3/L4) → beide Guardrails bestätigt (hart):** (1) KI-Teams handeln nie selbst mit Außenwirkung — keine Order, keine Steuerabgabe, kein Mailversand an Dritte; sie bereiten vor, der Mensch führt aus. (2) Sensible private Daten (Mails, Steuerunterlagen) landen nie in Repos mit GitHub-Remote. Verankerung im Playbook mit gleicher Härte wie „Sandbox pusht nie".
