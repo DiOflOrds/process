@@ -32,3 +32,14 @@ Drei CI-Gates je Push (platform: Tests+Matrix; p0: board-check; produkt: Tests+M
 ## 6. Geräte-Onboarding (F12/D023: weitere Geräte geplant)
 
 Je neues Gerät: (1) Mensch-Freigabe (guardrails: device_onboarding), (2) Toolchain: Git + Credential Manager (Login als DiOflOrds), Python 3.11+, optional Ollama/Copilot CLI, (3) `git clone` aller Repos in einen Wurzelordner, (4) Preflight grün, (5) Eintrag im Geräteregister (`process/cm/geraeteregister.md`) mit Identität, Toolchain, erlaubten Rollen, Rechten. Erst danach autonome Ticks auf dem Gerät.
+
+## 7. Betriebs-Backlog (Stand P1-Abschluss, 2026-08-15)
+
+| # | Aufgabe | Quelle | Hinweis |
+|---|---|---|---|
+| BB-1 | Copilot CLI am Team-Node installieren, dann `python platform\orchestrator\tick.py --repos . --ticket T-0072 --provider copilot` | p1/T-0018, p0/T-0072 (P0-K9) | Fehlversuch 2026-08-15 in Run-Registry protokolliert |
+| BB-2 | Checkliste „externen Dienst einrichten" (2FA → Secret/Env → Testlauf → Empfänger prüfen) hier ins Runbook | P1-Retro R1 | Lehre aus dem SMTP-Erstbetrieb (3 Anläufe) |
+| BB-3 | Frist-Warnung in `dr_benachrichtigung.py` (DRs nahe/über Frist erneut mailen) | P1-Retro R2 | requirements-first: erst SWR, dann Umsetzung |
+| BB-4 | Geräteregister um Soll-Toolchain je PoC ergänzen (z. B. Copilot CLI) | P1-Retro R3 | verhindert BB-1-artige Überraschungen |
+| BB-5 | PATs erneuern (ab 2026-09-05: p0-read-fuer-platform-ci; 2026-10-06/2026-11-05 folgen) | Kap. 4 | Secrets in den Repo-Settings aktualisieren |
+| BB-6 | Benachrichtigt-Marker T-0022 fehlt: nächsten offenen DR beobachten, ob Mail an D008-Adresse ankommt | p1/T-0022 | ggf. SMTP-Env im abschluss-Fenster prüfen (`set` vs `setx`) |
