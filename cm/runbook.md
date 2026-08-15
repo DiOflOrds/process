@@ -53,3 +53,7 @@ Je neues Gerät: (1) Mensch-Freigabe (guardrails: device_onboarding), (2) Toolch
 5. **Testlauf aus frischem Fenster** — den echten Aufrufpfad testen (z. B. `abschluss.cmd`), nicht nur das Skript isoliert.
 6. **Empfänger/Ziel verifizieren** — erste echte Zustellung beim tatsächlichen Empfänger bestätigen lassen (D008-Falle: Alt-Adresse im Default).
 7. **Geräteregister nachführen** — neue Umgebungsvariablen/Tools als Soll-Toolchain eintragen (Kap. 9 im Geräteregister).
+
+## 9. Team-Node-Gate (P2/T-0015, Lehre aus T-0002/T-0013)
+
+**Regel:** Ein G4-/Abnahme-DR wird erst gestellt bzw. beantwortet, wenn `abschluss.cmd` auf dem **Team-Node** (Windows, echte Env) grün durchgelaufen ist — Sandbox-/CI-Grün allein genügt nicht. Begründung: Beide Sprint-1-Probleme (Tests mit Mail-Seiteneffekt, CI ohne Tags) waren nur in der jeweils ungetesteten Umgebung sichtbar. Der abschluss.cmd-Lauf des Auftraggebers ist damit formell Teil des Gates, nicht nur Transportweg.
