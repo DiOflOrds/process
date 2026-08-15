@@ -1,0 +1,37 @@
+# Board-Check {{REPO}} (Muster p0/T-0015): board.py --check + BOARD.md-Aktualitätsprüfung je Push/PR.
+#
+# VORAUSSETZUNG (einmalig, Mensch): Fine-grained PAT mit "Contents: Read" für
+# DiOflOrds/platform (dieselbe PAT wie bei p0-p5) in DiOflOrds/{{REPO}} ->
+# Settings -> Secrets and variables -> Actions als Secret PLATFORM_READ_TOKEN hinterlegen.
+name: Board-Check
+on:
+  push:
+    branches: [main]  # P2/T-0013: keine Tag-Laeufe (alte Commits vs. heutige Repos = Rauschen)
+  pull_request:
+jobs:
+  board:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Secret PLATFORM_READ_TOKEN vorhanden?
+        env:
+          TOKEN: ${{ secrets.PLATFORM_READ_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::Secret PLATFORM_READ_TOKEN fehlt (Lese-PAT für DiOflOrds/platform). Anleitung im Workflow-Kopf."
+            exit 1
+          fi
+      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+        with:
+          repository: DiOflOrds/platform
+          token: ${{ secrets.PLATFORM_READ_TOKEN }}
+          path: .platform-tools
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Ticket-Validierung (Schema, Referenzen)
+        run: python .platform-tools/scripts/board.py . --check --no-git
+      - name: BOARD.md aktuell?
+        run: |
+          python .platform-tools/scripts/board.py . --no-git
+          git diff --exit-code BOARD.md || { echo "::error::BOARD.md ist nicht aktuell — board.py laufen lassen und mitcommitten."; exit 1; }

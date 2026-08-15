@@ -1,0 +1,8 @@
+# Team-Steckbrief (Kopie der Registry-Kernfelder — Quelle der Wahrheit bleibt process/teams/registry.yaml)
+name: "{{TEAM_NAME}}"
+typ: projekt            # aspice | pm | projekt
+profil: "{{PROFIL}}"    # entwicklung | dienstleistung | wiederkehrend (Playbook Kap. 15)
+datenklasse: intern     # intern | sensibel — bei `sensibel`: KEIN GitHub-Remote (Playbook Kap. 16, Guardrail 2)
+rollen: []              # bei Gründung definiert (Klasse A), Feinzuschnitt durch PM (Klasse B)
+sla: []                 # nur Profil wiederkehrend: Aufgabentyp -> Takt/Zusage
+gegruendet: "{{DATUM}} ({{GRUENDUNGS_DR}})"

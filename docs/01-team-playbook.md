@@ -222,6 +222,31 @@ Drei LLM-Arten hinter einem Gateway (Masterplan Kap. 5.8); für die tägliche Ar
 
 **Messen statt glauben:** First-Pass-Yield, Nacharbeitsquote und Kosten je Provider und Aufgaben-Typ sind KPIs; Gold-Beispiele werden periodisch auf allen verfügbaren Providern verglichen. Routing-Ketten werden nur datenbasiert per Prozess-CR geändert.
 
+## 15. Prozessprofile (Genesis 2.0, P5-E1)
+
+Die Organisation besteht aus Teams dreier Arten (ASPICE-Team, PM-Team, Projekt-Teams — Registry: `process/teams/registry.yaml`). Nicht jedes Team braucht den vollen SWE-Prozess: **Jedes Team erhält bei Gründung genau ein Prozessprofil** (Registry-Feld `profil`), das Gates, Pflicht-Artefakte und DoD festlegt. Ein Profilwechsel ist ein Klasse-A-Entscheid.
+
+**Profil `entwicklung`** *(gelebt seit P0; ASPICE-Team und SW-Produkte)*: volle SWE.1–6 + SUP.1/8/9/10, Gates G0–G4 als Inbox-DRs, Sprints mit Planning/Report/Retro, requirements-first mit SWR↔Test-Matrix (0 Lücken), Baselines als Tags + Manifest, Aufwandsschätzung je Planning.
+
+**Profil `dienstleistung`** *(einmalige/projektartige Lieferungen: wissenschaftliche Analyse, Steuererklärung eines Jahres)*: MAN.3 + SUP.1/8/9 light. Gates nur **G0** (Auftrag mit messbaren Abnahmekriterien) und **G4** (Abnahme je Lieferung) — beide Klasse A. Pflicht-Artefakte: Auftrag, Tickets mit DoD je Aufgabentyp, Decision-Log, Liefer-/Abnahmevermerk. Keine SWRs/Matrix; Qualität über DoD-Review (QM-Stichprobe). Probleme/CRs laufen über den normalen SUP.9/feedback_route-Weg.
+
+**Profil `wiederkehrend`** *(Daueraufgaben: Mail-Zusammenfassung, Markt-Monitoring, PM-Betrieb)*: Kanban ohne Sprints — Tickets tragen `sprint: 0` dauerhaft, Steuerung über Status und Prioritäten. Wiederkehrende Aufgaben als Ticket-Vorlagen mit Takt (täglich/wöchentlich); Ausführung im **Session-Takt** (F14/D027): die nächste Session arbeitet fällige Takt-Tickets nach PM-Agenda ab. Statt G4 gilt ein **SLA je Aufgabentyp** (z. B. „Digest in jeder Session, in der er fällig ist"); SLA-Verstöße sind Cockpit-/Retro-Thema. Qualitäts-Stichproben durch PM (Klasse B), Eskalation an den Menschen nur bei Befund. Gründung und SLA-Änderungen: Klasse A.
+
+## 16. Entscheidungsklassen und Organisations-Guardrails (Genesis 2.0, P5-E2)
+
+**Klasse A — immer der Mensch** (via Inbox/Briefkasten, mit Frist + Default): alles mit Geld, Recht oder Außenwirkung; Team-Gründung, -Pausierung, -Archivierung und Profilwechsel; Projekt-Aufträge (G0) und -Abnahmen (G4) außerhalb des Profils `wiederkehrend`; Budget- und Zugangs-Freigaben (neue externe Dienste, Credentials); Änderungen an diesem Kapitel.
+
+**Klasse B — das PM-Team allein**: Priorisierung und Session-Agenda, Staffing (Rollen/Skills innerhalb genehmigter Teams), Routine-Abnahmen im Profil `wiederkehrend` (SLA-Stichproben), Einplanung von CRs ohne Budgetwirkung. Jede Klasse-B-Entscheidung steht **append-only im PM-Decision-Log** (`pm/management/decisions/`) und ist über Mission Control einsehbar; der Mensch kann jederzeit einsprechen — Einspruch wird als neue Zeile verbucht, nie durch Umschreiben.
+
+**Klasse C — die Teams selbst**: Arbeitsebene innerhalb von Auftrag, Profil und DoD (Lösungsweg, Reihenfolge, Werkzeugwahl aus dem Katalog).
+
+Im Zweifel gilt die höhere Klasse. Eskalationsweg: C → B → A.
+
+**Harte Organisations-Guardrails (F17/D027 — gleiche Verbindlichkeit wie „die Sandbox pusht nie"):**
+
+1. **KI-Teams handeln nie selbst mit Außenwirkung.** Keine Order-Ausführung, keine Steuer-/Behörden-Abgabe, kein Geldtransfer, kein Mailversand an Dritte, kein Vertragsabschluss. KI-Teams analysieren, entwerfen und bereiten vor — die ausführende Handlung tut ausschließlich der Mensch. (Bestehende Ausnahme bleibt: DR-/Warn-Mails an die registrierten Team-Adressen nach SWR-033.)
+2. **Sensible private Daten kommen nie in Repos mit GitHub-Remote.** Datenklassen: `intern` (heutige Repos — Prozess, Code, Tickets), `sensibel` (private Mails, Steuer-/Finanzunterlagen, Gesundheitsdaten → nur lokale Ablage oder lokales Repo ohne Remote; Team-Repos verweisen per Pfad, committen nie Inhalte), `geheim` (Credentials, PINs → nur Env/lokale Ablage, wie bisher). Die Einstufung je Team ist Teil der Gründung (Klasse A).
+
 ---
 
-*Änderungshistorie: 0.1 initialer Entwurf; 0.2 +Automatisierungspyramide, besetzungs-agnostische Rollen, Lernzyklus, Live-Transparenz; 0.3 +Produktkatalog-Nutzung und Feedbackschleifen; 0.4 +Ortstransparenz und verteilter Betrieb; 0.5 +LLM-Provider-Einsatz (Claude, 2026-08-05); 0.6 +Requirements-first-Regel Kap. 5 (T-0025, CHG, 2026-08-06).*
+*Änderungshistorie: 0.1 initialer Entwurf; 0.2 +Automatisierungspyramide, besetzungs-agnostische Rollen, Lernzyklus, Live-Transparenz; 0.3 +Produktkatalog-Nutzung und Feedbackschleifen; 0.4 +Ortstransparenz und verteilter Betrieb; 0.5 +LLM-Provider-Einsatz (Claude, 2026-08-05); 0.6 +Requirements-first-Regel Kap. 5 (T-0025, CHG, 2026-08-06); 0.7 +Kap. 15 Prozessprofile und Kap. 16 Entscheidungsklassen/Organisations-Guardrails (P5-E1/E2 nach p0/D027, 2026-08-15).*

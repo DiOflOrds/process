@@ -1,0 +1,39 @@
+# Team-Registry v1 (Genesis 2.0, P5-E3) — alle Teams der Organisation.
+#
+# Schema:
+#   teams.<kuerzel>:
+#     name:       Anzeigename
+#     typ:        aspice | pm | projekt
+#     profil:     entwicklung | dienstleistung | wiederkehrend   (Playbook Kap. 15)
+#     repo:       Haupt-Repo des Teams (Discovery-Konvention: tickets/ + .git)
+#     status:     geplant | in_gruendung | aktiv | pausiert | archiviert
+#     gegruendet: Datum + Klasse-A-Beleg (Decision-Log-Referenz)
+#     rollen:     Rollen aus process/roles/registry.yaml bzw. Domänen-Rollen (bei Gründung definiert)
+#     datenklasse: intern | sensibel   (höchste im Team verarbeitete Klasse, Playbook Kap. 16)
+#     wissensbasis: Pfad zur Team-Wissensbasis
+#
+# Pflege: Gründung/Pausierung/Archivierung/Profilwechsel = Klasse A (Playbook Kap. 16),
+# Eintrag durch CM nach dem Entscheid. Statuspflege im Betrieb: PM (Klasse B, geloggt).
+
+teams:
+  aspice:
+    name: ASPICE-Team
+    typ: aspice
+    profil: entwicklung
+    repo: platform
+    status: aktiv
+    gegruendet: 2026-08-02 (P0 Genesis, Masterplan)
+    rollen: [PL, RM, ARCH, DEV, TEST, QM, CM, PROB, CHG, COACH]
+    datenklasse: intern
+    wissensbasis: process/knowledge/
+  pm:
+    name: Projektmanagement-Team
+    typ: pm
+    profil: wiederkehrend
+    repo: pm
+    status: in_gruendung   # P5-E4 (Sprint 1); Gründungsbeleg: p0/D027
+    gegruendet: 2026-08-15 (p0/D027)
+    rollen: [PL, QM, COACH]   # Startbesetzung; Feinzuschnitt bei E4
+    datenklasse: intern
+    wissensbasis: process/knowledge/pl/
+  # team-mail: geplant — Pilot-Team „Mail-Zusammenfassung" (F16/D027), Gründung als P6 (Klasse A).
