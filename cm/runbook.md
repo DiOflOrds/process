@@ -37,9 +37,19 @@ Je neues Gerät: (1) Mensch-Freigabe (guardrails: device_onboarding), (2) Toolch
 
 | # | Aufgabe | Quelle | Hinweis |
 |---|---|---|---|
-| BB-1 | Copilot CLI am Team-Node installieren, dann `python platform\orchestrator\tick.py --repos . --ticket T-0072 --provider copilot` | p1/T-0018, p0/T-0072 (P0-K9) | Fehlversuch 2026-08-15 in Run-Registry protokolliert |
-| BB-2 | Checkliste „externen Dienst einrichten" (2FA → Secret/Env → Testlauf → Empfänger prüfen) hier ins Runbook | P1-Retro R1 | Lehre aus dem SMTP-Erstbetrieb (3 Anläufe) |
-| BB-3 | Frist-Warnung in `dr_benachrichtigung.py` (DRs nahe/über Frist erneut mailen) | P1-Retro R2 | requirements-first: erst SWR, dann Umsetzung |
-| BB-4 | Geräteregister um Soll-Toolchain je PoC ergänzen (z. B. Copilot CLI) | P1-Retro R3 | verhindert BB-1-artige Überraschungen |
-| BB-5 | PATs erneuern (ab 2026-09-05: p0-read-fuer-platform-ci; 2026-10-06/2026-11-05 folgen) | Kap. 4 | Secrets in den Repo-Settings aktualisieren |
-| BB-6 | Benachrichtigt-Marker T-0022 fehlt: nächsten offenen DR beobachten, ob Mail an D008-Adresse ankommt | p1/T-0022 | ggf. SMTP-Env im abschluss-Fenster prüfen (`set` vs `setx`) |
+| BB-1 | Copilot CLI am Team-Node installieren, dann `python platform\orchestrator\tick.py --repos . --ticket T-0072 --provider copilot` | p1/T-0018, p0/T-0072 (P0-K9) | Fehlversuch 2026-08-15 in Run-Registry protokolliert; Soll-Toolchain jetzt im Geräteregister |
+| BB-2 | ~~Checkliste „externen Dienst einrichten"~~ **erledigt** (P2/T-0010, 2026-08-15) → Kap. 8 | P1-Retro R1 | — |
+| BB-3 | ~~Frist-Warnung in dr_benachrichtigung~~ **erledigt** (P2/T-0007, SWR-034/035, 2026-08-15) | P1-Retro R2 | Warnmail bei Frist ≤ 2 Tage/überschritten, mit Default-Hinweis |
+| BB-4 | ~~Geräteregister Soll-Toolchain~~ **erledigt** (P2/T-0011, 2026-08-15) | P1-Retro R3 | — |
+| BB-5 | PATs erneuern (ab 2026-09-05: p0-read-fuer-platform-ci; 2026-10-06/2026-11-05 folgen) | Kap. 4 | Secrets in den Repo-Settings aktualisieren; P2/T-0008: PAT braucht zusätzlich p2, process, produkt-datakonv (Katalog-CI) |
+| BB-6 | ~~Mail-Zustellung beobachten~~ **erledigt** (p2/T-0001-Mail mit Marker, 2026-08-15) | p1/T-0022 | Ursache damals: Testsuite-Fehlschlag brach abschluss.cmd ab (p2/T-0002) |
+
+## 8. Checkliste: Externen Dienst einrichten (P2/T-0010, Lehre aus dem SMTP-Erstbetrieb)
+
+1. **Konto-Voraussetzungen prüfen** — z. B. 2FA aktivieren, BEVOR App-Passwörter/API-Keys erzeugbar sind (Gmail-Falle).
+2. **Zugangsdaten erzeugen** — App-Passwort/API-Key; sofort im Passwort-Manager sichern (wird nur einmal angezeigt — PAT-Falle).
+3. **Nie in Git** — Zugangsdaten nur als Umgebungsvariable (Team-Node) oder GitHub-Actions-Secret.
+4. **Env richtig setzen** — Windows: `setx NAME wert` wirkt nur in NEUEN Fenstern; fürs aktuelle Fenster zusätzlich `set NAME=wert`. Werte ohne Leerzeichen (setx schneidet ab).
+5. **Testlauf aus frischem Fenster** — den echten Aufrufpfad testen (z. B. `abschluss.cmd`), nicht nur das Skript isoliert.
+6. **Empfänger/Ziel verifizieren** — erste echte Zustellung beim tatsächlichen Empfänger bestätigen lassen (D008-Falle: Alt-Adresse im Default).
+7. **Geräteregister nachführen** — neue Umgebungsvariablen/Tools als Soll-Toolchain eintragen (Kap. 9 im Geräteregister).

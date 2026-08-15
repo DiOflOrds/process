@@ -1,0 +1,7 @@
+# Nutzer-Registry (SWR-037, P2/T-0009). Rollen: entscheider | leser.
+# Neue Personen nur nach F9-Freigabe durch den Auftraggeber eintragen.
+nutzer:
+  - name: E. John
+    rolle: entscheider
+  - name: D. John
+    rolle: leser
