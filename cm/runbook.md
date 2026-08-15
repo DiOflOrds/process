@@ -28,6 +28,7 @@ Drei CI-Gates je Push (platform: Tests+Matrix; p0: board-check; produkt: Tests+M
 | Copilot-CLI-Aufruf schlägt fehl | `providers.copilot.befehl` in `platform/orchestrator/config/guardrails.yaml` an installierte CLI-Version anpassen; Login prüfen |
 | Ollama nicht erreichbar | Dienst starten; Modell prüfen (`OLLAMA_MODEL`, Geräteregister-Hinweis L-003); Kette fällt sonst auf session/claude |
 | Inbox nicht erreichbar | Erwartet, wenn Team-Node aus/außerhalb LAN (D017 bewusst akzeptiert) — Entscheidungen alternativ via Session-Dialog |
+| Frontend meldet „API nicht erreichbar: unbekannter Endpunkt" | Server-Prozess ist älter als der Code: statische Dateien (app.js) kommen je Request frisch von der Platte, der Python-Prozess lädt Routen nur beim Start. Nach jedem Plattform-Update: Server neu starten (Strg+C, neu ausführen) + Browser hart neu laden (Strg+F5) |
 
 ## 6. Geräte-Onboarding (F12/D023: weitere Geräte geplant)
 
