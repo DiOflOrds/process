@@ -55,6 +55,15 @@ Je neues Gerät: (1) Mensch-Freigabe (guardrails: device_onboarding), (2) Toolch
 6. **Empfänger/Ziel verifizieren** — erste echte Zustellung beim tatsächlichen Empfänger bestätigen lassen (D008-Falle: Alt-Adresse im Default).
 7. **Geräteregister nachführen** — neue Umgebungsvariablen/Tools als Soll-Toolchain eintragen (Kap. 9 im Geräteregister).
 
+## 10. LAN-Betrieb von Mission Control (P4/T-0008, ADR-006)
+
+1. **PIN setzen** (einmalig): `setx MC_PIN <deine-PIN>` → neues Fenster. Ohne PIN können LAN-Geräte nur lesen (sicherer Default). PIN nie in Git.
+2. **Starten:** `mission-control-lan.cmd` (statt server.py direkt) — zeigt die PC-Adresse fürs Handy an und bindet auf 0.0.0.0.
+3. **Firewall:** Beim ersten Start fragt Windows — „Zugriff zulassen" für **private** Netzwerke. Manuell: Einstellungen → Windows-Sicherheit → Firewall → App durch Firewall zulassen → Python (privat).
+4. **Handy (Android/Chrome):** `http://<PC-IP>:8080` öffnen (Adresse zeigt das Startskript); Menü → „App installieren" für die PWA; PIN oben im Kopfbereich eintragen — sie bleibt für die Browser-Sitzung gespeichert.
+5. **Harte Leitplanke:** NIEMALS Port-Forwarding/Internet-Expose — die PIN ist Heimnetz-Schutz, kein Passwortersatz (ADR-006). Kein TLS im LAN; wer das Heimnetz nicht kontrolliert, lässt den LAN-Modus aus.
+6. **Briefkasten-Routine:** Cowork-Session beginnt mit „Briefkasten zuerst" — Preflight meldet offene Briefe je Projekt.
+
 ## 9. Team-Node-Gate (P2/T-0015, Lehre aus T-0002/T-0013)
 
 **Regel:** Ein G4-/Abnahme-DR wird erst gestellt bzw. beantwortet, wenn `abschluss.cmd` auf dem **Team-Node** (Windows, echte Env) grün durchgelaufen ist — Sandbox-/CI-Grün allein genügt nicht. Begründung: Beide Sprint-1-Probleme (Tests mit Mail-Seiteneffekt, CI ohne Tags) waren nur in der jeweils ungetesteten Umgebung sichtbar. Der abschluss.cmd-Lauf des Auftraggebers ist damit formell Teil des Gates, nicht nur Transportweg.
