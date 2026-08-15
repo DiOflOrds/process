@@ -15,7 +15,7 @@
 | Basis (Board, Preflight, Tests, abschluss.cmd) | Git (Credential Manager als DiOflOrds), Python 3.10+, PyYAML | `python platform/scripts/preflight.py --repos .` |
 | DR-/Entscheidungs-Mails | Env: SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASS/MAIL_TO (Runbook Kap. 8) | Testlauf abschluss.cmd, Marker im Ticket |
 | Ollama-Provider | Ollama-Dienst + installiertes Modell (`OLLAMA_MODEL`, L-003) | `ollama list` |
-| **Copilot-PoC (BB-1, p0/T-0072)** | **GitHub Copilot CLI installiert + eingeloggt** (`copilot` im PATH; sonst `providers.copilot.befehl` in guardrails.yaml anpassen) | `copilot --version` — Stand 2026-08-15 auf team-node-1 NICHT installiert |
+| Copilot-Provider (derzeit inaktiv) | GitHub Copilot CLI installiert + eingeloggt (`copilot --version`: 1.0.80 auf team-node-1 ✓) **+ aktives Copilot-Abo — Stand 2026-08-15 ABGELAUFEN (p0/D026)**; Kette fällt regulär auf claude/mensch | `copilot -p "test"` muss ohne Policy-Fehler antworten |
 | Mission Control (Server) | Python 3.10+, Port 8080 frei, LAN-Zugriff optional (D017) | `python platform/backend/server.py --repos .` |
 
 ## Betriebshinweise

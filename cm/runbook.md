@@ -37,7 +37,7 @@ Je neues Gerät: (1) Mensch-Freigabe (guardrails: device_onboarding), (2) Toolch
 
 | # | Aufgabe | Quelle | Hinweis |
 |---|---|---|---|
-| BB-1 | Copilot CLI am Team-Node installieren, dann `python platform\orchestrator\tick.py --repos . --ticket T-0072 --provider copilot` | p1/T-0018, p0/T-0072 (P0-K9) | Fehlversuch 2026-08-15 in Run-Registry protokolliert; Soll-Toolchain jetzt im Geräteregister |
+| BB-1 | ~~Copilot-PoC-Lauf~~ **geschlossen: extern blockiert** (p0/D026, 2026-08-15) — CLI installiert + eingeloggt, Integrationsstrecke real belegt, aber **Copilot-Abo abgelaufen** (revidiert D023/F13). Wiedereröffnung per CR bei neuem Abo | p1/T-0018, p0/T-0072 (beide rejected) | Evidenz: Run-Registry + p0/T-0072; Executor dabei gehärtet |
 | BB-2 | ~~Checkliste „externen Dienst einrichten"~~ **erledigt** (P2/T-0010, 2026-08-15) → Kap. 8 | P1-Retro R1 | — |
 | BB-3 | ~~Frist-Warnung in dr_benachrichtigung~~ **erledigt** (P2/T-0007, SWR-034/035, 2026-08-15) | P1-Retro R2 | Warnmail bei Frist ≤ 2 Tage/überschritten, mit Default-Hinweis |
 | BB-4 | ~~Geräteregister Soll-Toolchain~~ **erledigt** (P2/T-0011, 2026-08-15) | P1-Retro R3 | — |
