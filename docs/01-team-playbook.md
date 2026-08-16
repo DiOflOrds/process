@@ -117,6 +117,8 @@ Typisierte Issue-Templates: **Task** (Arbeitsauftrag, Label nach Prozessgebiet),
 
 Status-Workflow (einheitlich): `open → in_analysis → in_progress → in_review → done` (+ `blocked`, `rejected`). Regeln: `in_review` erfordert benannten Reviewer ≠ Autor; `done` bei Problem/CR nur nach Verifikation; `blocked` erfordert Verweis auf Blocker (Ticket oder DR).
 
+**Sichtbarkeitsregel (pm/N-0011, 2026-08-16):** `in_progress` wird **beim Beginn der Arbeit gesetzt, nicht erst beim Abschluss nachgezogen** — die Spalte im Board ist der Live-Blick des Menschen auf „woran wird gerade gearbeitet". Sessions, die ein Ticket in einem Zug erledigen, durchlaufen die Stufen trotzdem einzeln, damit ein Blick ins HMI während der Session etwas zeigt.
+
 **Requirements-first (ab Sprint 3, T-0025):** Jedes neue Ticket, das Plattform- oder Produkt-Code erzeugt oder ändert, referenziert im Ticket-Body mindestens eine SWR-ID (Feld „SWR-Bezug") oder den auslösenden CR. Implementierung ohne Anforderungsbezug ist ein QM-Finding (SUP.1). Reine Prozess-/Doku-Tickets sind ausgenommen. Fehlt die passende Anforderung, entsteht sie zuerst (SWE.1, RM) — nicht der Code.
 
 ## 6. Definition of Done und QM-Checklisten
