@@ -167,6 +167,8 @@ Start-KPI-Set (COACH erhebt automatisch, Frontend zeigt Trends):
 
 Verbesserungen ändern ausschließlich versionierte Artefakte (Skills, Templates, Checklisten, CI-Regeln, Prompts) über Prozess-CRs — nie ad hoc. Wirkung wird im Folgesprint gegen den Erwartungswert geprüft (MAN.6/PIM.3 light).
 
+**LeLe-Takt (pm/D005, 2026-08-16):** Lessons Learned sind Pflichtteil JEDES Sprint-Abschlusses und jedes Takt-Durchlaufs — nicht quartalsweise. Jede Lehre wird noch in derselben Session verankert (Runbook-Regel, Gold-Beispiel oder Prozess-CR); das PM-Takt-Ticket prüft die Einhaltung.
+
 ## 9. Baselines und Releases
 
 **Baseline-Anlässe:** Anforderungs-Baseline vor Architekturstart und je Release (G1); Produkt-Baseline je Release (G3); Prozess-Baseline je P0-Meilenstein und danach quartalsweise. **Inhalt:** Git-Tag(s) + Manifest (Item-Versionen, Prüfstatus, offene Punkte). **Regel:** Nur aus Baselines wird released; Änderungen an einer Baseline nur über CR.
