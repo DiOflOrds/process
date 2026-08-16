@@ -302,3 +302,45 @@ keine mehr, sondern erzieht zum Wegsehen. `aggregation.cockpit` führt deshalb *
 (`heute` für Tagesarithmetik, `jetzt` für Momente) statt eines überladenen. Der Prüfsatz: *Welche
 Zahl meldet diese Vorsicht, wenn niemand etwas falsch gemacht hat?* Lautet die Antwort „Alarm",
 ist die Vorsicht an der falschen Stelle.
+
+## L-2026-08-16m — Wer eine geteilte Regel erweitert, muss ihre Nachbarn mitziehen — und die eigene Suite merkt es nicht (B059)
+
+**Woher.** Unmittelbar nach dem Commit zu SWR-104 (Uhrzeit-Takt, L-2026-08-16l) prüfte eine
+**unabhängige Gegenprüfung** die Änderung. Sie fand zwei echte Defekte. **Alle 400 Tests waren
+grün.**
+
+**Was passiert war.** `frist_ampel` liest eine Frist seit SWR-104 über `als_moment` und akzeptiert
+damit auch `2026-08-15 14:00`. Zwei Nachbarn lasen denselben Wert weiter mit der **alten**
+Auflösung:
+
+1. `aggregation.cockpit` filterte über `ist_ueberfaellig` (neu, akzeptiert Uhrzeit) und rechnete
+   die Tage-über daneben mit `date.fromisoformat` (alt). Ergebnis: `ValueError` — **erst nachdem
+   der Termin abgelaufen war** (vorher greift der Filter nicht), und weil `cockpit_alle` über alle
+   Projekte läuft, riss **ein** Ticket in **einem** Repo die **ganze** Cockpit-Seite mit, nach
+   außen als irreführendes `HTTP 404 „unbekanntes Projekt"`.
+2. Der Ticket-Editor baut sein Auswahlfeld aus einem festen Vokabular. Der neue Wert stand nicht
+   darin — der Browser wäre auf „einmalig" zurückgefallen, und das Speichern eines **beliebigen
+   anderen Feldes** hätte den Takt **stillschweigend gelöscht**.
+
+**Warum die Suite schwieg.** Die neuen Tests prüften die **neue** Fähigkeit (Takt mit Uhrzeit) und
+die **alte** Zusage (Datumsfristen unverändert). Keiner prüfte die **Kreuzung**: einen *alten*
+Feldnamen mit einem *neuen* Wert. Genau dort liegt der Schaden — und dort schaut niemand hin, der
+die Änderung geschrieben hat, weil er weiß, wofür er sie gemeint hat.
+
+**Regel 1 — die Erweiterung einer geteilten Regel ist erst fertig, wenn ihre Nachbarn geprüft
+sind.** Wird der **Wertebereich** einer geteilten Funktion vergrößert (Datum → Moment, Zahl →
+Bereich, ein Feld → Liste), wird jeder Aufrufer **desselben Rohwerts** aufgesucht und gefragt:
+*liest er ihn durch dieselbe Funktion, oder hat er seine eigene Kopie der alten Auflösung?* Eigene
+Kopien werden ersetzt, nicht ergänzt. Das ist die Anschlussfrage an B033 („wo steht die Regel
+schon?"): **wer liest denselben Wert noch, und mit welcher Annahme?**
+
+**Regel 2 — für jeden neuen Wertebereich ein Test am alten Feld.** Neben dem Test für die neue
+Fähigkeit gehört einer für den **alten** Namen mit dem **neuen** Wert (hier: `frist` *mit* Uhrzeit,
+obwohl niemand das vorhatte). Der Prüfsatz: *Welchen Wert kann dieses Feld ab heute tragen, den es
+gestern nicht tragen konnte — und wer liest dieses Feld?*
+
+**Regel 3 — eine grüne Suite ist kein Ersatz für einen fremden Blick, und der kommt zuletzt.**
+Die Defekte fand niemand, der den Code kannte. Bei Änderungen an **geteilten** Regeln gehört nach
+dem Commit eine unabhängige Gegenprüfung dazu, die ausdrücklich nach *Nachbarn und Grenzfällen*
+sucht statt nach der Absicht. Sie wird nicht als Zusatz geführt, sondern als **letzter Schritt der
+Änderung** — vorher ist sie nicht abgeschlossen.
