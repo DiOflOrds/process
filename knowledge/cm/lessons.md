@@ -95,3 +95,31 @@ einer Regel, hier ist es eine Regel, die nur einen der beiden Wege kennt.
 **Zweite Regel, aus dem Umgang damit:** Was ohne Code geht, wird sofort von Hand angewandt (Zeile
 nachgetragen, Kopf ergänzt); die Werkzeugänderung wird eingeplant (`pm/T-0037`) und nicht nebenbei
 in einer Routine-Session gebaut (B025/B038).
+
+## L-2026-08-16f (B052): Der Status-Übergang wird gegen HEAD geprüft, nicht gegen den vorigen Aufruf
+
+**Beim Schließen von `pm/T-0037`** wurde die vorgeschriebene Kette
+`open → in_progress → in_review → done` in **drei** `board.py status`-Aufrufen ohne
+Zwischencommit gefahren — so, wie „über die erlaubten Übergänge geschlossen" in sieben
+Session-Fußzeilen steht. Der anschließende `board.py pm --check` meldete
+`unzulässiger Status-Übergang: open -> done`.
+
+**Der Grund steht in `board.validiere`:** Verglichen wird der Status der Arbeitskopie gegen
+`status_in_head(repo, datei)` — also gegen den **zuletzt committeten** Stand. Für die Prüfung
+existieren die Zwischenschritte nicht; drei Aufrufe hintereinander sind ein einziger Sprung.
+
+**Das ist kein Werkzeugfehler, sondern die richtige Prüfung an der einzigen Stelle, die sie
+belegen kann:** die Historie. Ein Ticket, dessen Zwischenschritte nur in der Arbeitskopie
+stattgefunden haben, hat sie nicht nachweisbar durchlaufen — genau die Behauptung, gegen die
+B038 geschrieben ist.
+
+**Regel:** Ein Status-Übergang ist erst vollzogen, wenn er committet ist. Wer eine Kette fährt,
+committet **je Übergang** — mit einer Commit-Botschaft, die sagt, was den Übergang rechtfertigt
+(`-> in_review: DoD vollständig`, `-> done: Tests grün`). Ein Sammelcommit am Sessionende ist
+für Ticketstatus kein gültiger Abschluss.
+
+**Nebenbefund (R7, unverändert):** Jeder `git status`/`git add` hinterlässt auf diesem Mount ein
+`.git/index.lock`, das er nicht löschen kann — bei einer Commit-Kette also **mehrfach**, und beim
+`commit` zusätzlich ein `HEAD.lock`. Die Locks vor **jedem** Git-Aufruf per `mv` nach
+`.git/verwaiste-locks/` wegräumen, nicht nur einmal am Anfang; und `*.lock` prüfen, nicht nur
+`index.lock`.
