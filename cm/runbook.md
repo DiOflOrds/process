@@ -22,7 +22,7 @@ Drei CI-Gates je Push (platform: Tests+Matrix; p0: board-check; produkt: Tests+M
 
 | Störung | Behandlung |
 |---|---|
-| Git-Lock (R7: index.lock/HEAD.lock) | Preflight erneut laufen lassen (räumt verwaiste Locks, wenn kein git-Prozess läuft); in Cowork-Sessions ggf. Datei-Löschrecht erteilen |
+| Git-Lock (R7: index.lock/HEAD.lock) | Preflight erneut laufen lassen (räumt verwaiste Locks, wenn kein git-Prozess läuft). **Auf dem Cowork-Mount schlägt Löschen fehl** (`unable to unlink … Operation not permitted`) — Preflight räumt das Artefakt dann nach `.git/verwaiste-locks/` weg, Git ist damit entsperrt (pm/T-0023, seit 2026-08-16). Ursache bleibt bestehen: Der Session fehlt das Lösch-Recht auf `Downloads\aspice-team-repos-final`. Bis das erteilt ist, gelegentlich auf dem Host aufräumen: `.git\verwaiste-locks\` und die liegenbleibenden `.git\objects\**\tmp_obj_*`. **Warnzeichen:** Bleibt ein `index.lock` liegen, scheitert *jeder* folgende Commit im Repo — am 2026-08-16 blieb so die komplette Arbeit einer Session unverbucht |
 | CI rot | Lokal reproduzieren (Tests/Matrix wie im Abschluss-Skript); Secret-Fehler → Meldung im Workflow-Kopf befolgen (PATs erneuern: Ablaufdatum!) |
 | Tick bricht ab / Guardrail | `p0/management/runs/NOTFALL-MELDUNG.md` lesen; keine weiteren Ticks bis Ursache geklärt; Budget-Limits nur per CR + Mensch ändern |
 | Copilot-CLI-Aufruf schlägt fehl | `providers.copilot.befehl` in `platform/orchestrator/config/guardrails.yaml` an installierte CLI-Version anpassen; Login prüfen |
