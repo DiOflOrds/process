@@ -381,3 +381,96 @@ Flächen in einem Lauf gewählt (Feld, Zähler, Plandatei, Kachel). Auch das ste
 Gegenmaßnahme war, dass **keine** der vier eine neue Regel erfindet: die Ampel bleibt
 `board.frist_ampel`, die Kachel bleibt die aus SWR-103, neu ist genau eine Datei. Vier Flächen
 sind beherrschbar, solange sie vier **Anwendungen** einer Regel sind und nicht vier Regeln.
+
+## L-2026-08-17b — Zwei Gates, die einander auschecken, haben keine gemeinsame Push-Reihenfolge (B061)
+
+**Woher.** Der erste Hostlauf von SWR-105 meldete `platform` als rot, obwohl derselbe Stand lokal
+grün war. Ursache, nachgestellt statt vermutet: `abschluss.cmd` pusht die Werkzeug-Repos zuerst,
+also startet der CI-Lauf von `platform`, während `p0`/`p9` auf `origin/main` noch einen Commit alt
+sind — und das Matrix-Gate von `platform` checkt genau diese Repos aus. Dieselbe Reihenfolge
+existiert aus gutem Grund: der board-check jedes Projekt-Repos checkt `platform` aus und braucht
+dort die **neue** `board.py` (`pm/T-0013`).
+
+**Der Befund ist nicht die Reihenfolge, sondern der Zyklus.** A prüft B, B prüft A, beide werden im
+selben Lauf gepusht: wer zuerst geht, sieht den anderen alt. Es gibt keine Reihenfolge, die beide
+grün macht. `pm/T-0013` hat die eine Hälfte gelöst und die andere erzeugt — und niemand hat es
+gemerkt, weil der Beleg fehlte, bis SWR-105 ihn geliefert hat.
+
+**Regel 1 — bei einem Gate wird gefragt, wen es auscheckt.** Ein Gate, das fremde Repos ausleiht,
+prüft nicht den Stand, für den es läuft, sondern eine Mischung aus zwei Zeitpunkten. Der Prüfsatz
+vor jedem neuen Checkout in einem Workflow: *Wird dieses Repo im selben Lauf gepusht wie das
+prüfende — und wenn ja, in welcher Reihenfolge?*
+
+**Regel 2 — die Asymmetrie entscheidet, nicht die Symmetrie.** Beide Richtungen sind gleich
+plausibel und **nicht** gleich häufig: das Board-Format ändert sich zweimal im Projektleben, eine
+neue Anforderung entsteht in fast jedem Sprint. Die heute eingestellte Reihenfolge macht also den
+Regelfall rot und den Sonderfall grün. Wer zwischen zwei unauflösbaren Übeln wählt, zählt sie.
+
+**Regel 3 — eine Diagnose in demselben Lauf wie ihre Behebung ist eine Behebung ohne Diagnose.**
+Die Wahl zwischen den Wegen ändert `abschluss.cmd` oder schwächt ein Gate; `abschluss.cmd` ist im
+Vorlauf versehentlich geleert und rekonstruiert worden. Der Befund steht deshalb in `pm/T-0042`
+mit vier ausgeschriebenen Wegen und ihrem jeweiligen Preis, entschieden wird im nächsten Sprint.
+
+## L-2026-08-17c — Ein Zustand ohne Grund ist eine Farbe und verschiebt die Arbeit nur (B062)
+
+**Woher.** `CI-STATUS.md` meldete `p3`, `p5` und `platform` als **ROT** — und beantwortete damit
+die Frage, für die es gebaut worden war („sind die Läufe grün?"), ohne die Frage zu beantworten,
+die danach unweigerlich kommt („was ist kaputt?"). Für zwei der drei Repos ließ sich die Ursache in
+der Sandbox nicht ermitteln; der Mensch hätte doch wieder die Actions-Seite öffnen müssen — genau
+das, was `platform/T-0003` abschaffen sollte.
+
+**Regel 1 — wer einen Melder baut, baut die nächste Frage mit.** Ein Melder ist erst fertig, wenn
+seine Ausgabe zu einer Handlung führt, die nicht „nachsehen gehen" heißt. Der Prüfsatz: *Was tut
+der Leser als Erstes, nachdem er das gelesen hat — und kann der Melder ihm das abnehmen?* Hier war
+die Antwort eine einzige zusätzliche, ebenfalls anmeldefreie Abfrage (SWR-107).
+
+**Regel 2 — die Diagnose darf den Befund nie verschlucken.** Scheitert die Nachfrage — Budget leer,
+Netzfehler, unerwartete Antwort —, bleibt das Repo **rot** und der Bericht sagt „Schritt
+unbekannt". Ein Diagnoseweg, der bei eigenem Scheitern den Zustand aufweicht, ist gefährlicher als
+gar keiner (B038). Ebenso zählt die Nachfrage gegen **dasselbe** Budget und erscheint in derselben
+Zahl; ein zweiter, stiller Zähler wäre B033.
+
+**Regel 3 — die erste Erklärung wird gegen einen Nachbarn geprüft, bevor sie eine Ursache heißt.**
+Für `p3`/`p5` lag die Erklärung fertig da (Board-Formatänderung plus Push-Reihenfolge, `pm/T-0013`)
+und war falsch: `p7` trägt denselben Commit-Zeitpunkt **auf die Sekunde**, dieselbe Workflow-Datei,
+dieselbe Formatänderung — und ist grün. Gegen jede `board.py`-Fassung seit dem 16.08. sind alle
+drei grün, gegen die Fassung davor alle drei rot; es gibt also keine Version, die p3/p5 rot und p7
+grün macht. Der Prüfsatz: *Welcher Nachbar müsste nach dieser Erklärung dasselbe Ergebnis haben —
+und hat er es?* Ohne diese Frage wären zwei Tickets mit einer plausiblen, falschen Begründung
+geschlossen worden.
+
+## L-2026-08-17d — Ein Fall, den die Anforderung ausdrücklich nennt, ist damit noch nicht gebaut (B063)
+
+**Woher.** Die unabhängige Gegenprüfung von SWR-107 (L-2026-08-16m, zweiter Einsatz) fand bei
+**grüner Suite** fünf echte Befunde. Der schwerste: eine unerwartete Nutzlast der Jobs-Abfrage —
+eine Liste, wo ein Objekt erwartet wurde — ließ `fehlerschritt()` werfen, der Wurf verließ
+`pruefe()`, `main()` brach ab, und **es wurde gar keine Datei geschrieben**. Der rote Befund war zu
+diesem Zeitpunkt bereits vollständig ermittelt; `abschluss.cmd` schickte den Menschen mit
+„Details in CI-STATUS.md" auf eine Datei mit dem Stand des Vortages („ALLES GRÜN").
+
+**Das Besondere daran.** Der Fall stand **wörtlich in der Anforderung**: *„If the lookup fails for
+any reason — exhausted budget, network error, **unexpected payload** … the repository shall remain
+red."* Er war also nicht übersehen, sondern **aufgeschrieben und nicht gebaut** — und die Suite
+konnte es nicht merken, weil sie prüft, was gebaut wurde. Die beiden vorhandenen Grenzfalltests
+(`None`, `{"jobs": []}`) trafen ihn nicht: beide sind falsy und laufen deshalb gerade *nicht* in
+den Wurf. Zwei Tests, die den Fall zu prüfen scheinen und die einzige gefährliche Variante
+auslassen, sind schlimmer als keiner — sie erzeugen die Überzeugung, es sei geprüft.
+
+**Regel 1 — die DoD-Punkte werden gegen die Tests abgehakt, nicht gegen die Erinnerung.** Nach dem
+Bauen: jeden Satz der Anforderung durchgehen und zu jedem den Test benennen, der ihn hält. Wo kein
+Test benennbar ist, ist der Satz nicht umgesetzt, egal wie sicher man sich ist.
+
+**Regel 2 — bei „bei jedem Fehler" wird die Liste der Fehler ausgeschrieben.** „Scheitert die
+Nachfrage" klingt vollständig und ist es nie. Netzfehler, HTTP-Fehler, leere Antwort, Antwort mit
+falschem Typ, Antwort mit richtigem Typ und fehlenden Feldern — jede Zeile ein Test.
+
+**Regel 3 — zwei Quellen entstehen auch zwischen Zahl und Text.** Ein zweiter Befund derselben
+Prüfung: der Fließtext sagte viermal „Abfragebudget aufgebraucht", während das maschinenlesbare
+Feld `budget_erschoepft` daneben `false` meldete. Beide beantworten dieselbe Frage — das ist B033,
+auch wenn die eine Quelle Prosa ist und die andere JSON. Der Prüfsatz: *Steht dieselbe Aussage
+irgendwo zweimal, und wird sie an beiden Stellen von derselben Rechnung gespeist?*
+
+**Regel 4 — ein Ergebnis, das kein Fehlschlag ist, darf nie als Ursache erscheinen.** `neutral`
+wurde wie `failure` behandelt und hätte den wirklich gescheiterten Job verschwiegen. Bei jeder
+Aufzählung von „Zuständen, die zählen" gehört die Gegenliste mit ins Feld — hier `OHNE_BEFUND`,
+eine Konstante statt einer Aufzählung an drei Stellen.
