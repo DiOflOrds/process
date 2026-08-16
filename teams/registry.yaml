@@ -36,6 +36,22 @@ teams:
     rollen: [PL, QM, COACH]   # Startbesetzung; Feinzuschnitt bei E4
     datenklasse: intern
     wissensbasis: process/knowledge/pl/
+  team-dashboard:
+    name: team-dashboard (Ergebnis-Darstellung)
+    typ: projekt
+    profil: wiederkehrend
+    repo: team-dashboard   # lokal ohne Remote — Datenklasse `intern` erlaubt einen, das
+                           # GitHub-Repo + Secret + PAT-Erweiterung sind Handlungen des
+                           # Auftraggebers. KEIN `.kein-remote` — anders als bei team-mail
+                           # ist das Fehlen hier ein offener Schritt, keine Regel.
+    status: aktiv
+    gegruendet: 2026-08-16 (pm/T-0031 TG-a, pm/D006; Brief pm/N-0027, Pool-Kandidat #13)
+    rollen: [DASH-RED]
+    datenklasse: intern    # AUFLAGE (Gruendungs-DR Punkt 1, Guardrail 2): Das Mail-Widget
+                           # rendert team-mail (`sensibel`) NUR zur Laufzeit hinter dem
+                           # PIN-Lesegate. Wird je ein Digest-Inhalt in ein Repo committet,
+                           # ist dieses Team ab dann `sensibel` und verliert den Remote.
+    wissensbasis: team-dashboard/docs/
   team-mail:
     name: team-mail (Mail-Zusammenfassung)
     typ: projekt
