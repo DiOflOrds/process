@@ -265,3 +265,40 @@ Ticket aus, das in **keiner** Planzeile vorkommt (`nicht_geplant`) — mit Ref u
 der Tabelle, nicht darunter. Eine Sicht, die nur wiedergibt, was ihr vorgelegt wird, kann einen
 fehlenden Eintrag grundsätzlich nicht finden; sie bestätigt nur die Lücke, die sie zeigen sollte.
 Das gilt über diesen Fall hinaus für jede Ansicht, deren Quelle von Hand gepflegt wird.
+
+## L-2026-08-16l — Eine Regel, die auf Tagen rechnet, kann nichts über Uhrzeiten sagen — auch nicht schweigend (B058)
+
+**Woher.** `pm/T-0032` Teil 2 sollte den Uhrzeit-Takt bauen (`takt: taeglich@14:00`). Teil 1 hatte
+schriftlich entschieden: der abgeleitete Termin geht durch **dieselbe** `board.frist_ampel` wie
+eine Frist — *„eine Ampelregel, zwei Quellen"*, eine zweite Rechnung wäre B033. Genau das wurde
+gebaut, und es war beim ersten Test falsch.
+
+**Der Fehler.** `frist_ampel` verglich **Kalendertage** (`frist < heute` → rot). Der abgeleitete
+Termin „**heute** 14:00" ist um 15:00 **verstrichen**, der **Tag** aber nicht. Die geteilte Regel
+hätte deshalb **gelb — „fällig, aber noch Zeit"** gesagt, ausgerechnet für den Takt, der versäumt
+wurde. Kein Tippfehler: die Funktion beantwortete korrekt die Frage, die sie kannte („ist der Tag
+vorbei?"), und wurde nach etwas anderem gefragt („ist der **Moment** vorbei?"). Dieselbe Familie
+wie **B057** (zwei Fakten in eine Zahl) und **B053** (ein Feld, zwei Bedeutungen).
+
+**Regel 1 — eine Regel teilen heißt prüfen, ob ihre Auflösung zur neuen Frage passt.** Bevor eine
+bestehende Funktion eine zweite Quelle bekommt, wird ihre **Granularität** gegen die neue Frage
+gehalten: Tage gegen Minuten, Datum gegen Moment, Zähler gegen Menge. Passt sie nicht, ist die
+Wahl nicht „Kopie oder falsche Antwort", sondern **die geteilte Regel wird verfeinert** — und die
+alte Aussage wird dabei bewiesen, nicht behauptet: der Test vergleicht die neue Fassung mit der
+alten Formel **Tag für Tag über einen ganzen Monat gegen jeden Bezugstag desselben Monats**
+(961 Vergleiche). Erst dann ist es eine Erweiterung und keine Bedeutungsverschiebung.
+
+**Regel 2 — wo Auflösung fehlt, gilt die vorsichtige Richtung, und sie steht im Code.** Wo nur ein
+Tag bekannt ist, aber ein Moment gebraucht wird, gilt der Termin als **verstrichen** und eine
+Erledigung als **frühestmöglich** (Datum ohne Uhrzeit = Tagesbeginn, Termin ohne Uhrzeit =
+Tagesende). Beide Richtungen zeigen auf **„im Zweifel fällig, nie frisch"** — dieselbe
+Vorsichtsregel wie bei `session.stille` (B038). Was aus Vorsicht gilt und nicht aus Messung, wird
+im Docstring als solches benannt.
+
+**Regel 3 — Vorsicht darf nicht zur Falschmeldung werden.** Die naheliegende Abkürzung wäre
+gewesen, den Tagesbezug des Cockpits einfach als Moment zu behandeln (Tagesende). Das hätte
+`taeglich@23:00` **jeden Morgen** als fällig gemeldet — Vorsicht, die zur Fehlmeldung wird, ist
+keine mehr, sondern erzieht zum Wegsehen. `aggregation.cockpit` führt deshalb **zwei** Bezüge
+(`heute` für Tagesarithmetik, `jetzt` für Momente) statt eines überladenen. Der Prüfsatz: *Welche
+Zahl meldet diese Vorsicht, wenn niemand etwas falsch gemacht hat?* Lautet die Antwort „Alarm",
+ist die Vorsicht an der falschen Stelle.
