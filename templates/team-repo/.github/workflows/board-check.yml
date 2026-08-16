@@ -34,4 +34,4 @@ jobs:
       - name: BOARD.md aktuell?
         run: |
           python .platform-tools/scripts/board.py . --no-git
-          git diff --exit-code BOARD.md || { echo "::error::BOARD.md ist nicht aktuell — board.py laufen lassen und mitcommitten."; exit 1; }
+          git diff -I "^Stand:" --exit-code BOARD.md || { echo "::error::BOARD.md ist nicht aktuell — board.py laufen lassen und mitcommitten."; exit 1; }

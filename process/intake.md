@@ -27,3 +27,7 @@ Ein **Team** ist auf Dauer angelegt (ein Projekt endet, ein Team arbeitet weiter
 **Lebenszyklus danach:** Pausierung/Archivierung/Profilwechsel = Klasse A (Registry-Status; Repo bleibt als Historie). Staffing-Anpassungen im Betrieb = Klasse B (PM, geloggt).
 
 **Definition of Done (Team-Gründung):** Klasse-A-Entscheid im Log, Registry-Eintrag, Repo valide (board-check), Charter final, Datenklasse + Zugänge dokumentiert, Team in der Session-Agenda.
+
+## Projekte im Sammel-Repo (v3, pm/D003 2026-08-16)
+
+Ab P10 werden neue Projekte als **Ordner im Repo `projects`** angelegt (`projects/p10/` usw., gleiche Struktur wie bisher) — kein eigenes GitHub-Repo, kein PAT-Update je Projekt mehr. Einmalige Voraussetzung (Mensch): GitHub-Repo `DiOflOrds/projects` + Secret + PAT-Erweiterung. Discovery/board/Baselines für verschachtelte Projektordner: SWR-070 (P9). Bestandsprojekte p0–p9 bleiben eigenständig.
