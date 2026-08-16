@@ -51,3 +51,21 @@ Beides ist erfüllbar; es war nie ein Zielkonflikt, sondern eine Reihenfolge.
 **Ausnahme, ausdrücklich:** Klasse-A-Entscheidungsanträge bleiben vollständig. Ein Antrag, der
 Gegenargumente kürzt, ist kein kürzerer Antrag, sondern ein schlechterer — er bekommt den
 Kurzblock obenauf, nicht statt des Textes.
+
+## L-2026-08-16d (R7): Ein Umgehungsweg um eine Sperre darf den Zustand nicht raten
+
+Der `.git/index.lock` auf dem Mount lässt sich anlegen, aber nicht löschen — jeder folgende
+`git`-Aufruf bricht ab. Der naheliegende Ausweg, `GIT_INDEX_FILE` auf eine **Kopie** des Index zu
+setzen, läuft durch und ist trotzdem falsch: Die echte `.git/index` bleibt auf altem Stand, und
+**jede Datei, die nicht ausdrücklich im `git add` steht, wird aus diesem alten Stand
+mitcommittet**. In der Praxis hat das ein Ticket um 26 Zeilen zurückgesetzt, während die
+Commit-Message das Gegenteil behauptete.
+
+**Richtig:** Locks per `mv` nach `.git/verwaiste-locks/` wegräumen (Umbenennen ist auf dem Mount
+erlaubt, Löschen nicht — derselbe Ausweg wie in `pm/T-0023`), danach `git reset` gegen den echten
+Index und normale Aufrufe.
+
+**Regel:** Ein Workaround, der eine Sperre umgeht, muss denselben Zustand lesen wie das gesperrte
+Werkzeug — sonst tauscht er einen sichtbaren Fehlschlag gegen einen unsichtbaren (B038). Und:
+Diffstat-Zahlen nach dem Commit gegenlesen, nicht nur den Exit-Code (B041 Regel 3) — die Zahl
+`-26` war hier der einzige Hinweis.
