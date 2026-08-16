@@ -69,3 +69,29 @@ Index und normale Aufrufe.
 Werkzeug — sonst tauscht er einen sichtbaren Fehlschlag gegen einen unsichtbaren (B038). Und:
 Diffstat-Zahlen nach dem Commit gegenlesen, nicht nur den Exit-Code (B041 Regel 3) — die Zahl
 `-26` war hier der einzige Hinweis.
+
+## L-2026-08-16e (B051): Eine Konvention, die nur von Hand existiert, überlebt den ersten Werkzeuglauf nicht
+
+**P12 ist das erste Projekt, das über den „Starten"-Knopf entstanden ist** (`pm/T-0022` Teil 2,
+`pool.kandidat_starten`). Der Lauf war technisch fehlerfrei — und hinterließ zwei Dinge, die eine
+Session von Hand richten musste:
+
+1. **Der Pool-Kandidat wurde gelöscht statt nach „Realisiert" verschoben.** Den Abschnitt gibt es
+   seit 16:15 desselben Tages, eingeführt von Hand für Kandidat #13 mit der Begründung aus B029.
+   Das Werkzeug war da schon gebaut und kennt ihn nicht.
+2. **Das erzeugte Decision-Log hat keinen Tabellenkopf.** Die Inbox hängt ihre Entscheidungszeile
+   an — ohne Kopf ist das keine Tabelle, sondern Pipe-Text. Alle von Hand angelegten Logs (P10,
+   P11) tragen den Kopf; nur der vom Werkzeug erzeugte nicht.
+
+**Beides scheitert lautlos.** Ein gelöschter Kandidat wirft keinen Fehler, eine kopflose Tabelle
+auch nicht. Sichtbar wurde es nur, weil die Session den Commit des Knopfes gegengelesen hat
+(`1 file changed, 1 deletion(-)` — B041 Regel 3).
+
+**Regel:** Wird eine Konvention von Hand eingeführt, während ein Werkzeug denselben Weg
+automatisiert, gehört sie in derselben Sitzung als Ticket ans Werkzeug — sonst hält sie genau so
+lange, wie niemand den Knopf drückt. Das ist die Umkehrung von B033: dort waren es zwei Kopien
+einer Regel, hier ist es eine Regel, die nur einen der beiden Wege kennt.
+
+**Zweite Regel, aus dem Umgang damit:** Was ohne Code geht, wird sofort von Hand angewandt (Zeile
+nachgetragen, Kopf ergänzt); die Werkzeugänderung wird eingeplant (`pm/T-0037`) und nicht nebenbei
+in einer Routine-Session gebaut (B025/B038).
