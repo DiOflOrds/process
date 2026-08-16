@@ -186,3 +186,30 @@ ist eine Zusicherung, die niemand gegeben hat.
 Altstand nur mit `AttributeError` scheitert (die Funktion gab es noch nicht), belegt nichts über
 den Schaden. Erst der Test über den echten Lesepfad — *die Team-Antwort darf nicht in `nachricht`
 stehen* — scheitert mit `AssertionError` und benennt damit, was kaputt war.
+
+## L-2026-08-16i — Eine Zahl, die aus der Historie kommt, ist noch keine Messung dessen, wonach gefragt war (B056)
+
+**Woher.** `pm/T-0040` (Kachel „Letzte Session" in Mission Control) verlangt in seiner DoD „die
+Zahl der **Sessions** des Tages (aus der Git-Historie, nicht aus dem Text)". Die Historie kennt
+aber keine Sessions, sie kennt **Commits**. Am 16.08. stehen **42 Commits** auf
+`pm/management/session-agenda.md` rund **30** Routine-Läufen gegenüber: eine Session schreibt die
+Datei mehrfach.
+
+**Die naheliegende Brücke trägt nicht.** Commits über eine Zeitlücke zu Sessions zu bündeln — „was
+weniger als ein Takt auseinanderliegt, ist eine Session" — sieht sauber aus und unterschätzt
+nachweislich: zwischen `16:35:24` und `16:51:41` liegen **16 Minuten** und **zwei verschiedene**
+Sessions. Die Kachel hätte dann „12 Sessions heute" gesagt, wo 14 liefen, ohne jede Meldung.
+
+**Regel.** Wenn die verfügbare Größe die gefragte nur annähert, wird die **verfügbare** geliefert
+und sie wird nach sich selbst benannt (`fortschreibungen_heute`, nicht `sessions_heute`). Eine
+Schätzung unter dem Namen einer Messung ist B027/B038 — der stille Ausfall, den niemand bemerkt,
+weil er plausibel aussieht. Wer die gefragte Größe wirklich braucht, braucht eine **Markierung, die
+die Session selbst setzt**; das ist ein eigener CR und wird nicht nebenbei erfunden.
+
+**Zweiter Teil derselben Session, dieselbe Familie.** Ein Aufruf in der falschen CLI-Form
+(`board.py pm --status T-0040=in_progress` statt `board.py pm status T-0040 in_progress`) hat
+klaglos **BOARD.md neu erzeugt** und `OK: 40 Tickets validiert` gemeldet — der Statuswechsel fand
+nicht statt, und die bereits geschriebene Commit-Botschaft behauptete ihn trotzdem. Gefunden nur
+beim Nachlesen von `grep '^status:'`, nicht von einer Meldung. **Eine Commit-Botschaft ist eine
+Aussage über den Zustand und wird wie eine Aussage geprüft**, bevor sie stehenbleibt; hier
+richtiggestellt (`--amend`) und die drei Übergänge mit je einem Commit neu gefahren (B052).
