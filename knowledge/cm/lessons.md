@@ -153,3 +153,36 @@ und welchem, entscheidet der Aufrufer (Familie **B033**).
 **Zweite Regel:** Eine Zuordnung, die nur im Fließtext steht, existiert für jede Übersicht nicht.
 Sie muss in einem Feld stehen — und das Feld muss von der Ausgabe gelesen werden, auf die
 tatsächlich jemand schaut.
+
+---
+
+## L-2026-08-16h — Ein Test, der nur die eigene Fassung kennt, prüft nichts (B054)
+
+**Fund.** `briefkasten._parse` trennte die Team-Antwort von der Nachricht an einer wörtlichen
+Überschrift: `## Antwort (Team, JJJJ-MM-TT)`. Der zugehörige Test schrieb genau diese Zeile selbst
+in die Testdatei und war seit P4 grün. Die **Routine-Sessions** schreiben seit dem 15.08. eine
+andere Fassung — `## Antwort des Teams (Routine-Session, JJJJ-MM-TT HH:MM)`, mit Uhrzeit, weil bei
+einem 30-Minuten-Takt das Datum nicht mehr unterscheidet. Ergebnis: bei **10 von 30** beantworteten
+Briefen blieb `antwort` leer, und die vollständige Team-Antwort stand im **Nachrichtenblock**. Die
+Chat-Ansicht rendert den Antwortblock nur, wenn `b.antwort` gefüllt ist — sie zeigte Frage und
+Antwort als **einen** Text ohne Absender und ohne Datum. Betroffen war auch `pm/N-0030`.
+
+**Warum es niemand gemerkt hat.** Der Fehler hat keine Meldung, kein rotes Gate und keinen
+Stacktrace. Er sieht nur falsch aus, und zwar nur dort, wo niemand aus dem Team hinschaut: in der
+HMI des Auftraggebers. Der Preflight zählt Briefe nach `status`, nicht nach Lesbarkeit; die
+SWR-Matrix meldete SWR-050 als verifiziert — durch einen Test, der seine eigene Eingabe erzeugt.
+
+**Regel 1 — Testdaten aus dem Bestand, nicht aus der Fantasie.** Wo ein Parser ein Format liest,
+das **andere** Teile des Systems schreiben, muss mindestens ein Testfall die Fassung benutzen, die
+tatsächlich im Repo steht. Der billigste Vollzug: einmal über die echten Dateien laufen und zählen,
+was herausfällt (`beantwortet ohne erkannte Antwort` — hier: 10).
+
+**Regel 2 — auf die Überschrift prüfen, nicht auf ihre Fassung.** Wer eine Struktur erkennt, soll
+das erkennen, was sie zur Struktur macht (`^## Antwort…`), und den Rest (Zusatz, Uhrzeit, Klammern)
+als variabel behandeln. Ein exaktes Muster gegen einen Text, den Menschen und Sessions schreiben,
+ist eine Zusicherung, die niemand gegeben hat.
+
+**Regel 3 — der Gegenprobentest muss inhaltlich scheitern.** Ein neuer Test, der gegen den
+Altstand nur mit `AttributeError` scheitert (die Funktion gab es noch nicht), belegt nichts über
+den Schaden. Erst der Test über den echten Lesepfad — *die Team-Antwort darf nicht in `nachricht`
+stehen* — scheitert mit `AssertionError` und benennt damit, was kaputt war.
