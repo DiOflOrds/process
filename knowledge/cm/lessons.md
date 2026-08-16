@@ -344,3 +344,40 @@ Die Defekte fand niemand, der den Code kannte. Bei Änderungen an **geteilten** 
 dem Commit eine unabhängige Gegenprüfung dazu, die ausdrücklich nach *Nachbarn und Grenzfällen*
 sucht statt nach der Absicht. Sie wird nicht als Zusatz geführt, sondern als **letzter Schritt der
 Änderung** — vorher ist sie nicht abgeschlossen.
+
+## L-2026-08-17a — Wählt der Auftraggeber die Option mit der bekannten Schwäche, wird sie umgesetzt **und** abgesichert (B060)
+
+**Woher.** Bei der Umstellung von Datums- auf Sprintplanung (`pm/T-0041`) stand die Frage, ob das
+Datumsfeld `frist` verschwindet. Das Team hat drei Möglichkeiten vorgelegt und die dritte —
+**beide Felder parallel** — ausdrücklich als die schwächste bezeichnet: zwei Angaben zu „wann ist
+es dran" driften auseinander (B033). Der Auftraggeber hat genau diese gewählt.
+
+**Was daraus nicht folgt.** Weder „dann eben, er wird schon wissen, was er tut" noch „wir machen
+es trotzdem anders". Das erste liefert wissentlich eine Konstruktion mit eingebautem Fehler; das
+zweite überstimmt eine Entscheidung, die nicht dem Team gehört.
+
+**Regel 1 — die Schwäche wird zur Prüfung, nicht zur Fußnote.** Wenn eine gewählte Option eine
+benannte Schwachstelle hat, wird **die Schwachstelle geprüft**, nicht vorausgesetzt. Hier: `frist`
+und `geplant_sprint` beantworten ab jetzt schriftlich **zwei verschiedene Fragen** (Zusage nach
+außen / Lauf des Teams) — damit sind es zwei Fakten und keine zwei Quellen —, und
+`board.sprint_widerspruch` meldet jedes Ticket, dessen geplanter Sprint **auch im günstigsten
+Fall** nach seiner Frist läge. Zwei Fakten dürfen nebeneinander stehen; zwei Angaben, die sich
+widersprechen, nicht. Der Prüfsatz: *Woran würde man merken, dass die Schwäche eingetreten ist —
+und wer schaut dort hin?*
+
+**Regel 2 — der Melder zeigt nur, was schon der günstigste Fall nicht auflöst.** Die Prüfung
+rechnet mit **ununterbrochenem** Takt. Ein Plan, der nur bei Stillstand reißt, ist ein Risiko und
+kein Widerspruch; ein Melder, der Risiken als Fehler ausgibt, erzieht innerhalb weniger Läufe zum
+Wegsehen. Dieselbe Regel wie bei der Takt-Vorsicht aus **L-2026-08-16l**, Regel 3: *Welche Zahl
+meldet dieser Melder, wenn niemand etwas falsch gemacht hat?*
+
+**Regel 3 — die Entscheidung und ihr Einwand stehen im Ticket, nicht im Gedächtnis.** `pm/T-0041`
+nennt beide: die Wahl des Auftraggebers und den Einwand des Teams samt Gegenmaßnahme. Wer in drei
+Monaten auf die Doppelung stößt, findet dort, dass sie gewollt war und was sie absichert — statt
+sie als Versehen zu „reparieren".
+
+**Anmerkung zur zweiten Wahl desselben Vorgangs (B025).** Der Auftraggeber hat außerdem alle vier
+Flächen in einem Lauf gewählt (Feld, Zähler, Plandatei, Kachel). Auch das steht im Ticket. Die
+Gegenmaßnahme war, dass **keine** der vier eine neue Regel erfindet: die Ampel bleibt
+`board.frist_ampel`, die Kachel bleibt die aus SWR-103, neu ist genau eine Datei. Vier Flächen
+sind beherrschbar, solange sie vier **Anwendungen** einer Regel sind und nicht vier Regeln.
