@@ -213,3 +213,55 @@ nicht statt, und die bereits geschriebene Commit-Botschaft behauptete ihn trotzd
 beim Nachlesen von `grep '^status:'`, nicht von einer Meldung. **Eine Commit-Botschaft ist eine
 Aussage über den Zustand und wird wie eine Aussage geprüft**, bevor sie stehenbleibt; hier
 richtiggestellt (`--amend`) und die drei Übergänge mit je einem Commit neu gefahren (B052).
+
+## L-2026-08-16j — Ein Zähler, der zwei Fragen in eine Zahl faltet, verliert eine davon (B057)
+
+**Woher.** `pm/T-0016` (Sprint-Workflow-Sicht, SWR-103) zählt die Zeilen des Sprint-Plans nach
+Zustand: *dieser Sprint*, *terminiert*, *wartet auf Mensch*. Die erste Fassung las den Zustand
+ausschließlich aus der Spalte **Fällig** — eine Zeile hatte genau einen Zustand, die Zerlegung war
+sauber, alle 22 Tests grün.
+
+**Der Widerspruch stand in derselben Datei.** Beim ersten Lauf gegen den **echten** Plan meldete
+der Zähler `wartet_auf_mensch = 1`, während der Klartext oben in derselben Datei *„5 warten auf
+eine Handlung am Host"* sagte. Ursache ist kein Tippfehler, sondern ein Denkfehler: **Termin und
+Zuständigkeit sind zwei Fakten.** `pm/T-0034` trägt ein Datum (17.08.) **und** wartet auf den
+Host. Wer beides in *einen* Zustand faltet, muss eine der beiden Aussagen wegwerfen — und wirft
+die weg, die nicht in der gelesenen Spalte stand.
+
+**Regel 1 — vor der Zerlegung die Frage zählen, nicht die Spalte.** Eine überschneidungsfreie
+Zerlegung ist nur dann richtig, wenn die Dinge sich wirklich ausschließen. Merkmale, die
+**quer** liegen (wartet auf jemanden, ist blockiert, ist wiederkehrend), bekommen eine **eigene**
+Zahl, die sich mit den anderen überschneiden **darf** — und heißen nach dem, was sie zählen. Das
+ist dieselbe Familie wie **B053** (`rolle` mit zwei Bedeutungen) und **B033** (zwei Quellen für
+eine Aussage), nur in Zahlenform.
+
+**Regel 2 — der Test, der das gefunden hätte, gibt es nicht; der Lauf gegen den Bestand schon.**
+Alle Tests der ersten Fassung waren grün, weil die Testdaten dieselbe Annahme trugen wie der Code.
+Gefunden hat es der erste Lauf gegen die **echte** Datei — wörtlich Regel 1 aus **L-2026-08-16h**.
+Ein neuer Zähler wird deshalb **immer** einmal gegen den Bestand gefahren und seine Zahlen gegen
+den **Klartext derselben Quelle** gelesen; stimmen sie nicht überein, ist zuerst der Zähler
+verdächtig, nicht der Text.
+
+## L-2026-08-16k — Eine Regel, die nur terminierte Vorgänge sieht, macht unterminierte unsichtbar — auch die eigenen (B057)
+
+**Woher.** Das Sprint-Planning nach `pm/D006` sichtete zum ersten Mal **alle** Tickets **aller**
+Repos in einem Durchgang. Dabei fiel `pm/T-0016` auf: `typ: change-request`, `prio: hoch`, ohne
+Frist, ohne `takt` — und in **keiner** der drei Agendalisten („Für dich", „Für das Team",
+Takt-Dauerläufer). Es war das **einzige** unterminierte Ticket der Organisation
+(`cockpit_alle`: `unterminiert = 1`).
+
+**Der vierte Auftritt desselben Musters.** B049 hat es beschrieben: `board.ist_ueberfaellig`
+setzt eine Frist voraus, ohne Frist ist die Ampel grau, und ein Ticket ohne Frist kann **nie**
+überfällig werden. Die Regel gegen das Liegenbleiben hat ihren blinden Fleck genau dort, wo es
+stattfindet. Einziger Melder ist eine **Zahl je Kachel**, die niemand als Summe liest —
+`pm/T-0036` (Frist 23.08.) soll das beheben und ist selbst noch offen.
+
+**Die Pointe, die es zur Lehre macht:** Getroffen hat es den CR, der die Workflow-Sicht **liefern
+soll**. Der Vorgang, der die Unsichtbarkeit beheben sollte, war selbst unsichtbar.
+
+**Regel — jede Sicht auf einen Plan meldet, was im Plan fehlt.** `sprint.plan()` vergleicht die
+handgeschriebene Plantabelle mit dem echten Bestand aller entdeckten Repos und weist jedes offene
+Ticket aus, das in **keiner** Planzeile vorkommt (`nicht_geplant`) — mit Ref und Titel, **über**
+der Tabelle, nicht darunter. Eine Sicht, die nur wiedergibt, was ihr vorgelegt wird, kann einen
+fehlenden Eintrag grundsätzlich nicht finden; sie bestätigt nur die Lücke, die sie zeigen sollte.
+Das gilt über diesen Fall hinaus für jede Ansicht, deren Quelle von Hand gepflegt wird.
