@@ -169,6 +169,8 @@ Verbesserungen ändern ausschließlich versionierte Artefakte (Skills, Templates
 
 **LeLe-Takt (pm/D005, 2026-08-16):** Lessons Learned sind Pflichtteil JEDES Sprint-Abschlusses und jedes Takt-Durchlaufs — nicht quartalsweise. Jede Lehre wird noch in derselben Session verankert (Runbook-Regel, Gold-Beispiel oder Prozess-CR); das PM-Takt-Ticket prüft die Einhaltung.
 
+**Sprint-Semantik der Routine-Session (pm/D006, 2026-08-16):** Jeder Routine-Lauf ist ein Genesis-Gesamtsprint. PM plant zu Beginn ALLE offenen Aufgaben aller Repos und terminiert sie; Default ist Schließen im selben Sprint, Verschieben nur mit dokumentiertem Grund (Mensch nötig → Inbox-DR; zu groß → zerlegen, erster Teil sofort; blockiert → blocked_by). Rollen weisen einander Aufgaben zu (rolle-Feld + Begründung). Die Workflow-Sicht lebt in pm/management/sprint-aktuell.md.
+
 ## 9. Baselines und Releases
 
 **Baseline-Anlässe:** Anforderungs-Baseline vor Architekturstart und je Release (G1); Produkt-Baseline je Release (G3); Prozess-Baseline je P0-Meilenstein und danach quartalsweise. **Inhalt:** Git-Tag(s) + Manifest (Item-Versionen, Prüfstatus, offene Punkte). **Regel:** Nur aus Baselines wird released; Änderungen an einer Baseline nur über CR.
