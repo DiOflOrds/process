@@ -123,3 +123,33 @@ für Ticketstatus kein gültiger Abschluss.
 `commit` zusätzlich ein `HEAD.lock`. Die Locks vor **jedem** Git-Aufruf per `mv` nach
 `.git/verwaiste-locks/` wegräumen, nicht nur einmal am Anfang; und `*.lock` prüfen, nicht nur
 `index.lock`.
+
+## L-2026-08-16g (B053): Ein Feld beantwortet die Frage, für die es gebaut wurde — nicht die, die man ihm stellt
+
+**Der Brief `pm/N-0030` fragte, wer an einem offenen Ticket arbeitet.** Das generierte `BOARD.md`
+hat genau eine Zuordnungsspalte, `rolle`, und die sieht wie eine Antwort aus. Sie ist keine:
+`rolle` ist die **Fachrolle des Autors** — `board.py` benutzt sie als solche
+(*„reviewer darf nicht der Autor (rolle) sein"*). Vier offene Tickets (`pm/T-0034`, `T-0013`,
+`T-0010`, `T-0026`) sind ausschließlich am Host durch den Menschen lösbar und tragen trotzdem
+`prob` bzw. `cm`; im Board sehen sie aus wie Teamaufgaben.
+
+**Die fehlende Auflösung existierte die ganze Zeit.** `process/roles/registry.yaml` trägt je Rolle
+`besetzung: ki | mensch | script`. Gelesen wird das Feld von **keiner** Ausgabe — nicht vom Board,
+nicht vom Cockpit, nicht vom Preflight. Der Unterschied Mensch/KI war vollständig hinterlegt und
+nirgends sichtbar; die eigentliche Information stand im **Fließtext** der vier Tickets
+(*„eine Handlung des Auftraggebers"*, *„Voraussetzung beim Menschen"*) — Muster **B043**.
+
+**Die Abkürzung wäre ein stiller Schaden gewesen.** Naheliegend war, den vier Tickets
+`rolle: mensch` zu geben. Dieses Feld hat in `board.py` aber eine **zweite** Bedeutung: Tickets
+mit `rolle: mensch` sind Gates und von der Status-Übergangsprüfung ausgenommen
+(`t.get("rolle") != "mensch"` in `validiere`). Die Umstellung hätte vier Tickets die
+Übergangsprüfung abgeschaltet, ohne eine einzige Meldung.
+
+**Regel:** Bevor ein vorhandenes Feld für eine neue Frage benutzt wird, wird geprüft, **wer es
+sonst noch liest und wozu**. Trägt es bereits eine Bedeutung, die Verhalten steuert, bekommt die
+neue Frage ein **eigenes** Feld (`pm/T-0038`) — ein Feld für zwei Zwecke dient am Ende nur einem,
+und welchem, entscheidet der Aufrufer (Familie **B033**).
+
+**Zweite Regel:** Eine Zuordnung, die nur im Fließtext steht, existiert für jede Übersicht nicht.
+Sie muss in einem Feld stehen — und das Feld muss von der Ausgabe gelesen werden, auf die
+tatsächlich jemand schaut.
