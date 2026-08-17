@@ -726,3 +726,55 @@ aus T-0007 prüfte den **gesamten** Produktionscode und war trotzdem blind für 
 Defekt: er prüfte das Lesen. Ein Rohr hat zwei Enden. Wer einen Regel-Test schreibt, prüft
 danach, ob die Regel den ganzen Sachverhalt beschreibt oder nur die Hälfte, die gerade
 wehgetan hat.
+
+## L-2026-08-17n (Sprint 7): Ein grünes Ergebnis beschreibt den Zustand, den es gemessen hat — nicht den, den man ausliefert
+
+Sprint 6 meldete an vier Stellen **„Matrix 109 SWRs / 0 Lücken"** und pushte. `SWR-109` stand
+zu diesem Zeitpunkt nur in der **Arbeitskopie** von `p9`; die gepushten Repos trugen 108. Der
+Plattformcode und seine sieben Tests waren committet — die Anforderung, die sie erfüllen,
+nicht. Für einen Tag hatte die Organisation Code ohne Requirement im Git und ein grünes
+Traceability-Ergebnis, das für keinen Repo-Stand galt.
+
+**Regel 1 — wer eine Kennzahl meldet, sagt dazu, welchen Zustand sie gemessen hat.** Die
+Matrix liest die Platte (richtig so, sonst könnte man eine Anforderung nicht schreiben und im
+selben Lauf prüfen). Der Push liefert HEAD. Beide sind für sich korrekt; falsch war, dass
+**niemand vor dem Push gefragt hat, ob das Gemessene das Gelieferte ist**. Diese Frage gehört
+zu den Zustandsfragen (`preflight`) und nie in das Werkzeug, dessen Ergebnis sie prüft — ein
+Werkzeug, das seine eigene Voraussetzung bestätigt, sagt nichts.
+
+**Regel 2 — eine Prüfung, die häufiger belanglos als richtig anschlägt, ist eine
+Wegseh-Übung.** Der Befund **war sichtbar**: `preflight` schrieb `[p9] Arbeitskopie nicht
+sauber (1 Datei(en))`. Daneben standen fünf gleich aussehende Zeilen, alle `1 Datei(en)`, alle
+eine `BOARD.md`, deren `Stand:`-Zeile das Werkzeug bei **jedem** Lauf neu erzeugt. Sechs
+identische Meldungen, fünf davon dauerhaft belanglos — die sechste hatte keine Chance. Zwei
+Konsequenzen: eine Meldung **nennt**, worum es geht, statt zu zählen (B038 in Zeilenform); und
+eine dauerhaft belanglose Meldung bekommt eine begründete Ausnahme, entschieden am **Inhalt**
+(hier: am Diff) und nie am Namen.
+
+**Diese Sorge ist jetzt viermal dieselbe gewesen** — SWR-109 (Takt-Tickets nicht melden),
+SWR-110 (Stand-Zeile), SWR-112 (`decision-request` nicht melden) und B049. Sie ist damit
+keine Einzelfallabwägung mehr, sondern eine **Bauregel: zu jeder neuen Prüfung gehört die
+Frage, was sie am ersten Tag melden würde, und ein Test für den Fall, den sie NICHT melden
+soll.** Ohne diesen Gegentest ist eine Ausnahme nicht widerlegbar.
+
+**Regel 3 — eine Frage der Organisation wird nicht kachelweise beantwortet** (aus `pm/T-0036`
+Teil c, B049). Der „ohne Frist"-Zähler galt dreimal als abgearbeitet, während in einer anderen
+Kachel drei Tickets offen blieben. Ein Zähler ist erst abgearbeitet, wenn die **Summe über
+alle** Einträge 0 ist oder jeder Rest eine im Ticket ausgeschriebene Begründung trägt.
+„Kachel X erledigt" ist keine gültige Abschlussmeldung.
+
+**Regel 4 — eine Konstanz zu erklären ist die bequeme Variante, sie zu prüfen.** „Nicht
+geschlossen" stand vier Sprints auf 15 und passte zu keiner Zählweise des Werkzeugs. Zweimal
+wurde die Konstanz ausdrücklich **kommentiert** („zum dritten Mal dieselbe Zahl, und zum
+dritten Mal ist es Zufall") statt nachgerechnet. Eine Zahl ohne aufgeschriebene Zählweise ist
+keine Kennzahl, sondern eine Behauptung — sie ist weder prüfbar noch widerlegbar. Eine Zahl,
+die sich über mehrere Sprints nicht bewegt, ist derselbe Prüfanlass wie ein Wartegrund, der
+sich wiederholt (L-2026-08-17j Regel 2).
+
+**Regel 5 — ein rotes Ergebnis altert nicht und meldet sich nicht.** `pm/T-0043` stand fünf
+Sprints offen. `p3` und `p5` waren rot, weil ihr letzter Stand vom 16.08. gegen ein neueres
+Werkzeug geprüft worden war — und blieben rot, weil ohne Push kein neuer Lauf entsteht. Vier
+Sprints lasen das als **laufende Störung**, was es seit dem ersten Tag nicht mehr war.
+Aufgelöst wurde es erst, als jemand den Auslöser **herstellte** statt ihn zu erwarten.
+Erkennungsfrage: *Kann sich der Zustand, auf dessen Änderung ich warte, überhaupt ändern,
+wenn ich nichts tue?* Lautet die Antwort nein, ist Warten keine Option, sondern ein Fehler.
