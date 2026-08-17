@@ -300,3 +300,45 @@ Sprint 1 hat die Driftgefahr bei `frist` neben `geplant_sprint` erkannt und gepr
 dabei die **dritte** Angabe übersehen: die Fälligkeitsspalte in `sprint-aktuell.md`. Sieben
 Zeilen sind auseinandergelaufen. Wer eine Doppelaussage absichert, zählt vorher, wie viele
 Stellen dieselbe Frage beantworten.
+
+---
+
+## L-2026-08-17x — Umfang ist der Zerlegungsgrund, nicht der Verschiebungsgrund (Sprint 11)
+
+**Gemessen an drei Tickets in einem Lauf.**
+
+| Ticket | `geplant_sprint`-Kette | letzter Grund |
+|---|---|---|
+| `pm/T-0039` | 6→7→8→9→(10)→11 | Sprint 10 hat es **zerlegt** — daraus stammt die Regel |
+| `pm/T-0028` | 7→8→9→10→11 | *„Rest = Umfang (3 Flächen)"* — **vierte Verschiebung** |
+| `projects/p12/T-0003` | 8→9→10→11 | Sprint 10 notierte *„beim Anfassen zerlegen"* und schob |
+
+**`pm/T-0028` stand in derselben Plantabelle desselben Laufs, der die Regel aus
+`pm/T-0039` abgeleitet hat** — mit demselben Zählerstand — und wurde ein viertes Mal
+verschoben. Nach `pm/D006` ist Umfang **der Zerlegungsgrund selbst**; „zu groß für diesen
+Sprint" ist die Beschreibung eines Tickets, das zerlegt werden muss, nicht die Begründung,
+es zu verschieben.
+
+> **Eine Regel, die in einem Lauf aufgeschrieben und im selben Lauf am Nachbarfall nicht
+> angewandt wird, ist noch keine Praxis.** Erkennungsfrage beim Aufschreiben: *Auf welche
+> anderen offenen Fälle trifft dieser Satz gerade zu?*
+
+**Regel 2 — die Klammer zählt nicht mit.** `projects/p11/T-0003` ist seit Sprint 9 nur noch
+eine Klammer über drei Teiltickets. Ihr Feld wandert mit dem letzten Teil; das sind
+**Nachführungen, keine Verschiebungen**. Zählt man sie mit, schlägt die Vier-Runden-Regel
+bei einem Ticket an, das selbst nichts mehr enthält — und trainiert damit das Wegsehen bei
+denen, die etwas enthalten.
+
+**Regel 3 — ein wiederkehrender Verschiebungsgrund ist zu messen, nicht zu wiederholen.**
+Fünf offene Aufgaben lagen auf der HMI-Fläche, und jeder Lauf verschob sie mit **B025**
+(„nicht zwei Bauflächen in einem Lauf"). Gemessen: die Arbeit jedes Laufs entsteht aus den
+Briefen des Auftraggebers, und die treffen zuerst das Backend. **Solange jeder Lauf Backend
+baut, ist B025 für die HMI kein Grund, sondern ein Ausschluss.** Aufgelöst nicht durch einen
+sechsten Satz, sondern durch einen Beschluss: Sprint 12 ist ein HMI-Sprint.
+Erkennungsfrage: *Kann der Zustand, den mein Grund beschreibt, überhaupt eintreten, wenn
+ich weiter so plane wie bisher?*
+
+**Regel 4 — ein Ticket im selben Sprint wie sein Blocker behauptet, beides gehe in einem
+Lauf.** `promt-team/T-0003` stand auf Sprint 12 wie seine beiden `blocked_by`-Tickets,
+während es selbst sagt *„ohne Baseline kein Optimierungslauf"*. Stiller Widerspruch — keine
+Prüfung hält `geplant_sprint` gegen den Sprint des Blockers. Notiert als Prüfungskandidat.

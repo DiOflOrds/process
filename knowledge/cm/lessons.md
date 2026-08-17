@@ -813,3 +813,42 @@ Sprints lasen das als **laufende Störung**, was es seit dem ersten Tag nicht me
 Aufgelöst wurde es erst, als jemand den Auslöser **herstellte** statt ihn zu erwarten.
 Erkennungsfrage: *Kann sich der Zustand, auf dessen Änderung ich warte, überhaupt ändern,
 wenn ich nichts tue?* Lautet die Antwort nein, ist Warten keine Option, sondern ein Fehler.
+
+---
+
+## L-2026-08-17w — Ein Beschluss ohne Prüfung ist keine Regel (Sprint 11, `platform/T-0012`)
+
+**Anlass, gemessen.** Der Auftraggeber hat Kalenderfristen im Sprintplan zum **zweiten
+Mal** gerügt (`pm/N-0041`). Die erste Rüge hatte zu **SWR-106** geführt: *„Terminierung auf
+Sprints statt auf Kalenderdaten"* — als Anforderung geschrieben, in v1.12 abgenommen, und
+im Kopf des Sprintzählers wörtlich wiederholt. Fünf Sprints später trugen **14 von 14**
+offenen Teamaufgaben ein Kalenderdatum.
+
+**Die Ursache war keine Nachlässigkeit, sondern die Gegenprüfung.**
+`unterminierte_tickets` meldete jedes offene Ticket **ohne** `frist`. Der Beschluss hat sie
+nicht mitgeändert. Also tat jeder Lauf pflichtbewusst das Gegenteil des Beschlossenen.
+
+> **Eine Entscheidung, die keine Prüfung mitgeändert hat, ist eine Absichtserklärung.**
+
+**Spiegelbild zu SWR-122 (Sprint 10).** Dort wurde eine Prüfung berechnet und von
+niemandem **gelesen**; hier wurde eine Regel beschlossen und von keiner Prüfung
+**vertreten**. Beide Male stand das Richtige aufgeschrieben, beide Male gewann die
+Mechanik. **Bauregel: Wer eine Regel beschließt, benennt im selben Zug die Prüfung, die
+sie vertritt — oder schreibt auf, dass es keine gibt.**
+
+**Regel 2 — eine Kennzahl steuert, sobald sie berichtet wird, auch wenn sie nichts
+blockiert.** Der erste Entwurf der Antwort behauptete, der Startcheck werde ohne Datum
+**rot**. Nachgemessen im Code: falsch, `befunde += 1` fehlte, die Zeile wurde nur gedruckt.
+Es genügte, dass „unterminiert 0" zu den Zahlen gehört, die jeder Abschluss an den
+Auftraggeber meldet. **Wer eine Kennzahl berichtet, hat sie zu einem Anreiz gemacht — die
+Frage „blockiert sie?" ist die falsche.**
+
+**Regel 3 — eine ungeprüfte Behauptung über den eigenen Code ist derselbe Fehler wie eine
+ungeprüfte Zahl.** Der falsche Satz stand in dem Brief, der eine ungeprüfte Null
+aufarbeitet. Gefunden wurde er nur, weil derselbe Lauf die Stelle **anfassen** musste.
+Erkennungsfrage: *Habe ich in den Code gesehen, oder habe ich aus dem Namen geschlossen?*
+
+**Regel 4 — eine Prüfung braucht einen Ort, an dem der Betroffene sie sieht.** Die neue
+`kalenderfristen`-Zeile steht deshalb nicht nur im Startcheck, sondern auch im
+Cockpit-Kopfblock: der Auftraggeber sieht ins Cockpit. Eine Meldung an einer Stelle, an die
+niemand schaut, ist die halbe Wiederholung von SWR-122.
