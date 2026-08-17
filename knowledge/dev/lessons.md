@@ -39,3 +39,33 @@ zurückgenommen hat**.
 **Regel:** Ein früherer Einwand gegen eine Bauform wird nicht „überholt", sondern gelesen:
 verbietet er die Sache, oder verlangt er etwas dazu? Wer sich auf einen Unterschied beruft,
 sichert die **andere** Seite des Unterschieds mit einer Prüfung ab.
+
+## L-2026-08-17bg — Ein Schreibweg, der eine Datei voraussetzt, die ein ANDERER Weg anlegt, ist so lange richtig, bis ein Repo anders entsteht
+
+**Anlass (Sprint 20, `platform/T-0022`/SWR-152).** Der Auftraggeber hat eine
+**Klasse-A-Entscheidung** über die Inbox getroffen, und der Schreibweg starb mit
+`[Errno 2] No such file or directory` — `promt-team` hatte kein
+`management/decisions/decision-log.md`. `open(..., "a")` legt eine **Datei** an, aber kein
+**Verzeichnis**; das Verzeichnis legt `pool.gruende` bei der Gründung an.
+
+> **Solange jedes Repo durch den einen Weg entstanden ist, ist die Annahme unsichtbar
+> richtig. Sie wird erst sichtbar an dem Repo, das anders entstand — und das war ausgerechnet
+> das, in dem eine Klasse-A-Entscheidung fällig war.**
+
+⚠⚠ **Kein bestehender Test hätte es finden können.** Jede Fixture legt ihre Verzeichnisse
+selbst an — und damit auch das, das in Produktion fehlte. Das ist wörtlich die offene
+Erkennungsfrage aus Sprint 16 (`L-2026-08-17ai`), zum ersten Mal an einem **echten Schaden**
+belegt statt als Sorge formuliert.
+
+**Regel:** Wer eine Datei anlegt, die ein anderer Weg voraussetzt, hat eine **Abhängigkeit
+zwischen zwei Wegen** gebaut. Zwei Prüfungen gehören dazu:
+
+1. Eine Zusicherung, die den Zustand **ohne** die Datei herstellt — ausdrücklich, nicht
+   nebenbei, weil die Fixture ihn sonst wegräumt, bevor sie ihn misst.
+2. Eine **Zählung im echten Bestand**, wie viele Repos das Pflichtartefakt nicht haben, mit
+   den **Namen** und nicht nur der Zahl.
+
+⚠ Und die Kehrseite der Reparatur gehört benannt: ein Weg, der den Mangel im Vorbeigehen
+**heilt**, macht ihn unsichtbar. Ob das Anlegen in den Schreibweg gehört oder als Befund in
+den Preflight, ist offen (Frage 3 in `platform/T-0022`) — die Entscheidung „erst mal heilen,
+damit die Entscheidung nicht verloren geht" ist bewusst und nicht endgültig.
