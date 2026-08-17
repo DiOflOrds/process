@@ -690,3 +690,39 @@ allen Fällen dasselbe freundliche Wort war.
 zusammenfasst, ist ein stiller Ausfall mit Ansage. Die zwei Fälle bekommen zwei Werte, und
 der zweite wird ein **Befund** — auch dann, wenn das lauter ist. Dieselbe Familie wie
 SWR-108 (`null` vs. echte Null): eine leere Stelle sieht immer nach „nichts zu melden" aus.
+
+## L-2026-08-17l (platform/T-0009): Eine Reparatur, die nur ein Ende eines Rohrs anfasst, verschiebt den Fehler ans andere
+
+`platform/T-0007` hat die **Leseseite** jedes Subprozess-Aufrufs auf UTF-8 festgelegt — für
+`git` genau richtig. An den drei Stellen, an denen Python **Python** aufruft, schrieb der
+Kindprozess aber weiter in der Locale-Kodierung des Hosts. Vorher passten beide Seiten
+zufällig zusammen (cp1252/cp1252); danach schrieb das Kind cp1252 und der Elternprozess las
+UTF-8. Jeder Umlaut wurde zu U+FFFD — und U+FFFD ist genau das Zeichen, das cp1252 auf dem
+Rückweg **nicht ausgeben** kann. Der Lauf starb nicht mehr am Lesen, sondern am `print`.
+
+**Regel 1 — beide Enden oder keines.** Wer die Kodierung eines Datenstroms festlegt, legt
+sie an **beiden** Enden fest oder an keinem. Ein Aufruf ist kein Lesevorgang, sondern ein
+Rohr; „wir lesen jetzt fest UTF-8" ist eine halbe Aussage, solange niemand sagt, was der
+Schreiber tut. Die beiden Einstellungen gehören deshalb in **eine** Datei
+(`scripts/konsole.py`) und nicht je Aufrufstelle nebeneinander.
+
+**Regel 2 — `errors="replace"` ist keine Reparatur, sondern eine Verschiebung.** Es erzeugt
+U+FFFD, also ein Zeichen, das viele Ausgabeströme selbst nicht können. Wo der Wert nur
+weitergereicht wird, ist das eine Zeitbombe mit Zündschnur. Für **Ausgabe** ist
+`backslashreplace` die richtige Wahl: reines ASCII, auf jedem Strom darstellbar, und der
+Leser sieht, dass etwas ersetzt wurde.
+
+**Regel 3 — ein Werkzeug, dessen Aufgabe das Melden ist, darf am Melden nicht sterben.**
+Die Meldungen dieser Organisation zitieren Ticketinhalte, und **121 Ticketdateien** tragen
+ein „→", das cp1252 nicht kennt. Dieser Absturz war unabhängig von der Kodierungspaarung
+möglich und wäre früher oder später auch ohne sie eingetreten. Erkennungsfrage vor jedem
+`print`, das fremden Text weiterreicht: *Kann dieser Text ein Zeichen enthalten, das der
+Ausgabestrom nicht kann?* Wenn ja, ist die Antwort eine Einstellung am Strom und nicht
+Hoffnung.
+
+**Regel 4 — ein Regel-Test beschreibt eine Regel, nicht eine Zeile, und deckt deshalb
+genau so viel ab, wie seine Regel sagt.** `test_kein_produktionsaufruf_liest_ohne_feste_kodierung`
+aus T-0007 prüfte den **gesamten** Produktionscode und war trotzdem blind für diesen
+Defekt: er prüfte das Lesen. Ein Rohr hat zwei Enden. Wer einen Regel-Test schreibt, prüft
+danach, ob die Regel den ganzen Sachverhalt beschreibt oder nur die Hälfte, die gerade
+wehgetan hat.
