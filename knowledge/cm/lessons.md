@@ -866,3 +866,40 @@ Redundanz zum Vertrag gelesen werden (kein B033-Fall), sondern ist die einzige S
 der die beiden Repos überhaupt zusammengehalten werden. Erkennungsfrage beim Erweitern
 eines Payloads: *welches Dokument außerhalb dieses Repos behauptet etwas über die Form, die
 ich gerade ändere?*
+
+---
+
+## L-2026-08-17y — Ein Schreibversuch, der scheitert, kann die Datei trotzdem zerstören
+
+**Gemessen, Sprint 12, an der eigenen Arbeitskopie.** Ein Patch-Skript öffnete
+`preflight.py` mit `open(pfad, "w", newline="\\n")` — der Wert ist ungültig (`"\n"` ist
+richtig, `"\\n"` nicht). Python wirft dafür `ValueError: illegal newline value`. Was es
+**vorher** tut: die Datei im Modus `w` anlegen und damit **auf 0 Bytes kürzen**.
+
+> Ergebnis: eine Ausnahme, die nach „nichts passiert" aussieht — und eine leere
+> `preflight.py`. Die Prüfstrecke des Laufs war weg, bevor der Lauf sie brauchte.
+
+**Warum das hier steht und nicht als Kuriosität durchgeht:** es ist derselbe Vorfall wie
+`abschluss.cmd` in Sprint 1, das „versehentlich geleert und aus dem Protokoll
+rekonstruiert" wurde und bis heute als einziger offener Punkt beim Auftraggeber liegt.
+Zweimal dieselbe Klasse in elf Sprints.
+
+**Regel 1 — schreiben heißt: neben die Datei schreiben und dann umbenennen.**
+`open(tmp, "w") … os.replace(tmp, pfad)`. `os.replace` ist auf einem Dateisystem atomar;
+scheitert das Schreiben, bleibt das Original **unberührt**. Jedes Patch-Skript dieses
+Teams schreibt ab jetzt so. *(Der Nachbau ohne Temp-Datei ist genau der Fall oben.)*
+
+**Regel 2 — Arbeitskopie zuerst, Bestand danach.** Der Schaden blieb folgenlos, weil der
+Lauf auf `/tmp/genesis` arbeitete und der Bestand über `git checkout` wiederhergestellt
+werden konnte. Das war **Glück aus einer anderen Entscheidung** (Tests auf einer Kopie,
+Faktor ~50 schneller — Befund vom 11:05), nicht Vorsicht an dieser Stelle.
+
+**Erkennungsfrage:** *Kann der Aufruf, der meine Datei öffnet, zwischen „geöffnet" und
+„geschrieben" scheitern — und was steht dann drin?*
+
+**Regel 3 — ein zweiter Lauf ist kein Randfall.** Derselbe Tag hat zwei Routine-Sessions
+gleichzeitig in dieselben Repos schreiben sehen (Befund 11:05). Aufgenommen als
+`platform/T-0013`: das Sprintregister kennt **keinen Endezeitpunkt** und kann Überlappung
+deshalb nicht sehen. Erkennungsfrage vor jedem schreibenden Lauf: *bewegt sich der HEAD
+der Repos, während ich messe?* Zwei Kontrollmessungen im Abstand von Minuten beantworten
+das; dieser Lauf hat vier gebraucht, bis Ruhe war.
