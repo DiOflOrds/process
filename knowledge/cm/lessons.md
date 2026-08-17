@@ -546,3 +546,45 @@ derselben CI hat dasselbe Problem und hat noch nie falsch rot gemeldet. Ihn auf 
 Verdacht mit abzuräumen wäre das Gegenteil der Sorgfalt, die den Befund gefunden hat. Er bleibt,
 mit einem Satz im Workflow-Kopf und einer Zeile, die seine häufigere Rennhälfte beseitigt
 (`process` wird vor `platform` gepusht).
+
+## L-2026-08-17g — Die Gegenprüfung prüft auch die BEGRÜNDUNG, nicht nur den Code (B064/B065)
+
+**Woher.** Die unabhängige Gegenprüfung von `platform/T-0005` (L-2026-08-16m, dritter Einsatz) fand
+bei grüner Suite elf Punkte. Bemerkenswert ist nicht die Zahl, sondern die **Art**: die Hälfte
+waren keine Codefehler, sondern **falsche Sätze in Ticket, Doku und Kommentar** — geschrieben von
+demselben Lauf, der den Code korrigiert hat.
+
+Die vier, die wehtaten:
+
+* *„Aus dem Substring-Test wurde ein Präfix-Test."* Galt nur für den Zeilenfilter. Der Statustest
+  in `einstufung` suchte weiter im **ganzen** Text inklusive Tag-Annotation — ein Zwischenstand
+  `p11-v0.9` mit der Nachricht „Vorbereitung auf p11-v1.0" hätte das Projekt als abgeschlossen
+  ausgewiesen. Der Satz war nicht ungenau, er war falsch, und er stand **dreimal** (Ticket, Doku,
+  Test-Docstring). Ein Fehler, der behoben zu sein **behauptet** wird, wird nicht mehr gesucht.
+* *„Getragen wird das von `preflight.py` und Schritt [2/5]."* `preflight.py` kennt die Matrix
+  nicht. Das ausgesprochene Sicherheitsnetz war doppelt so groß gemalt wie das echte — im selben
+  Absatz, der den Preis einer Gate-Entfernung „ehrlich" nennen sollte.
+* *„Fünf Regressionstests."* Einer davon war ohne die Korrektur grün und bewies nichts. Eine
+  Testzahl ist eine Behauptung über Deckung, keine über Zeilen.
+* *„Teams haben kein G4, also keine Baseline."* Klang zwingend, war am echten Payload widerlegt:
+  `platform` ist `festes-team` und trägt eine. Ein vertragstreues Widget hätte einen echten Wert
+  unterdrückt.
+
+**Regel 1 — jeder Satz der Form „X ist jetzt Y" bekommt den Befehl daneben, der es zeigt.** Nicht
+in die Datei, aber in den Lauf: wer schreibt „der Test ist jetzt ein Präfix-Test", führt vorher
+`grep` auf die Stelle aus, die er meint. Die vier Fehler oben wären jeder von einem einzigen
+Befehl aufgedeckt worden.
+
+**Regel 2 — die Deckung eines Tests wird durch Rückbau bewiesen, nicht durch Zählen.** Korrektur
+in einer Kopie zurückbauen, Tests laufen lassen: was grün bleibt, beweist nichts. Zwei von acht
+blieben grün; einer davon zu Recht (Gegenprobe gegen Über-Filtern), einer zu Unrecht.
+
+**Regel 3 — ein ausgesprochener Preis ist eine Tatsachenbehauptung und wird wie eine geprüft.**
+Wer eine Sicherung entfernt und dazuschreibt, wer sie ersetzt, sagt etwas Nachprüfbares über den
+Ersatz. Die Versuchung, das Netz größer zu malen, ist genau dort am größten, wo man gerade etwas
+wegnimmt.
+
+**Regel 4 — Korrekturen werden nachgetragen, nicht überschrieben.** Die widerlegten Sätze stehen
+in `pm/T-0042` und `platform/T-0005` **wörtlich** als widerlegt da. Wer sie stillschweigend
+ersetzt, nimmt dem nächsten Leser den einzigen Hinweis darauf, welche Art Satz hier schon einmal
+ungeprüft durchging.
