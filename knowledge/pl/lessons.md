@@ -506,3 +506,23 @@ spart die Diskussion über Optionen, die die Messung ohnehin streicht.
 Ausführung bekommt ein eigenes Ticket mit eigener DoD, wenn sie eine abgenommene Anforderung
 anfasst — sonst hängt ein Bau mit Teststrecke, Matrix und Anforderungstext als Haken unter
 einer Entscheidung.
+
+## L-2026-08-17bf — Eine aufgeschriebene Lesson schließt keine Lücke; sie ist binnen eines Sprints wiederholt worden
+
+**Anlass (Sprint 19, Abschlussbericht).** Sprint 18 hat einen eigenen Abschnitt darüber
+geschrieben, dass seine Testzahl **fortgeschrieben statt gemessen** war (1069 statt 1061).
+Sprint 19 hat im ersten Entwurf seines Abschlusses **1077** genannt; gemessen waren **1079**.
+
+> **Der Lauf, der die Warnung beim Schreiben vor Augen hatte, hat denselben Fehler an
+> derselben Stelle gemacht. Eine Zahl aus „letzter Stand plus eigene Neuzugänge" liest sich
+> wie eine Messung und ist eine Fortschreibung.**
+
+⚠ Aufgefallen ist es **beim Nachzählen**, wieder nicht durch eine Prüfung — der
+Abschlussbericht hat für seine eigenen Kennzahlen keine. Das ist **Frage 3 von
+`platform/T-0020`**, und die Wiederholung binnen eines Sprints ist der Beleg, dass die
+Aufschreibung allein nicht wirkt.
+
+**Regel:** Kennzahlen im Abschlussbericht werden **erhoben, nicht fortgeschrieben** — die
+Testzahl über die Sammlung (`TestLoader.discover`), nicht über den letzten Bericht. Und die
+richtige Reaktion auf eine zum zweiten Mal aufgelaufene Lesson ist **kein dritter Merksatz**,
+sondern eine Prüfung.
