@@ -634,3 +634,59 @@ nicht liest.
 **Und die Zählung dazu, nach L-2026-08-17g Regel 2:** 15 Tests = **6** mit Rückbau-Nachweis,
 **4** gegen nachgestellte Fehlumsetzungen, **5** Regressionswächter für die unveränderten
 Normalfälle. „15 Tests" allein wäre wieder eine Behauptung über Deckung gewesen.
+
+## L-2026-08-17j (platform/T-0007): Ein ausbleibendes Ergebnis hat zwei Erklärungen — und die Datei, die es sagt, lag drei Sprints lang offen da
+
+Drei Sprints in Folge trugen `platform/T-0004` und `pm/T-0043` denselben Satz: *„Der Beleg
+kommt beim nächsten `abschluss.cmd` von selbst, keine Handlung nötig."* Sprint 4 verschärfte
+ihn noch: *„Nachzuschauen, ob sich eine Datei geändert hat, die sich nur durch einen Hostlauf
+ändern kann, ist keine Arbeit."*
+
+Der Wächter lief die ganze Zeit — alle 15 Minuten — und **brach jedes Mal ab**. `board.py`
+starb im `board-check` von `pm` an einer Kodierung. Nichts wurde je gepusht.
+
+**Das Schärfste daran: das Erkennungsmuster stand schon geschrieben.** L-2026-08-16
+(cmd-Klammern-Bug) endet mit dem Satz *„Erkennungsmuster: `PUSH-ANFORDERUNG.txt` bleibt
+liegen + `abschluss-auto.log` ansehen"*. Genau dieses Muster lag vor: Die Datei **war**
+liegengeblieben und trug **zwei** Zeilen, aus Sprint 3 und Sprint 4 — der Wächter löscht sie
+bei Erfolg. Zwei Zeilen in dieser Datei sind zwei gescheiterte Läufe, ausgeschrieben, an der
+Stelle, an die das Team selbst bei jedem Sprintende schreibt.
+
+**Regeln:**
+
+1. **Wer sagt „X kommt von selbst", prüft die Quelle von X — nicht nur X.** Ein fehlendes
+   Ergebnis heißt „noch nicht gelaufen" **oder** „gelaufen und gescheitert". Nur die erste
+   Lesart rechtfertigt Warten, und sie ist die bequemere. Solange die zweite nicht
+   ausgeschlossen ist, ist „warten" eine Annahme und kein Befund.
+2. **Ein Wartegrund, der einen zweiten Sprint überlebt, ist kein Wartegrund mehr, sondern
+   eine Hypothese** — und wird in dem Sprint geprüft, in dem er sich wiederholt. Sprint 3
+   schrieb selbst: „steht hier ein zweites Mal, damit es beim dritten Mal auffällt." Beim
+   dritten Mal ist es nicht aufgefallen, weil die Zeile dieselbe blieb. **Eine Wiederholung
+   fällt nur auf, wenn jemand sie zählt** — deshalb ist die Wiederholung selbst der Auslöser
+   für eine Prüfung, nicht für einen weiteren Vermerk.
+3. **Ein Protokoll, das niemand liest, ist kein Protokoll.** `abschluss-auto.log` ist auf
+   24 MB gewachsen, während drei Sprints über seinen Inhalt spekuliert haben. Der Startcheck
+   einer Session schaut ab jetzt auf das **Ende** dieser Datei, wenn `PUSH-ANFORDERUNG.txt`
+   noch liegt.
+4. **Was diese Sandbox nicht sehen kann, muss die Sandbox ausdrücklich sagen.**
+   `text=True` ohne `encoding=` ist hier (UTF-8) unauffällig und am Host (cp1252) tödlich.
+   Fehlerklassen, die von der Umgebung abhängen, gehören in einen Test über den **gesamten**
+   Produktionscode — nicht in eine Korrektur an der Fundstelle.
+5. **Eine Lehre, die nur an ihrem Fundort steht, schützt genau eine Zeile.** In
+   `preflight.py` trägt `git_laeuft()` seit `pm/T-0024` ein `errors="replace"` samt
+   Begründung; die drei Nachbaraufrufe **derselben Datei** haben es nie bekommen. Wer eine
+   Regel erkennt, schreibt den Test, der sie überall durchsetzt — sonst ist es keine Regel,
+   sondern eine Anekdote.
+
+## L-2026-08-17k (platform/T-0008): Ein Rückgabewert, der zwei Dinge heißt, sagt am Ende das Harmlosere
+
+`status_in_head` gab `None` zurück für „Ticket ist neu" **und** für „nicht gelesen"
+(T-0007) **und** für „Pfad falsch, weil das Repo verschachtelt ist" (T-0008). In allen drei
+Fällen wurde die Prüfung übersprungen und `board-check` meldete `OK`. Für `p10`, `p11` und
+`p12` hat SWR-002 deshalb **nie** geprüft — auffallen konnte das nicht, weil das Ergebnis in
+allen Fällen dasselbe freundliche Wort war.
+
+**Regel:** Ein Rückgabewert, der „alles in Ordnung" und „ich konnte nicht nachsehen"
+zusammenfasst, ist ein stiller Ausfall mit Ansage. Die zwei Fälle bekommen zwei Werte, und
+der zweite wird ein **Befund** — auch dann, wenn das lauter ist. Dieselbe Familie wie
+SWR-108 (`null` vs. echte Null): eine leere Stelle sieht immer nach „nichts zu melden" aus.
