@@ -141,3 +141,45 @@ diese zweite Messung ist eine grüne Quote von einer leeren Prüfung nicht zu un
 nicht von einem Suchtext über eine **Konvention** unterscheiden. Gilt eine Regel absichtlich
 an vielen Stellen, **soll** ihre Prüfung überall aufgehen. Deshalb wird die Zahl
 **berichtet und nicht erzwungen** — ein Gate dort verböte richtige Fälle (SWR-131).
+
+## L-2026-08-17az — Ein Muster im Quelltext ist eine Absicht; erst der Knoten, der danach dasteht, ist ein Befund
+
+**Anlass (Sprint 19, `p12/T-0006`).** Der Code-Zaun-Zweig war gebaut, der Zähltest über den
+Quelltext war **grün** — und der Zweig war **toter Code**. Erreicht wurde er nie: Absatz- und
+Listenpfad sammeln Folgezeilen, bis ein bekanntes Muster kommt, und ```` ``` ```` stand in
+dieser Abbruchregel nicht. Ein Zaun **nach** einem Absatz wurde samt Inhalt in den Absatz
+gezogen.
+
+> **Ein neuer Block-Zweig ist erst dann erreichbar, wenn die Fortsetzungsregel des
+> vorherigen Blocks ihn kennt. Beide Stellen sind für sich genommen richtig.**
+
+Der Zähltest konnte es nicht sehen: er liest den Quelltext und fand den Zweig. Gefunden hat
+es der **Verhaltenstest**.
+
+⚠ **Und dessen erste Fassung war ebenfalls grün** — sie hatte den Zaun am **Textanfang**, wo
+keine Fortsetzungsregel greift. Rot wurde sie erst mit einer Zeile davor.
+
+**Regel:** Eine Statikprüfung darf eine neue Verzweigung **melden**, aber nicht **abnehmen**.
+Zu jedem neuen Zweig gehört ein Beispiel, das ihn **im Zusammenhang** trifft — also mit dem,
+was in der Wirklichkeit davorsteht. Ein Beispiel, das die Stelle nicht trifft, ist grün und
+sagt nichts.
+
+## L-2026-08-17ba — Ein Test, der den heutigen Zustand einfriert, ist erst dann etwas wert, wenn der Lauf, der ihn rot macht, ihn auch umdreht
+
+**Anlass (Sprint 19).** Sprint 18 hatte in `test_renderweg_zaehlung.py` **drei** Zusicherungen
+hinterlassen, die absichtlich den **Befund** und nicht die Lösung festhielten („der Inline-Pass
+kennt die Ticketnummer heute **nicht**", „es gibt noch **keinen** Block-Pass für Zäune", der
+eingefrorene Zähler bei 4). Sprint 19 hat sie rot gemacht — **genau diese drei und keine
+vierte** — und sie **umgedreht** statt gelöscht.
+
+> **Ein eingefrorener Befund ohne die Zusage, ihn beim Bauen umzudrehen, ist eine Warnung mit
+> Zeitstempel. Wer ihn löscht, nimmt der Historie ihre Richtung; wer ihn stehen lässt,
+> erzieht zum Wegsehen.**
+
+⚠ Die Zahl **drei** ist dabei der eigentliche Nachweis: hätte der Umbau vier oder zwei
+Zusicherungen rot gemacht, wäre entweder mehr passiert als geplant oder weniger als
+versprochen.
+
+**Regel:** Wer einen Zustand als Zahl oder als Negativzusicherung einfriert, schreibt in ihren
+Docstring, **welches Ticket sie umdreht und wie**. Und der Lauf, der sie rot macht, prüft
+zuerst, ob **genau die erwarteten** rot sind.

@@ -1360,3 +1360,28 @@ und sie ist später von einem echten Abbruch nicht mehr zu unterscheiden.
 
 ⚠ Offen und benannt: dem Register fehlt ein Feld für „von wem nachgetragen" — heute steht es
 in der Prosa der Notiz. Kandidat für `platform/T-0020`s Nachbarschaft.
+
+## L-2026-08-17bd — Der Preflight räumt beim Start; was ihn stört, entsteht durch die Handlung, die er ermöglichen soll
+
+**Anlass (Sprint 19, `platform/T-0021`).** Auf dem Mount ohne `unlink`-Recht (R7) hinterlässt
+**jeder Commit** `.git/objects/**/tmp_obj_*`, die Git nicht mehr entfernen kann. Der
+**nächste** Git-Aufruf im selben Repo scheitert daran. Gemessen, dreimal in Folge: `entsperre`
+→ Buchung ok → **nächste Buchung gescheitert** → `entsperre` → ok → **nächste gescheitert**.
+
+> **Ein Vorlauf, der einmal am Anfang räumt, schützt gegen den Zustand von gestern und nicht
+> gegen den, den dieser Lauf gerade selbst erzeugt.**
+
+⚠⚠ Die zweite Gefahr ist die unangenehmere. `setze_status` (SWR-139) nimmt den Wechsel bei
+gescheiterter Buchung **byteweise zurück** — richtig, und hier zweimal korrekt geschehen.
+Aber:
+
+> **Ein korrekt zurückgenommener Wechsel ist von einem nie versuchten nicht zu unterscheiden.**
+
+Ein Lauf, der die Ausnahme nicht liest, sieht ein Ticket, das er gerade auf `done` gesetzt
+hat, wieder auf `in_review` stehen.
+
+**Regel (Zwischenlösung, hat in Sprint 19 gewirkt):** vor **jedem** Commit räumen, nicht nur
+beim Sessionstart. Das ist die **Umgehung** und nicht die Reparatur — welche der beiden
+Reparaturen richtig ist, hängt an einer Messung, die `platform/T-0021` als erste Frage
+stellt: ist `tmp_obj_*` eine Sperre oder nur Müll, den `verbuche` fälschlich als Fehlschlag
+liest? Die Meldungen kamen als `warning:` und der Exit-Code war trotzdem ungleich 0.

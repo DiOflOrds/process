@@ -483,3 +483,26 @@ Organisation trägt, liegt **außerhalb jedes Repos**. Für sie gibt es keine R�
 Diff und keinen Wächter. Das ist als Befund aufzunehmen und nicht als Pech zu verbuchen —
 `PROJEKTSTATUS-UPDATE.md`, `PUSH-ANFORDERUNG.txt` und die `SESSION-BEFUND-*.md` teilen diese
 Eigenschaft.
+
+## L-2026-08-17be — „Erst messen, dann entscheiden" erledigt Optionen an ihrer Voraussetzung statt an ihrem Preis
+
+**Anlass (Sprint 19, `p11/T-0014`).** Das Ticket fragte, ob `/api/dashboard` ohne Leser
+bestehen bleibt, und verlangte in seinem eigenen Text: *„Erst dessen Bedarf feststellen, dann
+entscheiden."* Der einzige benannte künftige Leser war `p11/T-0011`.
+
+Nachdem `T-0011` in **demselben** Sprint gebaut war, stand fest: es liest `/api/widgets` und
+braucht den Endpunkt **nicht**. Damit fielen **zwei von drei** Optionen sofort — Option A
+hätte einen **falschen** Satz in einen Docstring geschrieben, Option C war ausdrücklich an
+diesen Bedarf konditioniert.
+
+> **Beide waren Aussagen über ein Ticket, das es noch nicht gab. Über ihren Preis musste
+> niemand mehr reden.**
+
+**Regel:** Wenn ein Entscheidungsticket eine Eingabe benennt, die noch nicht existiert, ist
+die richtige Reihenfolge **nicht verhandelbar** — und die Wartezeit ist kein Verlust: sie
+spart die Diskussion über Optionen, die die Messung ohnehin streicht.
+
+⚠ Und die Gegenrichtung: ein Entscheidungsticket ist **mit der Entscheidung fertig**. Die
+Ausführung bekommt ein eigenes Ticket mit eigener DoD, wenn sie eine abgenommene Anforderung
+anfasst — sonst hängt ein Bau mit Teststrecke, Matrix und Anforderungstext als Haken unter
+einer Entscheidung.
