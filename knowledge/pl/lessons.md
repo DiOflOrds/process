@@ -342,3 +342,12 @@ ich weiter so plane wie bisher?*
 Lauf.** `promt-team/T-0003` stand auf Sprint 12 wie seine beiden `blocked_by`-Tickets,
 während es selbst sagt *„ohne Baseline kein Optimierungslauf"*. Stiller Widerspruch — keine
 Prüfung hält `geplant_sprint` gegen den Sprint des Blockers. Notiert als Prüfungskandidat.
+
+**Regel 5 — ein Briefkasten-Stand vom Laufbeginn ist am Laufende keine Aussage mehr.**
+Sprint 11 startete mit „1 offener Brief" und endete mit drei: `promt-team/N-0001` und
+`team-dashboard/N-0002` trafen **während** des Laufs ein und wurden erst vom
+**Abschluss**-Preflight gemeldet. Wäre der Abschlusscheck übersprungen worden, hätte der
+Lauf „kein offener Brief" berichtet und zwei unbeantwortete hinterlassen. Schwesterregel zu
+`L-2026-08-17t` (eine Messung vor der Änderung misst den Ausgangszustand): **hier misst eine
+Messung vor dem Ende nicht den Eingang.** Der Briefkasten gehört an **beide** Enden eines
+Laufs, nicht nur an den Anfang.
