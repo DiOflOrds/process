@@ -2,6 +2,41 @@
 
 *Kuratiert vom COACH (T-0016, Prozess-CR Retro Sprint 1). Quelle: Betriebsdaten des ersten autonomen Ticks (2026-08-06). Regeln: knowledge/README.md.*
 
+## L-2026-08-17r — Eine Datei, die von sich sagt „einzige Quelle", braucht eine Prüfung, die sie beim Wort nimmt
+
+*Anlass: B066 (Widget-Vertrag), Sprint 9 (2026-08-17).*
+
+`widget-vertrag-v2.yaml` trägt seit Sprint 3 in Großbuchstaben den Satz: DIESE DATEI IST
+DIE EINZIGE STELLE, DIE DIE FELDLISTE FÜHRT. Seit v2.1 (Sprint 7) **fehlte darin ein
+Feld**: beim Einschieben von `letzte_baseline_text` über den `team`-Eintrag ging dessen
+Zeile `- name: team` verloren. YAML machte daraus keinen Fehler, sondern verschmolz beide
+zu **einem** Eintrag — bei doppelten Schlüsseln gewinnt der hintere. `team` kam in der
+Feldliste nicht mehr vor, und `letzte_baseline_text` trug den Typ des verschluckten
+Nachbarn.
+
+**Regel 1 — der Satz „das ist die einzige Quelle" ist eine Zusicherung und gehört
+geprüft.** Zwei Sprints lang war die einzige Prüfung, die dieser Vertrag kannte, dass er
+**lesbar** ist. Lesbarkeit ist keine Übereinstimmung. Ein Vertrag, gegen den nichts
+gehalten wird, ist eine Beschreibung — und veraltet lautlos.
+
+**Regel 2 — geprüft wird in BEIDE Richtungen.** Ein Feld im Payload, das der Vertrag
+nicht führt (der Fall hier), und ein Feld im Vertrag, das der Payload nicht liefert.
+Die erste Richtung ist die gefährlichere: ein vertragstreues Widget **ignoriert
+unbekannte Felder** (so steht es in der Datei), hätte `team` also stillschweigend nicht
+mehr angezeigt — und der Vertrag hätte das gedeckt.
+
+**Regel 3 — gegen einen Fehler, den der Parser schluckt, hilft der Parser nicht.**
+`yaml.safe_load` meldet doppelte Schlüssel nicht, es nimmt den hinteren. Die Prüfung auf
+Duplikate geht deshalb **roh über den Text**. Wer hier über das geparste Ergebnis prüft,
+prüft genau die Stelle nicht, an der der Fehler entsteht.
+
+**Regel 4 — der Wächter greift sofort, auch gegen seinen Erbauer.** Im selben Lauf, in
+dem `test_vertrag_feldliste.py` entstand, meldete er zwei weitere Schlüssel im Payload,
+die der Vertrag noch nicht kannte (`wartet_auf_mensch_*` aus SWR-120). Dass sie jetzt im
+Vertrag stehen, ist nicht der Sorgfalt zu verdanken, sondern der Prüfung.
+
+---
+
 **L-001 (2026-08-06, T-0013):** Artefakt-Pfade in Datei-Blöcken sind immer **relativ zur Repo-Wurzel** anzugeben — nie mit Repo-Präfix. Falsch: `process/cm/datei.md` (ergibt `process/process/cm/datei.md`), richtig: `cm/datei.md`. Das Gateway strippt bekannte Präfixe (Schutznetz), aber der Prompt muss es von vornherein richtig vorgeben.
 
 **L-002 (2026-08-06, T-0014):** Ein Tick darf nur auf **sauberer Arbeitskopie** starten, und Ergebnis-Commits enthalten ausschließlich die eigenen Artefakte (selektives `git add`, nie `add -A`). Der Misch-Commit aus Sprint 1 (Session-Arbeit + Tick-Ergebnis unter einer Ticket-ID) hat die Traceability genau eines Commits geschwächt — Ursache im Orchestrator behoben (Precondition + selektives Add).

@@ -1,6 +1,89 @@
 
 ---
 
+## L-2026-08-17q — Eine Zahl in einem Ticket ist eine Behauptung, bis jemand sie erhoben hat
+
+*Anlass: `pm/T-0048`, Sprint 9 (2026-08-17).*
+
+Das Ticket sagte an drei Stellen „die **beiden** Altfälle" und baute einen ganzen Punkt
+seiner Definition of Done darauf auf („Was passiert mit den beiden Altfällen?"). Der
+erste Lauf der gebauten Prüfung fand **52** — verteilt auf acht Repos, davon 28 vom
+selben Typ wie die zwei genannten.
+
+**Regel 1 — die Zahlen in einem Ticket sind ungeprüfte Beobachtungen, keine Messungen.**
+Was ein Ticket zählt, hat jemand beim Schreiben gesehen. Was es *gibt*, weiß erst die
+Prüfung. Zwischen beidem kann ein Faktor 25 liegen, und der Unterschied ist nicht die
+Genauigkeit, sondern die **Art der Aussage**: „ich habe zwei gesehen" und „es sind zwei"
+sind verschiedene Sätze, und Tickets schreiben regelmäßig den zweiten, wenn sie den
+ersten meinen.
+
+**Regel 2 — die erste Ausgabe einer neuen Prüfung wird gegen die Erwartung gehalten, die
+sie ausgelöst hat.** Nicht um zu bestätigen, sondern um den Unterschied zu sehen. Weicht
+sie ab, ist die Abweichung der eigentliche Befund und gehört ins Ticket — noch bevor die
+Prüfung eingebaut wird. In Sprint 9 hat genau dieser Vergleich aus einem
+Werkzeug-Ticket einen Befund über die Organisation gemacht: die Fehlerart war nicht ein
+Unfall aus Sprint 7, sondern der Normalfall seit dem ersten Sprint.
+
+**Regel 3 — „nicht aufgefallen" ist keine Aussage über Häufigkeit, sondern über
+Aufmerksamkeit.** Die zwei genannten Fälle fielen auf, weil in Sprint 7 gerade jemand
+auf ihre Dateien sah (SWR-110 war frisch gebaut). Wer aus „uns sind zwei aufgefallen"
+schließt „es waren zwei", verwechselt die Reichweite seines Blicks mit der Größe des
+Bestands. **Dieselbe Verwechslung wie B049**, nur eine Ebene höher: dort war die Zahl je
+Kachel lesbar und nie als Summe, hier war sie je Sprint sichtbar und nie über die
+Historie.
+
+**Regel 4 — auch Kostenschätzungen in Tickets sind solche Zahlen.** Dasselbe Ticket
+verwarf einen Lösungsweg als „teuer" und stellte ihm den billigeren gegenüber; eine Zahl
+stand nirgends. Gemessen: rund 10 s gegen einen Preflight, der ohnehin 60 s braucht. Die
+Kostenfrage war real — ihre Antwort lag in einer Minute vor und trug die **entgegen**-
+gesetzte Entscheidung.
+
+---
+
+## L-2026-08-17p — Ein Verschiebungsgrund, der die eigene Definition of Done zitiert, ist zirkulär
+
+*Anlass: `pm/T-0047`, Sprint 9 (2026-08-17). Vierter Treffer von L-2026-08-17j Regel 2 in
+vier aufeinanderfolgenden Sprints.*
+
+`pm/T-0047` wurde zweimal verschoben mit dem Grund „Vertragsfrage vor Bau — die
+Entscheidung gehört vor die Umsetzung". Punkt 1 der Definition of Done desselben Tickets
+lautet: *„Entscheidung zu Punkt 1 und 2 im Ticket ausgeschrieben."*
+
+**Das Ticket wurde also verschoben, weil seine erste Aufgabe noch nicht erledigt war.**
+
+**Regel 1 — die Erkennungsfrage.** Steht der Verschiebungsgrund als Aufgabe in der
+Definition of Done desselben Tickets? Dann ist er kein Grund, sondern eine Beschreibung
+der Arbeit. Ein solcher Grund kann nie erfüllt werden, solange man ihm folgt: er
+verschiebt genau die Arbeit, die ihn auflösen würde.
+
+**Regel 2 — „eine Entscheidung ist nötig" ist erst dann ein Verschiebungsgrund, wenn
+jemand anders sie treffen muss.** Der Test ist die Entscheidungsklasse (Playbook Kap. 16),
+und er dauert eine Minute: Klasse A → Inbox-DR mit Frist und Default, und *dann* wartet
+das Ticket zu Recht. Klasse B oder C → das Team entscheidet, und die Entscheidung ist
+Arbeit dieses Sprints. **Gibt es keinen DR zu einer angeblich vorzulegenden Frage, wurde
+sie nie vorgelegt** — sie wurde nur nicht beantwortet.
+
+**Regel 3 — ein Nachbar, der auf dieses Ticket wartet, ist ein Argument dafür, es zu
+bauen.** In Sprint 8 kam als zusätzlicher Grund „ein neuer Nachbar will an dieselbe
+Stelle" (`pm/T-0051`) hinzu. Dessen eigene DoD verlangt wörtlich: *„`pm/T-0047` ist
+geschlossen."* Die Abhängigkeit zeigte in die falsche Richtung. **Bei „X blockiert
+dieses Ticket" wird in X nachgesehen**, nicht geglaubt.
+
+**Regel 4 — ein B025-Grund verfällt mit dem Lauf, für den er galt.** „Diese Fläche wurde
+in diesem Lauf schon angefasst" ist eine Aussage über **einen** Sprint. Unverändert in
+den nächsten übernommen, wird sie falsch, ohne dass jemand etwas tut. `git log` auf die
+genannte Datei beantwortet das in Sekunden — hier: zuletzt in Sprint 7 angefasst, der
+Grund wurde durch zwei Sprints getragen.
+
+**Regel 5 — eine falsch gestellte Frage kann ein Ticket jahrelang festhalten.** „Kopfblock
+**oder** Feld?" unterstellte, ein Kopfblock ändere die Antwort für jeden Leser. Gemessen
+liest jeder Leser `payload["projekte"]`; ein Schlüssel **daneben** ändert für keinen
+etwas. Die Frage zerfiel bei der ersten Messung in eine harmlose und eine schwere Hälfte,
+und nur die schwere hätte die Abstimmung gebraucht — die niemand gewählt hätte. **Vor dem
+Messen des Grundes lohnt das Prüfen der Frage.**
+
+---
+
 ## L-2026-08-17o — Eine Prüfung, deren Ergebnis vom Zeitpunkt abhängt, prüft den Zeitpunkt
 
 *Anlass: `platform/T-0010` / `pm/T-0049`, Sprint 8 (2026-08-17).*
