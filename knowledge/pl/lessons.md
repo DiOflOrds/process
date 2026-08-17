@@ -450,3 +450,36 @@ Registerzeile.
 ⚠ Und der Nebenbefund, der ernster ist als der Fall: die Eröffnung eines Sprints ist erst
 mit ihrem **Commit** haltbar. Bis dahin ist sie eine Datei auf einer Platte, die jeder
 Absturz mitnimmt oder — schlimmer — stehen lässt.
+
+## L-2026-08-17at — Wer den Kopf einer Datei „fortschreibt", muss den alten Kopf VERSCHIEBEN und nicht ersetzen
+
+**Anlass (Sprint 17, dieser Lauf, selbst verursacht und selbst gefunden).**
+`PROJEKTSTATUS-UPDATE.md` ist so gebaut: oben *„Das Wichtigste (Stand Sprint N)"*, darunter
+die Marke *„Frühere Stände (**unverändert, nichts umgeschrieben**)"*, darunter alle älteren
+Stände.
+
+Dieser Lauf hat den Sprint-17-Block geschrieben, indem er alles **vor** der Marke ersetzte
+und alles **danach** behielt. Das Ergebnis: der komplette **Sprint-16-Block war weg** — 92
+Zeilen, gelöscht von einem Lauf, der im selben Atemzug schrieb, er habe nichts
+umgeschrieben.
+
+> **Die Datei verspricht in ihrer eigenen Überschrift, dass nichts umgeschrieben wird. Der
+> Schreibvorgang, der sie fortschreibt, war die einzige Stelle, an der dieses Versprechen
+> gebrochen werden konnte — und er hat es gebrochen.**
+
+⚠ Gefunden hat es **kein** Test. `PROJEKTSTATUS-UPDATE.md` liegt im Wurzelverzeichnis und
+damit in **keinem** Repo: kein `git diff`, keine Historie, kein Wiederherstellen. Gefunden
+wurde es nur, weil beim Nachsehen wegen eines **anderen** Verdachts (hat der parallele Lauf
+etwas geschrieben?) die Überschriftenliste zufällig aufgefallen ist. Wiederhergestellt
+werden konnte der Block nur, weil derselbe Lauf ihn zu Beginn **gelesen** hatte.
+
+**Regel:** Beim Fortschreiben eines „Neues oben"-Dokuments wird der bisherige Kopfblock
+**unter die Marke verschoben** und dann der neue davorgesetzt — nie „alles vor der Marke
+ersetzen". Wer es doch tut, prüft danach die **Zahl der Blöcke**: sie muss um genau eins
+gewachsen sein.
+
+⚠ **Zweiter Punkt, der schwerer wiegt als der Fehler:** eine Datei, die die Geschichte der
+Organisation trägt, liegt **außerhalb jedes Repos**. Für sie gibt es keine Rücknahme, keinen
+Diff und keinen Wächter. Das ist als Befund aufzunehmen und nicht als Pech zu verbuchen —
+`PROJEKTSTATUS-UPDATE.md`, `PUSH-ANFORDERUNG.txt` und die `SESSION-BEFUND-*.md` teilen diese
+Eigenschaft.
