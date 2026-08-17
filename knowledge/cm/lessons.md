@@ -1073,3 +1073,52 @@ Lage aus SWR-125, hier **benannt und nicht als erledigt gemeldet**.
 
 **Erkennungsfrage:** *Welche Aussage meines Berichts behauptet etwas über den Inhalt einer
 Datei — und habe ich diese Datei danach aufgemacht?*
+
+---
+
+## L-2026-08-17ah — Ein Zustandswechsel aus zwei Vorgängen hat einen Zwischenzustand, und der geht verloren
+
+**Sprint 15, zweimal in einem Lauf eingetreten.** Ein Statuswechsel besteht heute aus zwei
+Aufrufen: `board.py <repo> status T-xxxx <neu>` schreibt die Datei, ein zweiter Aufruf
+bucht sie. Scheitert der zweite an einer verwaisten `.git/index.lock`, steht der neue
+Zustand **in der Datei** und **nicht in der Historie** — und der nächste Wechsel
+überschreibt ihn.
+
+| Fall | Ticket | Ausgang |
+|---|---|---|
+| 1 | `platform/T-0013` | vor dem Commit bemerkt, Reihenfolge wiederhergestellt |
+| 2 | `pm/T-0052` | committet: `in_progress -> done` steht in der Historie |
+
+> **Beim ersten Mal ging es gut aus, weil jemand hingesehen hat — nicht, weil eine
+> Vorkehrung gegriffen hätte.**
+
+⚠ **Die Ursache ist nicht die Sperre.** Die ist behandelt: SWR-134 hat den einen
+Schreibweg nach Git gebaut. Der Fehler liegt darüber — `setze_status` kennt den Commit
+nicht, also muss ihn **jeder Aufrufer** kennen, bei jedem Wechsel, in jedem Repo, in jeder
+Session.
+
+> **Eine Reparatur, die der Aufrufer anwenden muss, ist keine Reparatur.**
+
+Das ist SWR-134 ein Feld weiter: dort waren es acht Git-Schreibwege, hier sind es zwei
+Vorgänge, die einer sein müssten.
+
+**Regel 1 — ein Zustandswechsel ist ein Vorgang.** Wer den Zustand schreibt, bucht ihn im
+selben Aufruf. Scheitert die Buchung, gilt der Wechsel als nicht geschehen und die Datei
+geht zurück. (Als Ticket: `platform/T-0017`, Sprint 16 — hier **benannt und nicht als
+erledigt gemeldet**, die Lage aus SWR-125.)
+
+**Regel 2 — bis dahin: nach jedem Statuswechsel den Commit prüfen, bevor der nächste
+kommt.** Ein `git log -1` kostet nichts; ein verlorener Zustand kostet einen
+Preflight-Befund und eine Erklärung an den Auftraggeber.
+
+**Regel 3 — einen schon eingetretenen Verstoß nicht glätten.** Fall 2 steht als dritter
+Verstoß seit dem Stichtag im Befund. Kein Stichtag verschoben, keine Historie
+umgeschrieben, kein Test angepasst (`L-2026-08-17ad`).
+
+⚠ **Der Unterschied zwischen Fall 1 und Fall 2 ist die Aufmerksamkeit eines Augenblicks,
+und darauf darf keine Regel bauen.** Fall 1 wurde bemerkt, weil der fehlgeschlagene
+Commit unmittelbar auf dem Schirm stand; Fall 2 lief in derselben Befehlszeile durch, in
+der schon der nächste Schritt folgte.
+
+**Erkennungsfrage:** *Habe ich gerade einen Zustand geschrieben, dessen Buchung ich nicht
+gesehen habe?*
