@@ -52,6 +52,23 @@ teams:
                            # PIN-Lesegate. Wird je ein Digest-Inhalt in ein Repo committet,
                            # ist dieses Team ab dann `sensibel` und verliert den Remote.
     wissensbasis: team-dashboard/docs/
+  promt-team:
+    name: promt-team (Prompt- und Kontext-Optimierung)
+    typ: projekt
+    profil: wiederkehrend
+    repo: promt-team       # LOKAL-ONLY: Datenklasse sensibel -> kein GitHub-Remote (.kein-remote)
+    status: aktiv
+    gegruendet: 2026-08-17 (pm/T-0056 TG-a, pm/D009; Brief pm/N-0040, Pool-Kandidat #14)
+    rollen: [PROMPT-OPT]
+    datenklasse: sensibel  # Das Team liest TRANSKRIPTE der geprueften Rollen. Ein Transkript
+                           # kann alles enthalten, was je durch eine Rolle lief — auch
+                           # Mail-Inhalte aus team-mail. Die Einstufung folgt dem
+                           # schlechtestmoeglichen Inhalt der Eingabe, nicht dem erwarteten.
+    auflagen:
+      - "Wirkbereich zunaechst NUR die eigenen Werkzeuge/Rollen des ASPICE-Teams; Ausweitung = eigener DR (Klasse A)"
+      - "Vorschlaege bleiben Vorschlaege — kein produktiver Prompt wird selbst geaendert"
+      - "Kein Optimierungslauf ohne Baseline (T-0001) und Goldset (T-0002) — Regel des Auftrags selbst"
+    wissensbasis: promt-team/docs/
   team-mail:
     name: team-mail (Mail-Zusammenfassung)
     typ: projekt
