@@ -1122,3 +1122,71 @@ der schon der nächste Schritt folgte.
 
 **Erkennungsfrage:** *Habe ich gerade einen Zustand geschrieben, dessen Buchung ich nicht
 gesehen habe?*
+
+## L-2026-08-17ai — Eine Reparatur, die ihre Abhängigkeit beim Aufrufer sucht, wirkt genau dort nicht, wo sie hin sollte
+
+**Anlass (Sprint 16, gemessen in Produktion, `platform/T-0018` / SWR-143).** Drei Commits
+scheiterten hintereinander an einer `.git/index.lock` und quittierten `geraeumt: 0` —
+während ein **direkter** Aufruf derselben Räumfunktion sie in einem Zug wegräumte.
+
+Ursache: `git_schreiben.entsperre` legte `os.path.dirname(__file__)` in `sys.path`. Das ist
+`backend/`, `preflight` liegt in `scripts/`. Der Import scheiterte, die Funktion gab `0`
+zurück, und die Räumung lief nicht.
+
+> **Die Reparatur wirkte überall dort, wo der Aufrufer sie mitgebracht hat — also genau
+> dort nicht, wo SWR-134 sie hinbringen wollte.**
+
+⚠⚠ **Der Fehlermodus ist der schlimmste, den diese Bauart hergibt: unsichtbar in der
+Teststrecke, sichtbar nur unter Last.** Die Zusicherung dazu war die ganze Zeit grün, weil
+die Testdatei `scripts/` beim Import selbst in den Pfad legt.
+
+**Regel:** Greift ein Modul über `sys.path` nach einem anderen, ist der Anker `__file__`
+und der Pfad wird normalisiert — nie der Zustand des Aufrufers.
+
+**Erkennungsfrage:** *Welche unserer Zusicherungen prüfen etwas, das die Testdatei selbst
+eingerichtet hat?* ⚠ Für die rund 900 Python-Zusicherungen ist sie **unbeantwortet**, und
+das steht hier, statt als erledigt zu gelten.
+
+## L-2026-08-17aj — Eine Prüfung, die den Fehler zusichert, und eine, deren Regel zu weit gefasst ist, sehen gleich aus — und werden verschieden behandelt
+
+**Anlass (Sprint 16).** SWR-139 machte drei bestehende Zusicherungen rot
+(`test_ohne_sperre_wird_gar_nicht_geraeumt` und zwei im Briefkasten). Alle drei verlangten
+*„ohne Fehlschlag darf gar nicht geräumt werden"* — und die neue Räumung **zwischen** `add`
+und `commit` verletzt das wörtlich.
+
+⚠ Der Reflex aus SWR-136 wäre gewesen, sie als *Prüfungen, die den Fehler zusichern* zu
+behandeln. Das wären sie **nicht**: ihre Regel war **richtig** und nur zu weit gezogen. Der
+Unterschied ist prüfbar:
+
+| | Prüfung, die den Fehler zusichert (SWR-136) | Prüfung mit zu weitem Anwendungsbereich (hier) |
+|---|---|---|
+| Die zugesicherte Regel | war falsch | war und ist richtig |
+| Nach der Korrektur | verschwindet sie | wird sie **schärfer** |
+| Was zu tun ist | die Absicht retten, den Wortlaut aufgeben | die **Ebene** wechseln, auf der gemessen wird |
+
+Konkret: gemessen wird ab jetzt die **Reihenfolge** (vor dem ersten Git-Aufruf wird nicht
+geräumt) und die **Wiederholung** (genau eine), nicht die Abwesenheit der Räumung.
+
+> **Der Grund, warum die Räumung dort erlaubt ist, muss ausgesprochen werden: ein
+> gelungenes `add` ist der Nachweis, dass die danach liegende Sperre die eigene ist.**
+
+**Regel:** Wird eine bestehende Zusicherung von einer neuen Anforderung rot, ist die erste
+Frage nicht *„löschen oder anpassen?"*, sondern *„war ihre Regel falsch oder nur zu weit?"*
+— und die Antwort gehört ins Ticket, nicht in den Bericht.
+
+## L-2026-08-17ak — Was als „Markup" gilt, ist eine Entscheidung der Messung; eine unsaubere macht ein richtiges System rot
+
+**Anlass (Sprint 16, `p12/T-0008` / SWR-099).** Der Vollständigkeitsnachweis des Renderers
+meldete an sieben Briefen fehlende Zeichen: `1.`, `2.`, `3.`, `4.` — die **Marken einer
+Nummernliste**. Die Quelle schreibt sie, das `<ol>` erzeugt sie; der Renderer wirft nichts
+weg. Die Messung nahm `-` und `*` als Markup aus und Ziffern nicht.
+
+⚠ Ein solcher Dauerbefund wäre **schlimmer als kein Nachweis**: er trainiert das Wegsehen
+an — an genau der Prüfung, die später einen echten Verlust zeigen soll.
+
+Korrigiert wurde nicht die Zeichenklasse, sondern die **Ebene**: die führende Marke einer
+**Zeile** ist Markup, eine Ziffer mitten im Satz nicht. Beide Richtungen sind eigens
+zugesichert, sonst wäre die Korrektur durch Verschieben der Regel grün zu bekommen.
+
+**Regel:** Bevor eine neue Messung als Befund gilt, wird ihre eigene Definition geprüft.
+Ein erster roter Lauf ist genauso oft ein Fehler der Messung wie einer des Gemessenen.
