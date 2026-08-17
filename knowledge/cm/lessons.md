@@ -852,3 +852,17 @@ Erkennungsfrage: *Habe ich in den Code gesehen, oder habe ich aus dem Namen gesc
 `kalenderfristen`-Zeile steht deshalb nicht nur im Startcheck, sondern auch im
 Cockpit-Kopfblock: der Auftraggeber sieht ins Cockpit. Eine Meldung an einer Stelle, an die
 niemand schaut, ist die halbe Wiederholung von SWR-122.
+
+**Regel 5 — der Vertrag wird nie von dem nachgezogen, der den Payload ändert.** Der
+Widget-Vertrag ist in **v2.3 und v2.4 hintereinander** von derselben Prüfung
+(`test_vertrag_feldliste`) nachgefordert worden, nicht von der Session, die die Schlüssel
+hinzufügte. Beide Male stand es hinterher im Vertrag mit dem Satz „das ist nicht der
+Sorgfalt zu verdanken". Zweimal in Folge ist kein Zufall: **wer Code ändert, sieht den
+Vertrag nicht** — die Dateien liegen in verschiedenen Repos, und der Gedanke „welches
+Dokument beschreibt, was ich gerade geändert habe?" kommt beim Bauen nicht auf.
+
+Konsequenz: **die Prüfung ist die Lösung, nicht der Notausgang.** Sie darf nicht als
+Redundanz zum Vertrag gelesen werden (kein B033-Fall), sondern ist die einzige Stelle, an
+der die beiden Repos überhaupt zusammengehalten werden. Erkennungsfrage beim Erweitern
+eines Payloads: *welches Dokument außerhalb dieses Repos behauptet etwas über die Form, die
+ich gerade ändere?*
