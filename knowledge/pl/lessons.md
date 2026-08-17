@@ -394,10 +394,19 @@ Wiederöffnungsquote ist genau dafür eine KPI. Falsch war die Buchführung: die
 Zwischenstand bekam keinen eigenen Commit, weil die Wiederöffnung sich wie Buchhaltung
 anfühlte und nicht wie ein Zustandswechsel.
 
-`uebergang_historie` hat es gemeldet: **1 unzulässiger Übergang seit dem Stichtag.** Der
-Befund steht im Sprintabschluss und ist **nicht** geglättet worden — weder durch ein
-Verschieben des Stichtags noch durch ein Umschreiben der Historie. Der Altbestand von 52
-Fällen liegt aus demselben Grund unangetastet da.
+`uebergang_historie` hat es gemeldet — und beim zweiten Hinsehen waren es **zwei**:
+`platform/T-0014` (`done → in_review`) und `pm/T-0064` (`open → in_review`). Der Befund
+steht im Sprintabschluss und ist **nicht** geglättet worden — weder durch ein Verschieben
+des Stichtags noch durch ein Umschreiben der Historie. Der Altbestand von 52 Fällen liegt
+aus demselben Grund unangetastet da.
+
+⚠⚠ **Der zweite Fall ist der eigentliche Befund an dieser Lesson.** Der erste wurde beim
+Testlauf gefunden, diese Regel daraufhin geschrieben — und der zweite lag zu diesem
+Zeitpunkt **schon in der Historie** und wurde erst vom Abschluss-Preflight gefunden. Eine
+Regel aufzuschreiben ist nicht dasselbe wie den Bestand danach zu prüfen: *wer eine Lesson
+formuliert, prüft im selben Zug, wie oft der Fall schon eingetreten ist.* Genau diese Frage
+stellt `L-2026-08-17x` („auf welche anderen offenen Fälle trifft dieser Satz gerade zu?") —
+hier ging es nicht um andere Fälle, sondern um **denselben Fall ein zweites Mal**.
 
 **Regel — jeder Statuswert, der auf der Platte stand, braucht einen Commit.** Auch der
 rückwärts. `board.setze_status` und `git commit` sind ein Paar; wer das erste ohne das
