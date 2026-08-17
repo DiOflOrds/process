@@ -95,3 +95,49 @@ die ihn wie einen Fehler zeigt, lehrt ihre Benutzer, Fehler zu ignorieren.
 
 ⚠ Die Unterscheidung muss **bis in die Ansicht** durchgehalten werden — drei Zustände, drei
 Gestalten. Im Server erfüllt und in der Anzeige verloren ist sie nicht erfüllt.
+
+## L-2026-08-17au — Ein Beleg, der als Satz im Ticket steht, ist keiner
+
+**Anlass (Sprint 18, `promt-team/T-0007` / SWR-149).** Die DoD verlangte wörtlich: *„Real
+heißt: aus dem Bestand belegt, nicht ausgedacht."* Dieser Satz stand seit Sprint 15 im
+Ticket. **Keine Prüfung liest einen Satz.** Ein Lauf hätte 51 plausibel formulierte Fälle
+schreiben und die DoD als erfüllt melden können — und nichts hätte widersprochen.
+
+Gebaut ist `herkunft` als **Pflichtfeld mit Belegstelle** (`pfad::suchtext`), gegen den
+Bestand aufgelöst. ⚠ Die **Stelle** ist die eigentliche Prüfung:
+
+> **Eine Datei existiert auch für einen erfundenen Fall. Erst die Belegstelle darin
+> unterscheidet „aus dem Bestand" von „plausibel formuliert".**
+
+**Regel:** Verlangt eine DoD, dass etwas **echt** ist, dann gehört der Beleg als **Feld** in
+das Artefakt und als **Auflösung** in die Prüfung. Eine Echtheitsforderung in Prosa ist eine
+Bitte an den nächsten Lauf, ehrlich zu sein — und `L-2026-08-17ag` hat an einem Tag dreimal
+gezeigt, wie zuverlässig das ist.
+
+⚠ Und die Formentscheidung gehört dazu: `herkunft` als **Zeichenkette** wird abgelehnt. Ein
+Satz und ein Pfad sehen als Zeichenkette gleich aus, und nur einer von beiden lässt sich
+auflösen — dieselbe Entscheidung, die `fehlschlag_erkannt_an` gegen Prosa schon getroffen
+hatte, am Nachbarfeld **angewandt statt ein zweites Mal gelernt**.
+
+## L-2026-08-17av — Eine Prüfung, die überall aufgeht, ist grün und wertlos
+
+**Anlass (Sprint 18, `promt-team/T-0007` / SWR-149).** Der erste Entwurf des Goldsets war
+**mangelfrei**: 51 Fälle, Form geprüft, Herkunft aufgelöst, Registry geprüft, Quote 100 %.
+Eine zweite Messung, die die DoD **nicht** verlangt hatte — **Trennschärfe** —, hat ihn
+widerlegt: von 46 textbasierten Prüfungen gingen **41** auch in **fremden** Artefakten des
+Sets auf.
+
+> **Eine Prüfung, deren Suchtext überall steht, geht auf, ohne etwas zu unterscheiden. Ein
+> Goldset aus solchen Prüfungen ist kein Maßstab, sondern ein Maß für die Beliebigkeit
+> seiner Suchtexte — und es ist grün.**
+
+Geschärft auf **2 von 40** vor dem ersten Commit.
+
+**Regel:** Wer einen Maßstab baut, misst **auch dessen Auflösungsvermögen** — nicht nur, ob
+seine Prüfungen aufgehen, sondern ob sie am **falschen** Gegenstand **nicht** aufgehen. Ohne
+diese zweite Messung ist eine grüne Quote von einer leeren Prüfung nicht zu unterscheiden.
+
+⚠ **Die Grenze der Messung gehört in denselben Bericht:** sie kann einen beliebigen Suchtext
+nicht von einem Suchtext über eine **Konvention** unterscheiden. Gilt eine Regel absichtlich
+an vielen Stellen, **soll** ihre Prüfung überall aufgehen. Deshalb wird die Zahl
+**berichtet und nicht erzwungen** — ein Gate dort verböte richtige Fälle (SWR-131).

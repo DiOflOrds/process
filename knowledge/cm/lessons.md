@@ -1289,3 +1289,74 @@ gehörte er ins Runbook; hier steht er als Beobachtung.
 **Regel (vorsichtig):** Berührt ein Ticket einen Vertrag, gehört die Vertragsfrage als
 **eigener, erster** DoD-Punkt ins Ticket — nicht als Hinweis im Fließtext. Der Wächter
 bleibt trotzdem; er ist die Lösung und nicht der Notausgang (`L-2026-08-17y`).
+
+## L-2026-08-17aw — Aufschrift vom Server, Ziel selbst gebaut: zwei Aussagen über eine Sache
+
+**Anlass (Sprint 18, `projects/p11/T-0012` / SWR-150).** `app.js` hatte **neun** Stellen, die
+`"#/ticket/" + projekt + "/" + id` zusammensetzten — und in **sieben** davon stand als
+**Beschriftung** `x.ref`, also die Kennung **vom Server** (SWR-087).
+
+> **Ein Link, dessen Aufschrift der Server liefert und dessen Ziel die Ansicht zusammenbaut,
+> ist zwei Aussagen über dasselbe Ticket. Solange beide gleich sind, merkt es niemand.**
+
+Und sie sind nicht theoretisch verschieden: **68 Ticketnummern gibt es in mehr als einem
+Projekt**, `T-0002` allein in **17** — gemessen, nicht befürchtet.
+
+**Regel:** Wo der Server eine Kennung liefert, ist sie die Quelle für **Anzeige und Ziel**.
+Eine Ansicht, die eine Kennung nur **beschriftet** und ihr Ziel selbst baut, hat SWR-087
+formal erfüllt und sachlich unterlaufen.
+
+⚠ Und die harte Hälfte: eine **nackte Nummer ergibt keinen Link**.
+> **Ein Link auf das falsche Projekt ist schlimmer als kein Link. Der falsche öffnet ein
+> fremdes Ticket und sieht dabei richtig aus.**
+
+⚠ Wo eine Auflösung unmöglich ist — ein `T-nnnn` im Fließtext sagt nicht, aus welchem
+Projekt es kommt —, heißt die Stelle nach dem, was sie tut (`textRefAnnahme`) und die Ansicht
+macht die Annahme sichtbar. Eine Vermutung zu **benennen** ist weniger, als sie aufzulösen,
+und mehr, als sie zu verstecken.
+
+## L-2026-08-17ax — Ein Altbestand als Zahl kann nur sinken; als Warnung wächst er
+
+**Anlass (Sprint 18, `projects/p12/T-0009` / ADR-P12-001, und ein zweites Mal in
+`test_deep_links.py`).** P12 ist eine **Zusammenführung**: endet sie mit zwei Renderwegen,
+hat sie ihr Ziel verfehlt, auch wenn alles funktioniert. Die Regel dagegen ist deshalb keine
+Absichtserklärung im ADR, sondern ein **Zähltest** — `ALTBESTAND_TLINKS_AUFRUFE = 4`, und
+`9 → 0` beim Zwillingsbefund in SWR-150.
+
+> **Ein Altbestand, der als Warnung dasteht, wächst. Einer, der als Zahl dasteht, kann nur
+> sinken — denn wer ihn erhöht, muss die Zahl anfassen und sieht dabei, dass er es tut.**
+
+**Regel:** Ein benannter Altbestand gehört als **eingefrorene Zahl** in eine Zusicherung,
+nicht als Hinweis in einen Kommentar. Der eine Fall, in dem er sinkt, ist der Nachweis der
+Reparatur; der andere, in dem er steigt, ist ein roter Test.
+
+⚠ Zwei Zusicherungen dieses Laufs halten bewusst den **heutigen** Zustand fest („der
+Inline-Pass kennt die Ticketnummer heute **nicht**"). Sie werden rot, sobald gebaut wird —
+**und das ist ihr Zweck**: sie sagen dem Lauf, der es tut, dass er den Altbestand
+mitzunehmen hat, statt dieselbe Erkennung zweimal stehen zu lassen. Ein Test, der nur den
+Zielzustand kennt, wäre bis dahin dauerhaft rot und würde ignoriert (SWR-131).
+
+## L-2026-08-17ay — Ein Lauf, der fertig ist und nicht bucht, hinterlässt keinen Abbruch
+
+**Anlass (Sprint 18, Eröffnung).** Sprint 17 hatte seine Arbeit um 18:50 abgeschlossen und
+committet, aber **bewusst kein `ende` gebucht**, weil eine zweite Session in denselben Repos
+arbeitete. Beide Läufe endeten. Sprint 17 stand danach als **laufend** da.
+
+Der von `beginne()` vorgesehene Weg hätte ihn beim zweiten Anlauf als **`abgebrochen: true`**
+geschlossen — und das wäre **falsch gewesen**: Sprint 17 hat vier Sachtickets geschlossen und
+SWR-144 bis SWR-147 hervorgebracht.
+
+> **Das Register kennt „läuft" und „abgebrochen". Für „fertig, aber aus Rücksicht nicht
+> gebucht" hat es kein Wort — und der automatische Weg wählt dann das falsche.**
+
+Geschlossen wurde er deshalb mit `beende()` **ohne** Abbruchmarke und mit einer Notiz, die
+Messung (Schreibspur unbewegt, alle 17 Repos clean), Zeitpunkt der Arbeit (18:50) und den
+nachtragenden Lauf nennt.
+
+**Regel:** Wer eine fremde Buchung nachträgt, trägt **nicht** die bequemste Etikette ein,
+sondern die zutreffende — und schreibt in die Notiz, **woran** er es gemessen hat. Ein
+`abgebrochen: true` an einem erfolgreichen Sprint ist eine falsche Angabe in der Buchhaltung,
+und sie ist später von einem echten Abbruch nicht mehr zu unterscheiden.
+
+⚠ Offen und benannt: dem Register fehlt ein Feld für „von wem nachgetragen" — heute steht es
+in der Prosa der Notiz. Kandidat für `platform/T-0020`s Nachbarschaft.
