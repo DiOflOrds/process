@@ -382,3 +382,31 @@ gewinnt die bequeme.
 
 **Erkennungsfrage am Sprintende:** *Ist zwischen meiner letzten Messung und dem Satz, den
 ich gerade schreibe, noch etwas passiert — und wer hätte es mir gesagt?*
+
+## L-2026-08-17ad — Eine Wiederöffnung ist ein Statuswechsel und braucht ihren eigenen Commit
+
+*Anlass: Sprint 13 (2026-08-17), selbstverschuldeter Befund an `platform/T-0014`.*
+
+Dieser Lauf hat `platform/T-0014` geschlossen, danach **zwei weitere Leser** des
+Entscheidungsmarkers gefunden und das Ticket bewusst wiedereröffnet — richtig so, die
+Wiederöffnungsquote ist genau dafür eine KPI. Falsch war die Buchführung: die Datei ging
+`done → in_progress → in_review → done`, die **Commits** aber `done → in_review`. Der
+Zwischenstand bekam keinen eigenen Commit, weil die Wiederöffnung sich wie Buchhaltung
+anfühlte und nicht wie ein Zustandswechsel.
+
+`uebergang_historie` hat es gemeldet: **1 unzulässiger Übergang seit dem Stichtag.** Der
+Befund steht im Sprintabschluss und ist **nicht** geglättet worden — weder durch ein
+Verschieben des Stichtags noch durch ein Umschreiben der Historie. Der Altbestand von 52
+Fällen liegt aus demselben Grund unangetastet da.
+
+**Regel — jeder Statuswert, der auf der Platte stand, braucht einen Commit.** Auch der
+rückwärts. `board.setze_status` und `git commit` sind ein Paar; wer das erste ohne das
+zweite aufruft, erzeugt einen Sprung, den die Historie später nicht erklären kann.
+
+**⚠ Die eigentliche Lehre liegt eine Ebene höher.** Der Lauf, der die Prüfung gegen
+*„Zustand nur in Prosa"* gebaut hat, hat im selben Ticket den *Zustand in der Historie*
+verloren. Es ist die vierte Wiederholung desselben Musters an einem Tag: die Regel war
+bekannt, die Prüfung existierte, und sie wurde am **Nachbarfall** nicht angewandt.
+
+**Erkennungsfrage:** *Habe ich gerade ein Feld geändert, ohne zu committen — und wie sieht
+die Änderung für den aus, der nur die Commits liest?*

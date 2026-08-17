@@ -903,3 +903,68 @@ gleichzeitig in dieselben Repos schreiben sehen (Befund 11:05). Aufgenommen als
 deshalb nicht sehen. Erkennungsfrage vor jedem schreibenden Lauf: *bewegt sich der HEAD
 der Repos, während ich messe?* Zwei Kontrollmessungen im Abstand von Minuten beantworten
 das; dieser Lauf hat vier gebraucht, bis Ruhe war.
+
+## L-2026-08-17ab — Eine Entscheidung im Fließtext ist für jede Prüfung unsichtbar
+
+*Anlass: `platform/T-0014` / SWR-131, Sprint 13 (2026-08-17).*
+
+Der Auftraggeber hat `projects/p12/T-0007` um **11:48:25** über die Inbox entschieden. Die
+Inbox hat die Entscheidung angenommen, in den **Ticketrumpf** geschrieben und committet.
+Danach schrieb derselbe Sprint 12 drei Berichte, die sagten, die Frage liege noch bei ihm —
+und **es ging eine E-Mail** hinaus, die ihm einen „Neuen Decision Request" mit Frist 24.08.
+ankündigte.
+
+Die Ursache waren **vier Formulierungen eines Wortes**. `inbox` las „entschieden" am
+Rumpfmarker, `board`/`aggregation`/`preflight` am `status`, `aggregation.cockpit` trug eine
+dritte Kopie des Markers, `dr_benachrichtigung` eine vierte. ⚠ **Nicht alle waren falsch —
+sie waren verschieden.** Das Cockpit hat den DR nach der Entscheidung korrekt nicht mehr
+geführt, während der Preflight ihn als offen zählte. Das ist der eigentliche Preis von
+B033: nicht eine falsche Anzeige, sondern zwei richtige, die sich widersprechen.
+
+**Regel 1 — wer einen Zustand in Prosa schreibt, schreibt ihn nirgends hin.** Ein Zustand,
+den eine Prüfung lesen soll, gehört in ein **Feld**. Prosa darf ihn erläutern, nie tragen.
+
+**Regel 2 — „eine Stelle" wird gezählt, nicht behauptet.** Der erste Anlauf dieser
+Anforderung stellte drei Leser um und übersah zwei; gefunden wurden sie erst durch ein
+`grep` über den Quelltext. Es gibt jetzt einen Test, der **die Definitionen im Quelltext
+zählt** — ohne ihn wäre „eine Stelle" eine Aussage über den Einführungstag.
+
+**Regel 3 — der Leser mit Außenwirkung wird zuerst geprüft.** Von vier Lesern war der
+schwächste der, der E-Mails verschickt. Erkennungsfrage: *welcher dieser Leser erreicht
+einen Menschen?*
+
+**Regel 4 — eine Prüfung, die den Fehler zusichert, ist schlimmer als keine.**
+`test_entschiedene_drs_ohne_warnung` verlangte für einen entschiedenen DR ausdrücklich
+`["gesendet"]`. Das Fehlverhalten war nicht ungeprüft, sondern **geprüft und bestätigt** —
+und damit gegen jede Änderung verteidigt. Erkennungsfrage bei jedem Test, der zwei Dinge in
+einer Zeile prüft: *sichert er das eine zu und das andere nur mit?*
+
+**Regel 5 — eine Reparatur, die verstummt, ist keine.** Einen entschiedenen DR aus
+„wartet auf den Menschen" zu nehmen war richtig und allein **schlimmer als der Fehler**:
+das Ticket wäre aus jeder Anzeige verschwunden und weiter offen geblieben. Zu jeder
+Bedingung, die etwas ausblendet, gehört im selben Lauf der Leser, der es auffängt.
+
+**Erkennungsfrage für den nächsten Lauf:** Sprint 12 hat notiert, dass bei 60-Minuten-Takt
+ein **Brief mitten im Lauf der Regelfall** ist, und daraus die Doppelprüfung des
+Briefkastens gebaut — für **Entscheidungen** aus derselben Inbox nicht. *Welche anderen
+Eingänge des Menschen prüfe ich nur einmal?*
+
+## L-2026-08-17ac — Verwaiste Git-Locks lassen sich auf diesem Mount nicht löschen, aber umbenennen
+
+*Anlass: Sprint 13 (2026-08-17), vier abgebrochene Commits.*
+
+SWR-123 räumt verwaiste `.git/index.lock` per `unlink`. Auf dem Cowork-Mount scheitert das
+mit `Operation not permitted` — **`os.rename` gelingt dagegen**. Ein Commit hinterlässt hier
+regelmäßig einen Lock, der den nächsten Commit im selben Repo abweist.
+
+**Regel — Lock beiseite benennen, nicht löschen wollen.** `os.rename(lock, lock +
+".verwaist")` vor `git add` und vor `git commit`. Dieselbe Grundoperation wie in
+`L-2026-08-17y` (Temp-Datei schreiben, dann `os.replace`) — **derselbe Nachbarfall, zwei
+Sprints später wiedererkannt statt neu gelernt.**
+
+⚠ Die Voraussetzung aus SWR-123 bleibt: geräumt wird nur, wenn **kein** Git-Prozess läuft.
+Das Umbenennen macht die Räumung möglich, nicht zulässig.
+
+**Offen:** die Regel steht hier und **nicht im Code** — SWR-123 räumt weiter per `unlink`.
+Aufgenommen als `platform/T-0015`. *Eine Regel, die keine Prüfung vertritt, ist die Lehre
+aus SWR-125; sie wird hier bewusst als Schuld notiert und nicht als erledigt gemeldet.*
