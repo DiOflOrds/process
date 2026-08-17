@@ -81,3 +81,28 @@ Nur-lesender Zugriff, Werte nie in Git. Postfach lt. team-mail/D001: **dimitri.j
 ## 13. Mail-Autopilot (P8, SWR-065)
 
 **Takt-Lauf ohne Session:** `python team-mail\tools\mail_digest.py --auto` prüft die konfigurierten Takte (Tag/Woche/Monat, konfiguration.yaml), verdichtet fällige per **lokalem Ollama** (Inhalte verlassen den Rechner nicht) und stellt bei `zustellung_mail: ja` per Mail zu (Zustellvermerk = nie doppelt). Ohne erreichbares Ollama: Fallback auf Rohdaten, die nächste Session verdichtet. Einrichtung (einmalig): `schtasks /Create /TN "ASPICE-MailAutopilot" /TR "cmd /c cd /d <Arbeitsordner> && python team-mail\tools\mail_digest.py --auto" /SC DAILY /ST 07:30 /F`. Sofort-Lauf: Knopf „Jetzt zusammenfassen (Ollama)" im Team-Tab (SWR-063). Modellwahl: `ollama_modell:` in der Konfiguration (leer = erstes installiertes Modell). QM: PM zieht wöchentlich eine Digest-Stichprobe (Klasse B).
+
+## 14. Sprintabschluss: das Gemeldete gegen das Verbuchte halten (SWR-115, Sprint 8, 2026-08-17)
+
+**Regel.** Bevor ein Sprintabschluss geschrieben oder eine Statusmeldung an den Auftraggeber
+erzeugt wird, läuft `python platform/scripts/preflight.py`. Die Zeile
+
+```
+[org] Statusdrift Plan/Ticket: 0.
+```
+
+muss **0** sagen. Meldet sie einen Befund, ist entweder die Planzeile falsch oder das
+Ticketfeld nicht umgelegt — beides wird **vor** der Meldung korrigiert, nicht danach.
+
+**Warum die Regel existiert.** Sprint 7 hat `platform/T-0010` an vier Stellen als erledigt
+gemeldet, während das Ticket auf `open` stand. Die Arbeit war fertig; nur das Feld fehlte.
+Drei vorhandene Prüfungen meldeten leer, jede aus einem nachvollziehbaren Grund — die
+Statusspalte des Plans las keine von ihnen.
+
+**Nicht ersetzbar durch „sorgfältig sein".** Der Fehler entstand nicht aus Nachlässigkeit,
+sondern daraus, dass „erledigt" in vier Dokumenten stand und in keinem davon gegen die Quelle
+gehalten wurde. Vier übereinstimmende Abschriften sehen aus wie eine Bestätigung.
+
+**Zwei Werte unterscheiden.** `Statusdrift Plan/Ticket: 0` heißt „geprüft, nichts gefunden".
+`nicht prüfbar` heißt „die Sprintsicht war nicht ladbar" — das ist **kein** Erfolg und wird
+wie ein Befund behandelt.
