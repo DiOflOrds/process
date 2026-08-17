@@ -968,3 +968,37 @@ Das Umbenennen macht die Räumung möglich, nicht zulässig.
 **Offen:** die Regel steht hier und **nicht im Code** — SWR-123 räumt weiter per `unlink`.
 Aufgenommen als `platform/T-0015`. *Eine Regel, die keine Prüfung vertritt, ist die Lehre
 aus SWR-125; sie wird hier bewusst als Schuld notiert und nicht als erledigt gemeldet.*
+
+## L-2026-08-17ae — Die Kollisionsregel galt für Ticket-IDs, nicht für Anforderungsnummern
+
+*Anlass: Sprint 14 (2026-08-17), zwei gleichzeitige Läufe, `SWR-134` doppelt belegt.*
+
+Zwei Routine-Läufe hielten am 2026-08-17 gleichzeitig Sprint 14. Der eine baute
+`platform/T-0015` (Git-Schreibweg), der andere `p11/T-0010` (Dashboard-Endpunkt). **Beide
+haben ihre Anforderung `SWR-134` genannt.** Entdeckt wurde es nicht von einer Prüfung,
+sondern beim Lesen des fremden Commits — die Nummer stand plötzlich in einer Datei, die der
+eigene Lauf nie angefasst hatte.
+
+Die Regel vom 2026-08-16 lautet: *die nächste freie **Ticket-ID** gegen HEAD prüfen.* Sie
+hat gehalten — `platform/T-0016` und `p11/T-0010` sind kollisionsfrei. **Für
+SWR-Nummern gab es diese Regel nicht**, und sie ist genauso knapp: die höchste vergebene
+Nummer steht in einer einzigen Datei, die beide Läufe lesen und schreiben.
+
+> **Eine Kollisionsregel schützt die Kennungen, die sie nennt — und keine anderen.**
+
+**Regel 1 — jede fortlaufende Kennung braucht dieselbe Prüfung.** Nicht nur `T-xxxx`:
+`SWR-xxx`, `D0xx` (Decision-Log), `N-xxxx` (Briefe), `L-2026-xx` (Lessons), `ADR-xxx`. Alle
+werden hochgezählt, alle stehen in genau einer Datei, alle kollidieren gleich.
+
+**Regel 2 — gegen einen bewegten HEAD ist Prüfen ein Wettlauf.** Das steht seit dem
+11:05-Befund so da und hat sich hier bestätigt: der andere Lauf hat die 134 *unmittelbar vor
+seinem Commit* geprüft und trotzdem kollidiert. Die Prüfung ist nicht falsch, sie ist gegen
+Nebenläufigkeit **wirkungslos** — die Reparatur ist `platform/T-0013` (Sprintregister mit
+Ende), nicht eine gründlichere ID-Prüfung.
+
+**Regel 3 — der committete Stand gewinnt.** Wer seine Nummer noch in der Arbeitskopie hat,
+nummeriert um. Das ist die einzige Zuordnung, die nicht willkürlich ist, und sie braucht
+keine Absprache zwischen zwei Läufen, die einander nicht sehen.
+
+**Erkennungsfrage:** *Welche Nummer, die ich in diesem Lauf vergebe, könnte ein anderer Lauf
+im selben Takt auch vergeben — und woran würde ich es merken?*
