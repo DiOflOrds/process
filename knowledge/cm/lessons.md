@@ -1002,3 +1002,74 @@ keine Absprache zwischen zwei Läufen, die einander nicht sehen.
 
 **Erkennungsfrage:** *Welche Nummer, die ich in diesem Lauf vergebe, könnte ein anderer Lauf
 im selben Takt auch vergeben — und woran würde ich es merken?*
+
+---
+
+## L-2026-08-17af — Eine Reparatur, die nur ihr Fundort benutzt, repariert den Fundort
+
+**Herkunft:** Sprint 14, `platform/T-0015` / SWR-134. Gemessen vor dem Bauen.
+
+Das Ticket verlangte, die Lock-Räumung aus SWR-123 solle bei `PermissionError` auf
+`rename` zurückfallen. **Dieser Rückfall existierte seit `pm/T-0023` (2026-08-16).** Die
+DoD zu bauen hätte nichts geändert.
+
+Der wirkliche Befund lag eine Ebene daneben und war größer: **8** Stellen der Organisation
+bauen einen `git commit`, **1** davon räumte die Sperre — der Briefkasten, also genau der
+Ort, an dem der Fehler damals aufgefallen war. Die anderen sieben liefen in einen Fehler,
+für den die Reparatur seit Sprint 5 im Haus lag.
+
+> **Eine Reparatur, die nur ihr eigener Fundort benutzt, ist eine Reparatur des Fundorts
+> und nicht des Fehlers.**
+
+**Regel 1 — wer einen Fehler an einer Stelle behebt, zählt im selben Zug die Nachbarn.**
+Nicht „gibt es Nachbarn?", sondern **wie viele** und **welche**. Die Zahl gehört ins
+Ticket; ohne sie ist „behoben" eine Aussage über eine Datei und liest sich wie eine über
+das System.
+
+**Regel 2 — die Reichweite wird von einem Zähltest gehalten** (aus SWR-131 übernommen und
+hier zum zweiten Mal angewandt). „Alle Schreiber gehen durch einen Weg" ohne Test ist eine
+Aussage über den Tag der Einführung.
+
+**Regel 3 — ein Ticket sagt, ob seine Ursache gemessen oder geraten ist.** Sprint 13 hat
+den Symptomweg notiert und auf die Umsetzung von SWR-123 geschlossen, **ohne sie zu
+lesen** — genauso wie `platform/T-0013` einen 60-Minuten-Takt annahm, den seine eigene
+Messung widerlegte. Im Ticket stand in beiden Fällen nicht, welches von beidem es war.
+
+**Erkennungsfrage:** *Die Stelle, an der ich den Fehler gefunden habe — ist sie die einzige,
+die so arbeitet? Wie viele sind es, und habe ich sie gezählt oder geschätzt?*
+
+---
+
+## L-2026-08-17ag — Eine gemeldete Korrektur, die nur im Bericht steht, ist keine
+
+**Herkunft:** Sprint 14, Startprüfung an `platform/T-0013`. Gemessen am Commit-Diff.
+
+Sprint 13 hat dreimal berichtet, die DoD von `platform/T-0013` sei *„im Ticket
+korrigiert"*, die *„Neufassung steht im Ticket"*. Der einzige Commit von Sprint 13 an
+dieser Datei (`37eb1e5`) enthält **eine Zeile**: `geplant_sprint: 13` → `14`. Die Messung
+(12 Abstände, Median 57, 7 von 12 unter 60) und die Neufassung standen ausschließlich im
+Sprintbericht.
+
+⚠ Das Bittere daran: **derselbe Lauf hatte den Satz dafür schon geschrieben.** Sein
+Hauptbefund lautete *„Eine Entscheidung im Fließtext ist für jede Prüfung unsichtbar"* —
+und eine korrigierte Abnahme im Fließtext eines Berichts ist für jeden Bauenden unsichtbar.
+Fünfte Wiederholung der Familie (SWR-122/125/128/131), und die Erkennungsfrage aus
+`L-2026-08-17x` wurde im selben Lauf gestellt und **auf den eigenen Bericht nicht
+angewandt**.
+
+> **Der Bericht ist der Ort, an dem man erzählt, was man getan hat — nicht der Ort, an dem
+> man es tut.**
+
+**Regel 1 — was ein späterer Lauf beim Bauen braucht, steht im Ticket.** Berichte werden
+gelesen, wenn jemand wissen will, was geschah; Tickets, wenn jemand baut. Eine DoD, die im
+Bericht steht, erreicht die Bauenden nie.
+
+**Regel 2 — wer im Bericht „im Ticket korrigiert" schreibt, öffnet das Ticket und liest
+nach.** Ein Satz über eine Datei ist so viel wert wie der letzte Blick hinein.
+
+**Regel 3 — die Prüfung dafür ist billig und fehlt:** Wörter der eigenen Berichtszeile
+gegen den Ticketinhalt halten. Solange sie fehlt, ist dies eine Regel ohne Prüfung — die
+Lage aus SWR-125, hier **benannt und nicht als erledigt gemeldet**.
+
+**Erkennungsfrage:** *Welche Aussage meines Berichts behauptet etwas über den Inhalt einer
+Datei — und habe ich diese Datei danach aufgemacht?*
