@@ -351,3 +351,34 @@ Lauf „kein offener Brief" berichtet und zwei unbeantwortete hinterlassen. Schw
 `L-2026-08-17t` (eine Messung vor der Änderung misst den Ausgangszustand): **hier misst eine
 Messung vor dem Ende nicht den Eingang.** Der Briefkasten gehört an **beide** Enden eines
 Laufs, nicht nur an den Anfang.
+
+---
+
+## L-2026-08-17aa — Der Abschluss-Preflight gehört VOR die Berichte, nicht danach
+
+**Gemessen, Sprint 12.** Der Lauf schrieb `sprint-aktuell.md`, `session-agenda.md` und
+`PROJEKTSTATUS-UPDATE.md` fertig, ließ danach den Abschluss-Preflight laufen — und der fand
+einen Brief (`pm/N-0042`, eingegangen 12:00), der in allen drei Berichten fehlte. Alle drei
+mussten nachträglich ergänzt werden.
+
+**Zweiter Sprint in Folge.** Sprint 11 traf es zweimal (`promt-team/N-0001`,
+`team-dashboard/N-0002`) und leitete daraus die Regel ab, den Briefkasten **zweimal** zu
+prüfen. Diese Regel hat gegriffen. Die **Reihenfolge** hat sie nicht mitgeregelt.
+
+> **Bei 60-Minuten-Takt und Briefen zu beliebiger Zeit ist „Brief mitten im Lauf" kein
+> Sonderfall, sondern der Regelfall.** Ein Lauf dauert eine Stunde; die Wahrscheinlichkeit,
+> dass in dieser Stunde nichts eintrifft, ist keine Konstante, auf die man einen Ablauf
+> bauen kann.
+
+**Regel 1 — Reihenfolge des Abschlusses:** Tickets terminieren → **Abschluss-Preflight** →
+*dann* Berichte schreiben → Verifikation. Nicht: Berichte → Preflight → Berichte flicken.
+Ein Bericht, der nach seiner eigenen Prüfung entsteht, muss nicht korrigiert werden.
+
+**Regel 2 — dieselbe Familie wie SWR-122.** Dort wurde eine Zahl **vor** der Änderung
+gemessen, die sie beschreiben sollte („eine Messung vor der Änderung misst den Ausgangs-
+zustand, nicht das Ergebnis"). Hier wird ein **Bericht** vor der Prüfung geschrieben, die
+ihn vollständig machen soll. Gleiche Ursache: die Reihenfolge ist nicht festgelegt, also
+gewinnt die bequeme.
+
+**Erkennungsfrage am Sprintende:** *Ist zwischen meiner letzten Messung und dem Satz, den
+ich gerade schreibe, noch etwas passiert — und wer hätte es mir gesagt?*
