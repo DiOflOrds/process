@@ -474,3 +474,75 @@ irgendwo zweimal, und wird sie an beiden Stellen von derselben Rechnung gespeist
 wurde wie `failure` behandelt und hätte den wirklich gescheiterten Job verschwiegen. Bei jeder
 Aufzählung von „Zuständen, die zählen" gehört die Gegenliste mit ins Feld — hier `OHNE_BEFUND`,
 eine Konstante statt einer Aufzählung an drei Stellen.
+
+## L-2026-08-17e — Wechselt der Behälter, wechselt die Bedeutung jeder Frage an ihn (B064)
+
+**Woher.** Beim Entwurf des Widget-Vertrags (`team-dashboard/T-0001`) wurde jedes Feld der
+Cockpit-Aggregation gegen den **echten** Payload aller 16 Projekte und Teams gehalten. Dabei fiel
+auf: `p11` und `p12` trugen als „letzte Baseline" den Tag **`p10-v1.0`** — die Baseline eines
+fremden, abgeschlossenen Projekts. Kein fehlender Wert, ein **falscher**, und er stand nicht erst
+im geplanten Dashboard, sondern seit P10 in Mission Control.
+
+**Ursache.** `git tag` beantwortet die Frage nach dem **Repository**, nicht nach dem Ordner. Seit
+`pm/D003` (Monorepo) liegen Projekte ab P10 als Ordner in `projects`; `git -C projects/p11 tag`
+liefert deshalb die Tags von `projects`. Das Cockpit nahm davon die letzte Zeile.
+
+**Regel 1 — bei einem Behälterwechsel wird jeder Werkzeugaufruf neu befragt.** Als aus „ein
+Projekt = ein Repo" „ein Projekt = ein Ordner in einem Repo" wurde, hat sich die Bedeutung **jedes**
+repo-bezogenen Aufrufs still geändert: `git tag`, `git log`, `git status`, jede Pfadableitung, jede
+Zählung „pro Repo". Die Discovery wurde damals nachgezogen (SWR-070) — die Nachbarn nicht. Der
+Prüfsatz: *Welche Frage stelle ich hier eigentlich dem Repository, und meine ich den Ordner?*
+
+**Regel 2 — ein Nachbar, der richtig aussieht, kann aus Versehen richtig sein.** `einstufung` liest
+**denselben** Tag-Text und war korrekt — aber nur, weil sie nach `f"{projekt}-v1.0"` sucht und
+damit **zufällig** nach dem Projektnamen filtert. Wer beim Prüfen „der Nachbar stimmt ja" notiert,
+muss dazuschreiben, **warum** er stimmt. Hier hätte die Antwort gelautet: *weil er filtert — und
+der andere Leser tut es nicht.* Das ist B059 und L-2026-08-16m ein zweites Mal: **eine geteilte
+Quelle mit zwei Auflösungen.** Beide gehen jetzt durch **eine** Funktion.
+
+**Regel 3 — ein Substring-Test über Namen ist ein Präfix-Test, der noch nicht fertig ist.**
+`"p11-v1.0" in text` hält `xp11-v1.0` für einen Treffer. Wo Namen einen Namensraum bilden, wird am
+Anfang verglichen, nicht irgendwo.
+
+**Regel 4 — die Korrektur braucht den Test, der sie widerlegen würde.** Nach dem Filter lag nahe,
+ihn überall anzuwenden. `p0` trägt `genesis-v1.0` — konventionsfremd; ein globaler Filter hätte p0
+Baseline **und** Status `abgeschlossen` genommen. Der Test dazu steht ausdrücklich in der Suite,
+nicht nur die fünf, die die Korrektur bestätigen.
+
+**Gefunden hat es niemand, der danach suchte.** Der Anlass war eine Feldliste, die jemand
+vollständig durchgehen musste. Der Befund ist damit der zweite Beleg in zwei Sprints für Regel 1
+aus **L-2026-08-16h**: *gegen den echten Bestand laufen, nicht gegen die Testwelt.*
+
+## L-2026-08-17f — Ein Gate am falschen Ort ist keine Reihenfolgefrage (B061, Auflösung)
+
+**Woher.** `pm/T-0042` beschrieb die Zwickmühle korrekt und bot vier Wege an — drei davon
+Reihenfolge- oder Wiederholungsvarianten. Die Entscheidung in Sprint 3 hat keinen davon gewählt,
+sondern die Frage eine Ebene tiefer gestellt: *Kann dieses Gate den Zustand, über den es urteilt,
+überhaupt jemals sehen?*
+
+**Die Antwort war nein.** Die SWR↔Test-Matrix ist eine Aussage über **alle** Repos **zur gleichen
+Zeit**. Eine CI, die je Repo läuft, sieht die anderen immer so, wie der Push sie hinterlassen hat.
+Kein Push-Auftrag der Welt erzeugt Gleichzeitigkeit.
+
+**Regel 1 — vor dem Justieren eines Gates kommt die Frage nach seinem Ort.** Prüft ein Gate eine
+Eigenschaft, die über seine Grenze hinausreicht (mehrere Repos, mehrere Dienste, mehrere Läufe),
+dann gehört es dorthin, wo diese Grenze nicht existiert. Alles andere ist Feinjustage an einem
+Denkfehler.
+
+**Regel 2 — der Test für „überflüssig oder falsch".** Für jeden Push über `abschluss.cmd` konnte
+das Gate nur zweierlei sein: überflüssig (Schritt [2/5] hatte dieselbe Prüfung schon **vor** dem
+Push mit Abbruch gefahren) oder falsch. Ein Gate, das **keinen** echten Befund erbringen kann, den
+ein früheres Gate nicht schon verhindert, ist keine Sicherheit, sondern Rauschen — und Rauschen an
+einer Ampel erzieht innerhalb weniger Läufe zum Wegsehen.
+
+**Regel 3 — wer ein Gate entfernt, schreibt auf, welcher echte Befund damit verloren geht.** Hier:
+ein Push, der `abschluss.cmd` umgeht, wird nicht mehr gegen die Matrix geprüft. Der Satz steht im
+Ticket **und im Kopf der Workflow-Datei**, nicht nur im Ticket — wer den Workflow liest, soll den
+Preis sehen, ohne ein Ticket zu suchen. Ein „aufgeräumtes" Gate ohne benannten Preis ist eine
+stille Schwächung.
+
+**Regel 4 — die gleiche Bauart nebenan wird benannt, nicht mitgerissen.** Der Katalog-Check in
+derselben CI hat dasselbe Problem und hat noch nie falsch rot gemeldet. Ihn auf theoretischen
+Verdacht mit abzuräumen wäre das Gegenteil der Sorgfalt, die den Befund gefunden hat. Er bleibt,
+mit einem Satz im Workflow-Kopf und einer Zeile, die seine häufigere Rennhälfte beseitigt
+(`process` wird vor `platform` gepusht).
