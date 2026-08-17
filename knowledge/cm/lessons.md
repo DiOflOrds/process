@@ -588,3 +588,49 @@ wegnimmt.
 in `pm/T-0042` und `platform/T-0005` **wörtlich** als widerlegt da. Wer sie stillschweigend
 ersetzt, nimmt dem nächsten Leser den einzigen Hinweis darauf, welche Art Satz hier schon einmal
 ungeprüft durchging.
+
+---
+
+## L-2026-08-17h — Eine leere Stelle sieht immer nach „noch nicht" aus (B038-Familie)
+
+*Anlass: `platform/T-0006` / SWR-108, Sprint 4 (2026-08-17).*
+
+Fünfzehn von sechzehn Einträgen im Cockpit meldeten `kpi: {laeufe: 0}`, obwohl nur `p0`
+überhaupt eine Run-Registry führt. Der Payload behauptete fünfzehnmal eine Messung, die es
+nicht gab — und zwar in der Form, die am meisten nach Fakt aussieht: als **Zahl**. Kein
+Mensch hätte diese Null hinterfragt.
+
+**Regel 1 — für „nicht geliefert" ist die Tatsache eine andere als für den Wert, und sie muss
+benannt werden.** Nicht „laeufe ist 0", sondern „die Registry-Datei existiert nicht". Nicht
+„das Feld ist leer", sondern „die SLA sagt nichts dazu". Wer die Unterscheidung an der Leere
+des Werts festmacht, hat sie nicht getroffen, sondern nur umbenannt.
+
+**Regel 2 — die Tatsache ist die Zusage, nicht ihr Nebenprodukt.** „Führt das Team Digests?"
+war beinahe an `os.path.isdir("digest")` festgemacht worden. Das Verzeichnis entsteht aber
+erst mit dem **ersten** Digest — die Regel hätte genau im Moment davor „führt keine" gesagt,
+also in dem einzigen Moment, für den man sie braucht. Dieselbe Frage bei der Baseline: es
+entscheidet das **Profil** (welche Gates gelten), nicht die **Gruppe** (was der Eintrag ist).
+An dieser Verwechslung war schon der erste Widget-Vertrag gescheitert.
+
+**Regel 3 — eine vorhandene Redewendung erweitern schlägt eine neue erfinden.** `team: null`
+hieß im Payload längst „kein Team". Drei Wege standen im Ticket; gewählt wurde der, der schon
+im Haus war. Ein Zusatzfeld neben dem Wert (`kpi_erhoben`) wäre die zweite Aussage über
+dieselbe Sache gewesen (B033), ein Herkunfts-Vokabular (`quellen:`) eine Pflegelast für einen
+Bedarf, den heute niemand hat.
+
+**Regel 4 — wer den Wertebereich eines Feldes weitet, zieht die Leser im selben Commit mit.**
+`null` erzeugt bei einem unvorbereiteten Leser keinen falschen Wert, sondern einen **Absturz**
+(`p.kpi.kosten_eur.toFixed(...)`) — im HMI die ganze Kachel. Das ist ein anderer Fehlermodus
+als vorher und ein schlechterer, wenn man ihn übersieht. Deshalb steht das Mitziehen in der
+**Verifikation** der Anforderung und nicht als Folgeticket.
+
+**Regel 5 — zu jedem verworfenen Weg gehört ein Test, der ihn nachstellt.** Vier der fünfzehn
+Tests fallen nicht ohne die Korrektur um, sondern gegen eine **plausible falsche** Umsetzung:
+`laeufe == 0` als Kriterium, das Verzeichnis statt der Zusage, die Gruppe statt des Profils,
+die Profilprüfung vor der Tag-Prüfung. Jede wurde einzeln nachgebaut und der Test fiel um.
+Ohne solche Tests ist der verworfene Weg nur eine Notiz im Ticket, die der nächste Umbau
+nicht liest.
+
+**Und die Zählung dazu, nach L-2026-08-17g Regel 2:** 15 Tests = **6** mit Rückbau-Nachweis,
+**4** gegen nachgestellte Fehlumsetzungen, **5** Regressionswächter für die unveränderten
+Normalfälle. „15 Tests" allein wäre wieder eine Behauptung über Deckung gewesen.
