@@ -1190,3 +1190,102 @@ zugesichert, sonst wäre die Korrektur durch Verschieben der Regel grün zu beko
 
 **Regel:** Bevor eine neue Messung als Befund gilt, wird ihre eigene Definition geprüft.
 Ein erster roter Lauf ist genauso oft ein Fehler der Messung wie einer des Gemessenen.
+
+## L-2026-08-17al — Ein Werkzeug, dessen unvollständiger Modus an den Ort des vollständigen schreibt, macht aus einem Tippfehler einen Totalbefund
+
+**Anlass (Sprint 17, `platform/T-0019` / SWR-145 — ausgelöst von diesem Lauf, nicht
+gelesen).** Der Lauf wollte nach dem Bau von SWR-144 die Matrix erneuern und rief
+`trace_matrix.py` **ohne** `--alle-projekte` auf. Antwort:
+
+```
+Matrix geschrieben: p0/verification/reports/swr-test-matrix.md — 24 SWRs, 101 Lücke(n).
+```
+
+Sprint 16 hatte **143 / 0** hinterlassen. 121 Zeilen weg, Exit **0**, und die Meldung
+benutzte die Wörter „Matrix geschrieben".
+
+⚠ **Keine der beiden Voreinstellungen ist allein falsch.** `--alle-projekte` ist aus, weil
+ein Flag etwas *hinzuschaltet*; das Ziel ist die kanonische Datei, weil der Normalfall ohne
+Argumente laufen soll. Erst zusammen schreiben sie den **Teilmodus an den Ort des Ganzen** —
+und genau deshalb hat es keine der bestehenden Prüfungen gefunden.
+
+⚠⚠ Und der Befund **tarnt sich als Katastrophe**: „101 Lücken" liest sich wie ein Einbruch
+der Abdeckung, nicht wie ein falscher Aufruf. Ein Lauf, der hier abgebrochen wäre, hätte
+eine Matrix hinterlassen, die 101 Anforderungen als unbelegt ausweist — und der nächste
+Lauf hätte sie *reparieren* wollen.
+
+Es ist die Bauart von **SWR-143** eine Etage höher: dort fand eine Funktion ihre
+Abhängigkeit nur, wenn der **Aufrufer** sie mitbrachte; hier findet ein Werkzeug seine
+Quellen nur, wenn der Aufrufer ein Flag mitbringt — und beide Male ist das Ergebnis eines
+unwissenden Aufrufers **nicht als falsch erkennbar**.
+
+**Regel:** Wo ein Generator seine Eingaben selbst entdecken kann, ist die **Discovery der
+Standardfall** und die Einschränkung das Flag. Ein ausdrücklich übergebener Pfad gewinnt —
+das ist die einzige Stelle, an der der Aufrufer nachweislich etwas anderes gemeint hat. Und
+findet die Discovery **nichts**, wird **nicht geschrieben**: eine leere Ausgabe am Ort der
+echten ist derselbe Fehler eine Stufe schlimmer.
+
+**Zweite Regel, beim Bauen gemessen:** Bei zwei Fehlern in einem Aufruf entscheidet die
+**Reihenfolge der Prüfungen**, welchen der Aufrufer erfährt. Die Quellenprüfung stand
+zuerst hinter `tests_scannen` — und ein fehlendes Testverzeichnis meldete dann sein
+`FileNotFoundError`, während die fehlende Quelle die Ursache war.
+
+## L-2026-08-17am — Eine Warnung im Nachbarcode verhindert den Fehler nicht; die Zusicherung, die sie messbar macht, tut es
+
+**Anlass (Sprint 17, `platform/T-0016` / SWR-146).** `Regeln.cockpitFeldText` wurde neu
+geschrieben, um die Zustandsregel an **einer** Stelle zu führen. Der erste Entwurf fragte
+
+```js
+if (zustand === "nicht_geliefert" || !zustand) return texte.nicht_geliefert;
+```
+
+und fiel bei jedem **unbekannten** Zustand bis `String(wert)` durch — bei einem
+unvollständigen Payload also auf die Zeichenkette `"undefined"`.
+
+⚠ Das ist **wörtlich** der Fehler, den der Kommentar in `Regeln.feldText` seit SWR-135
+beschreibt — *drei Funktionen weiter oben in derselben Datei*, mit dem Satz „eine Anzeige,
+die aussieht wie ein Inhalt und keiner ist".
+
+Gefunden hat es nicht die Erinnerung an den Kommentar, sondern eine Zusicherung, die
+`undefined`, `null`, `""` und `"quatsch"` **durchprobiert** — beim ersten Lauf.
+
+**Regel:** Eine geschlossene Menge wird **positiv** geprüft (`!== "wert"` → keine Daten),
+nie über die Verneinung ihrer bekannten Fehlfälle. Und: ein Kommentar, der einen Fehler
+beschreibt, ist keine Vorkehrung gegen ihn — die Vorkehrung ist der Test, der ihn
+durchprobiert. Wer eine zweite Funktion neben einer bestehenden baut, liest deren
+**Warnungen** und übernimmt deren **Prüfform**, nicht nur deren Absicht.
+
+## L-2026-08-17an — Ein Test, der behauptet, ein Wert werde gelesen und nicht eingetragen, darf ihn nicht selbst eintragen
+
+**Anlass (Sprint 17, `platform/T-0016` / SWR-146).** Der Bump des Widget-Vertrags auf v2.5
+machte `test_die_vertragsversion_wird_gelesen_nicht_eingetragen` rot — weil dort `"2.4"`
+als **Literal** stand. Der Test trug die Version damit an einer **zweiten** Stelle, also
+genau dort, wo sein eigener Titel sie ausschließt.
+
+Repariert ist nicht die Zahl, sondern der Vergleich: gegen die **Datei**, und mit einem
+**anderen Verfahren** als die Funktion (`yaml.safe_load` gegen den Zeilenscanner). Zwei
+unabhängige Lesungen, die übereinstimmen, sind die Zusicherung. Dazu die Gegenprobe gegen
+„beide lesen nichts" (`^\d+\.\d+$`) — zwei leere Antworten wären gleich und trotzdem falsch.
+
+**Regel:** Prüft ein Test, dass ein Wert aus **einer** Quelle kommt, darf er die Quelle
+nicht kopieren. Er liest sie — möglichst anders als der Code — und vergleicht. Und er
+sichert zu, dass überhaupt etwas gelesen wurde: Gleichheit zweier Leeren ist kein Beleg.
+
+## L-2026-08-17ao — Wer mit der Vertragsfrage anfängt, kann den Vertrag nicht vergessen
+
+**Anlass (Sprint 17, Widget-Vertrag v2.5).** Die Einträge v2.3 und v2.4 halten beide fest,
+dass der Vertrag **nicht** von dem nachgezogen wurde, der den Payload änderte, sondern
+jedes Mal vom Wächter `test_vertrag_feldliste` — verankert als `L-2026-08-17y`: *wer Code
+ändert, sieht den Vertrag nicht.*
+
+**v2.5 ist die erste Ausnahme.** Der Grund ist kein besseres Vorsatzverhalten, sondern die
+**Reihenfolge**: die DoD von `platform/T-0016` hat die Vertragsfrage als **DoD 1** einen
+ganzen Sprint vor den Code gestellt und das Bauen davor ausdrücklich verboten.
+
+⚠ Das ist ein Beleg für **einen** Fall und noch keine Regel — die Reihenfolge war hier
+ohnehin erzwungen, und der Vertragsanschluss war ihr Nebeneffekt. Als Zusage formuliert
+gehörte er ins Runbook; hier steht er als Beobachtung.
+
+**Regel (vorsichtig):** Berührt ein Ticket einen Vertrag, gehört die Vertragsfrage als
+**eigener, erster** DoD-Punkt ins Ticket — nicht als Hinweis im Fließtext. Der Wächter
+bleibt trotzdem; er ist die Lösung und nicht der Notausgang (`L-2026-08-17y`).

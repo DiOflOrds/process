@@ -419,3 +419,34 @@ bekannt, die Prüfung existierte, und sie wurde am **Nachbarfall** nicht angewan
 
 **Erkennungsfrage:** *Habe ich gerade ein Feld geändert, ohne zu committen — und wie sieht
 die Änderung für den aus, der nur die Commits liest?*
+
+## L-2026-08-17ap — Ein Lauf, der zwischen Registerzeile und erstem Commit stirbt, hinterlässt einen Sprint, der laufend aussieht und nichts hervorgebracht hat
+
+**Anlass (Sprint 17, dieser Lauf).** Die Registerzeile für Sprint 17 stand um **16:49** in
+`pm/management/sprints.jsonl` und war **nicht committet**. Seit dem Ende von Sprint 16
+(17:10) hatte **kein** Repo einen Commit bekommen. Der Lauf, der die Zeile schrieb, ist
+zwischen dem Schreiben und seinem ersten Commit abgebrochen.
+
+⚠ Für `laufender()` war das ein **laufender Sprint** — richtig gelesen und trotzdem
+irreführend: er hatte nichts hervorgebracht.
+
+Die mechanische Anwendung von SWR-136 wäre gewesen: Schreibspur beobachten, einen Takt
+warten, dann übernehmen (`ende` mit `abgebrochen: true`) und **Sprint 18** eröffnen. Das
+hätte eine Sprintnummer für einen Lauf verbraucht, der nichts getan hat, und den Zähler der
+Organisation gegen ihre eigene Arbeit verschoben.
+
+Gewählt ist der **idempotente Wiedereintritt**, den `beginne()` seit SWR-136 ausdrücklich
+vorsieht: dieselbe Kennung übergeben, nichts wird angehängt, die Nummer bleibt. Der
+Docstring nennt genau diesen Fall — *„ein Lauf, der zweimal startet (Wiederholung nach
+Fehler)"*.
+
+**Regel:** Steht beim Start ein laufender Sprint im Register, wird **zuerst** gefragt, ob
+er etwas hervorgebracht hat (Commits in irgendeinem Repo seit seinem Beginn). Hat er
+**nichts** und ist seine Kennung die des eigenen Takts, ist der Wiedereintritt unter
+derselben Kennung die richtige Antwort — keine Übernahme mit neuer Nummer. Die Tatsache,
+dass ein Lauf abgebrochen ist, gehört dann in die **Sprintdatei**, nicht in eine zweite
+Registerzeile.
+
+⚠ Und der Nebenbefund, der ernster ist als der Fall: die Eröffnung eines Sprints ist erst
+mit ihrem **Commit** haltbar. Bis dahin ist sie eine Datei auf einer Platte, die jeder
+Absturz mitnimmt oder — schlimmer — stehen lässt.
