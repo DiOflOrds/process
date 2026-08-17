@@ -1,6 +1,115 @@
 
 ---
 
+## L-2026-08-17s — Eine Messung vor der Änderung misst den Ausgangszustand
+
+*Anlass: `platform/T-0011`, Sprint 10 (2026-08-17).*
+
+Der Abschlussbericht von Sprint 9 meldete an **drei** Stellen „Plan-Drift 0, überfällig 0".
+Beide Zahlen waren beim Berichten falsch (3 und 1) — und beide waren richtig, **als sie
+gemessen wurden**. Zwischen Messung und Bericht hat derselbe Lauf die Plantabelle
+umgeschrieben und dabei den Drift erzeugt, den die Zahl daneben bestritt.
+
+**Regel 1 — eine Kennzahl im Abschlussbericht wird NACH der letzten Änderung des Laufs
+erhoben, nicht davor.** Wer eine Zahl früh misst und spät berichtet, berichtet den
+Ausgangszustand unter dem Namen des Ergebnisses.
+
+**Regel 2 — die bessere Lösung ist nicht „besser aufpassen", sondern eine Stelle, an der
+die Reihenfolge egal ist.** Das ist dieselbe Antwort wie bei SWR-118 in Sprint 9: die
+Prüfung gehört dorthin, wo sie ohnehin läuft (Preflight), nicht dorthin, wo jemand an sie
+denken muss.
+
+**Regel 3 — eine berechnete Kennzahl, die niemand liest, ist keine Prüfung.**
+`plan_drift` (seit Sprint 6) und `sprint_vergangen` (seit Sprint 7) wurden bei jedem
+Aufruf berechnet, in den Payload gelegt und von keiner Meldung gelesen. Sie waren in
+vier bzw. drei Sprints wirkungslos vorhanden. **Wer eine Prüfung baut, prüft im selben
+Zug, wer ihr Ergebnis liest.**
+
+**Regel 5 — die ID-Kollisionsprüfung gilt auch für Lessons, und die Reihe läuft über
+ZWEI Dateien.** Dieser Lauf hat zunächst `L-2026-08-17r` vergeben — die Kennung war
+bereits in `process/knowledge/cm/lessons.md` belegt. Die Buchstabenreihe a–r ist über
+`pl/lessons.md` **und** `cm/lessons.md` hinweg fortlaufend; wer nur die eigene Datei
+ansieht, findet die nächste freie Kennung nicht. Die Kollisionsregel vom 2026-08-16 war
+für **Ticket**-IDs geschrieben; derselbe Fehler steht bei jeder Kennung, die an mehr als
+einer Stelle vergeben wird. (Vor der Vergabe: `grep -oE '^## L-[0-9-]+[a-z]?'` über
+**beide** Dateien, gegen **HEAD**.)
+
+**Regel 4 — ein sauber ausgeführter Verzug ist unsichtbar.** `pm/T-0039` wurde viermal
+korrekt um eins erhöht und fiel nicht auf; beim fünften Mal wurde nur die Plantabelle
+geändert, und **genau diese Schlamperei** erzeugte den Drift, an dem alles auffiel. Wer
+sich darauf verlässt, dass Fehler sich zeigen, findet nur die unordentlichen.
+
+---
+
+## L-2026-08-17t — Ein Test, dessen Fehlerfall repariert wird, prüft nicht mehr seinen Namen
+
+*Anlass: `pm/T-0055` und `pm/T-0057`, Sprint 10 (2026-08-17) — zweimal im selben Lauf.*
+
+**Fall 1: die Provokation.** Drei Tests aus Sprint 9 erzeugten ihren Fehlerfall, indem sie
+eine `.git/index.lock` anlegten. SWR-123 räumt genau diese Sperre weg — der Ablauf gelang,
+die Tests wurden rot, und weder an der alten noch an der neuen Anforderung war etwas
+falsch. Hier wurden sie rot, weil die Erwartung „wirft einen Fehler" lautete. **Hätte sie
+„meldet nichts" gelautet, wären sie still grün geworden — aus dem falschen Grund.**
+
+**Fall 2: der Ort statt der Zusage.** Zwei Tests aus den Briefen `pm/N-0023`/`pm/N-0024`
+prüften, ob ein langer Text **in der Pool-Datei** steht. Die Zusage dieser Briefe lautet
+„wird angenommen und nicht gekürzt" — eine Aussage über den **Wortlaut**, nicht über die
+Datei. SWR-124 lagert den Text aus; die Zusage gilt, ihre Umsetzung ist eine andere.
+
+**Regel 1 — ein Test prüft die Zusage, nicht ihre gegenwärtige Umsetzung.** Steht im Test
+ein Dateipfad, ein Speicherort oder ein Mechanismus, wo die Zusage von einem Ergebnis
+spricht, ist er an die Bauform gebunden statt an die Anforderung.
+
+**Regel 2 — wird ein Test durch eine richtige Änderung rot, ersetzt man die Provokation
+oder die Prüfgröße, NIE die Erwartung.** Eine Erwartung anzupassen, weil das Verhalten
+sich geändert hat, ist Arbeit am Test. Eine Erwartung anzupassen, weil sie stört, ist
+Aufgabe der Verifikation.
+
+**Regel 3 — ein Fehlerfall wird über etwas provoziert, das die Anforderung NICHT
+verspricht zu reparieren.** Wer den Fehler über genau den Mechanismus erzeugt, den ein
+späteres Ticket beseitigt, baut ein Ablaufdatum in seinen Test ein.
+
+---
+
+## L-2026-08-17u — Eine Zahl von Befunden zählt Artefakte, keine Entscheidungen
+
+*Anlass: `pm/T-0053`, Sprint 10 (2026-08-17).*
+
+„21-mal `open -> in_review`" las sich wie ein Arbeitsweg, den die Organisation tatsächlich
+geht — so stand es in der Frage des Tickets. Nach **Datum** aufgeschlüsselt zerfielen die
+21 in **drei Ereignisse**: 7 vor Existenz der Prüfung, 13 aus *einer* Sitzung binnen 56
+Minuten, 1 Einzelfall neun Tage später. Kein Repo außer p0 und p1 kommt vor.
+
+**Regel 1 — bevor eine Befundzahl als Praxis gelesen wird, wird sie nach Zeitpunkt und
+Urheber gruppiert.** 13 Tickets aus einer Sitzung sind ein Ereignis, nicht dreizehn.
+
+**Regel 2 — die Gruppierung, in der ein Befund erhoben wurde, ist selten die, in der man
+ihn deuten darf.** Die 52 aus `pm/T-0048` waren nach **Übergangstyp** gruppiert; genau
+diese Gruppierung erzeugte die Vermutung eines fehlenden Arbeitswegs.
+
+**Regel 3 — Schwesterregel zu L-2026-08-17q.** Dort hieß „uns sind zwei aufgefallen" nicht
+„es waren zwei"; hier heißt „21 Fälle" nicht „21-mal so gearbeitet". Beide Male sagt die
+Zahl etwas über die **Erhebung** und nicht über den Sachverhalt.
+
+---
+
+## L-2026-08-17v — Wer zerlegt, zieht die Klammer nach
+
+*Anlass: `projects/p11/T-0003`, Sprint 10 (2026-08-17).*
+
+Das Ticket wurde als **überfällig** gemeldet („offen auf Sprint 8, laufend ist Sprint 10"),
+obwohl es seit Sprint 9 nur noch eine Klammer über drei Teiltickets ist. Es trug die
+Sprintnummer aus der Zeit **vor** der Zerlegung.
+
+**Regel 1 — bei einer Zerlegung bekommt das Klammerticket den Termin des LETZTEN Teils.**
+Sonst meldet es einen Verzug für Arbeit, die es selbst gar nicht mehr enthält — ein
+Fehlalarm, der das Wegsehen trainiert.
+
+**Regel 2 — die Klammer bleibt offen, aber sie behauptet nichts über den Zeitpunkt der
+Teile.** Ihre Frist ist die des letzten Teils, nicht die kürzeste und nicht die alte.
+
+---
+
 ## L-2026-08-17q — Eine Zahl in einem Ticket ist eine Behauptung, bis jemand sie erhoben hat
 
 *Anlass: `pm/T-0048`, Sprint 9 (2026-08-17).*
