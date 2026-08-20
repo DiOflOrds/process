@@ -1,0 +1,35 @@
+# Workflow-Definition je Einheit (Template, SWR-187 — Konzept 04 Kap. 9).
+# Ablage im Projekt: docs/workflows.yaml — die EINE Quelle; die Workflow-Sicht liest sie.
+#
+# Governance (Auftraggeber-Auftrag 2026-08-21): PL plant (oder die Rolle selbst,
+# geplant_von sagt wer), ARCH reviewt den Schnitt (arch_review), CM verankert die
+# Outputs als Work Products im CM-Plan (cm_verankert), die ausführende Rolle liefert
+# die Schritte. Leere Governance-Felder sind SICHTBAR leer — nicht weglassen.
+#
+# Regeln:
+#   - Jeder Schritt hat rolle (oder script + werkzeug), aktion, input, output.
+#   - Outputs sind in der Regel Work Products: den CM-Plan-Pfad nennen, wo er existiert;
+#     Laufzeitdaten (z. B. eingang/) sind erlaubt und werden als solche benannt.
+#   - Jedes Takt-Ticket der Einheit braucht einen tragenden Workflow (ticket-Feld) —
+#     unabgedeckte Takte meldet die Sicht (SWR-128-Familie).
+#   - Änderungen: PL/Rolle schreibt, ARCH/CM-Marken werden beim Review gesetzt (Klasse C;
+#     neue externe Zugänge in einem Schritt bleiben Klasse A).
+
+workflows:
+  - id: WF-<KUERZEL>-<NAME>
+    name: <Sprechender Name>
+    takt: je-session            # je-session | schnell | taeglich[@HH:MM] | woechentlich[@Tag-HH:MM]
+    geplant_von: pl             # pl oder die Rolle selbst
+    ticket: T-XXXX              # das wiederkehrende Ticket, das dieser Workflow trägt
+    arch_review: ""             # z. B. "2026-08-21 (Ticket)" — leer = Review offen (sichtbar)
+    cm_verankert: ""            # z. B. "Outputs im CM-Plan" — leer = offen (sichtbar)
+    schritte:
+      - rolle: script           # script -> werkzeug ist Pflicht
+        werkzeug: tools/<skript>.py
+        aktion: <was passiert>
+        input: <woher kommt es — Work Product, externe Quelle, Laufzeitdaten>
+        output: <was entsteht — in der Regel ein Work Product (CM-Plan-Pfad)>
+      - rolle: <rolle>
+        aktion: <was die Rolle tut>
+        input: <Output des Vorschritts>
+        output: <Work Product>

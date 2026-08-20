@@ -1,29 +1,45 @@
-# Team-Registry v1 (Genesis 2.0, P5-E3) — alle Teams der Organisation.
+# Projekt-Registry v2 (Orga-Rework 2, process/docs/04-projektmodell-orga-rework-2.md).
+# Vorher: Team-Registry v1 (Genesis 2.0, P5-E3). Es gibt nur noch das PM-Team und
+# Projekte (Auftraggeber-Auftrag 2026-08-21, pm/T-0073); die bisherigen Projekt-Teams
+# sind in-place zu Projekten umgewidmet — Repos/Ordner sind Identitäten und bleiben
+# (SWR-175-Prinzip), geändert ist die Beschriftung.
+#
+# typ-Literale seit T-0041 (2026-08-21): `plattform | pm | projekt`. Das alte Literal
+# `aspice` wird eine Ausbaustufe lang LESEND toleriert (aggregation.einstufung
+# normalisiert; Alt-Tests bleiben als Toleranz-Beleg grün) — geschrieben wird nur noch
+# neu. Der Top-Level-Schlüssel heißt weiter `teams:` (dokumentierter Bestand: alle
+# Leser hängen daran; die Umbenennung des Schlüssels hätte keinen Leser-Nutzen).
 #
 # Schema:
 #   teams.<kuerzel>:
-#     name:       Anzeigename
-#     typ:        aspice | pm | projekt
-#     profil:     entwicklung | dienstleistung | wiederkehrend   (Playbook Kap. 15)
-#     repo:       Haupt-Repo des Teams (Discovery-Konvention: tickets/ + .git)
+#     name:       Anzeigename (Projekt-Beschriftung)
+#     projekt:    Projekt-Kennung im Projektmodell (P13, P14, P15, plattform; pm = keins)
+#     typ:        aspice | pm | projekt      (aspice = das Plattform-Projekt)
+#     profil:     entwicklung | dienstleistung | wiederkehrend   (Arbeitsweise, Playbook Kap. 15)
+#     repo:       Haupt-Repo (Discovery-Konvention: tickets/ + .git) — Identität, wird nie umbenannt
 #     status:     geplant | in_gruendung | aktiv | pausiert | archiviert
 #     gegruendet: Datum + Klasse-A-Beleg (Decision-Log-Referenz)
-#     rollen:     Rollen aus process/roles/registry.yaml bzw. Domänen-Rollen (bei Gründung definiert)
-#     datenklasse: intern | sensibel   (höchste im Team verarbeitete Klasse, Playbook Kap. 16)
-#     wissensbasis: Pfad zur Team-Wissensbasis
+#     rollen:     PROJEKTSPEZIFISCHE Rollen (Domänen-Rollen). Das Core Team (alle 10
+#                 ASPICE-Rollen) gilt implizit für jedes aktive Projekt und steht NICHT
+#                 hier — Quelle: roles/besetzungen.yaml `core_team` (Konzept 04, Kap. 3.1).
+#     datenklasse: intern | sensibel   (höchste verarbeitete Klasse, Playbook Kap. 16)
+#     wissensbasis: Pfad zur Projekt-Wissensbasis
 #
 # Pflege: Gründung/Pausierung/Archivierung/Profilwechsel = Klasse A (Playbook Kap. 16),
 # Eintrag durch CM nach dem Entscheid. Statuspflege im Betrieb: PM (Klasse B, geloggt).
+# Klassische Projekte (p0-p12) stehen NICHT hier — Discovery + steckbrief.yaml genügen;
+# hier stehen nur Einheiten, die vom Ordnernamen abweichende Governance-Daten tragen.
 
 teams:
   aspice:
-    name: ASPICE-Team
-    typ: aspice
+    name: Plattform-Projekt (ASPICE)
+    projekt: plattform
+    typ: plattform         # T-0041; `aspice` bleibt lesend toleriert (s. Kopf)
     profil: entwicklung
     repo: platform
     status: aktiv
     gegruendet: 2026-08-02 (P0 Genesis, Masterplan)
-    rollen: [PL, RM, ARCH, DEV, TEST, QM, CM, PROB, CHG, COACH]
+    rollen: []             # Core Team implizit (besetzungen.yaml core_team); Umwidmung pm/T-0073
     datenklasse: intern
     wissensbasis: process/knowledge/
   pm:
@@ -33,11 +49,12 @@ teams:
     repo: pm
     status: aktiv          # Gründung vollzogen P5-E4 (2026-08-15); Gründungsbeleg: p0/D027
     gegruendet: 2026-08-15 (p0/D027)
-    rollen: [PL, QM, COACH]   # Startbesetzung; Feinzuschnitt bei E4
+    rollen: [PL, QM, COACH]   # PM ist KEIN Projekt: kein Core Team, Besetzung explizit
     datenklasse: intern
     wissensbasis: process/knowledge/pl/
   team-dashboard:
-    name: team-dashboard (Ergebnis-Darstellung)
+    name: P14 Dashboard (Ergebnis-Darstellung)
+    projekt: p14
     typ: projekt
     profil: wiederkehrend
     repo: team-dashboard   # lokal ohne Remote — Datenklasse `intern` erlaubt einen, das
@@ -45,37 +62,39 @@ teams:
                            # Auftraggebers. KEIN `.kein-remote` — anders als bei team-mail
                            # ist das Fehlen hier ein offener Schritt, keine Regel.
     status: aktiv
-    gegruendet: 2026-08-16 (pm/T-0031 TG-a, pm/D006; Brief pm/N-0027, Pool-Kandidat #13)
-    rollen: [DASH-RED]
+    gegruendet: 2026-08-16 (pm/T-0031 TG-a, pm/D006; Brief pm/N-0027, Pool-Kandidat #13); umgewidmet 2026-08-21 (pm/T-0073)
+    rollen: [DASH-RED]     # projektspezifische Rolle; Core Team implizit
     datenklasse: intern    # AUFLAGE (Gruendungs-DR Punkt 1, Guardrail 2): Das Mail-Widget
                            # rendert team-mail (`sensibel`) NUR zur Laufzeit hinter dem
                            # PIN-Lesegate. Wird je ein Digest-Inhalt in ein Repo committet,
-                           # ist dieses Team ab dann `sensibel` und verliert den Remote.
+                           # ist dieses Projekt ab dann `sensibel` und verliert den Remote.
     wissensbasis: team-dashboard/docs/
   promt-team:
-    name: promt-team (Prompt- und Kontext-Optimierung)
+    name: P15 Prompt (Prompt- und Kontext-Optimierung)
+    projekt: p15
     typ: projekt
     profil: wiederkehrend
     repo: promt-team       # LOKAL-ONLY: Datenklasse sensibel -> kein GitHub-Remote (.kein-remote)
     status: aktiv
-    gegruendet: 2026-08-17 (pm/T-0056 TG-a, pm/D009; Brief pm/N-0040, Pool-Kandidat #14)
-    rollen: [PROMPT-OPT]
-    datenklasse: sensibel  # Das Team liest TRANSKRIPTE der geprueften Rollen. Ein Transkript
+    gegruendet: 2026-08-17 (pm/T-0056 TG-a, pm/D009; Brief pm/N-0040, Pool-Kandidat #14); umgewidmet 2026-08-21 (pm/T-0073)
+    rollen: [PROMPT-OPT]   # projektspezifische Rolle; Core Team implizit
+    datenklasse: sensibel  # Das Projekt liest TRANSKRIPTE der geprueften Rollen. Ein Transkript
                            # kann alles enthalten, was je durch eine Rolle lief — auch
                            # Mail-Inhalte aus team-mail. Die Einstufung folgt dem
                            # schlechtestmoeglichen Inhalt der Eingabe, nicht dem erwarteten.
     auflagen:
-      - "Wirkbereich zunaechst NUR die eigenen Werkzeuge/Rollen des ASPICE-Teams; Ausweitung = eigener DR (Klasse A)"
+      - "Wirkbereich zunaechst NUR die eigenen Werkzeuge/Rollen des Plattform-Projekts; Ausweitung = eigener DR (Klasse A)"
       - "Vorschlaege bleiben Vorschlaege — kein produktiver Prompt wird selbst geaendert"
       - "Kein Optimierungslauf ohne Baseline (T-0001) und Goldset (T-0002) — Regel des Auftrags selbst"
     wissensbasis: promt-team/docs/
   team-mail:
-    name: team-mail (Mail-Zusammenfassung)
+    name: P13 Mail (Mail-Zusammenfassung)
+    projekt: p13
     typ: projekt
     profil: wiederkehrend
     repo: team-mail        # LOKAL-ONLY: Datenklasse sensibel -> kein GitHub-Remote (.kein-remote)
     status: aktiv
-    gegruendet: 2026-08-15 (pm/T-0004 TG-a, pm/D000; F16-Pilot, Vorgehen pm/B002)
-    rollen: [MAIL-RED]
+    gegruendet: 2026-08-15 (pm/T-0004 TG-a, pm/D000; F16-Pilot, Vorgehen pm/B002); umgewidmet 2026-08-21 (pm/T-0073)
+    rollen: [MAIL-RED]     # projektspezifische Rolle; Core Team implizit
     datenklasse: sensibel
     wissensbasis: team-mail/docs/

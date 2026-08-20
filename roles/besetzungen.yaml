@@ -1,16 +1,21 @@
-# Besetzungs-Registry v1 (Rollenmodell v2, process/docs/03-rollenmodell-v2-orga-rework.md)
+# Besetzungs-Registry v2 (Projektmodell/Orga-Rework 2, process/docs/04-projektmodell-orga-rework-2.md;
+# v1: Rollenmodell v2, Doc 03). Eine Besetzung = Instanz einer Rolle in genau einer Einheit.
 #
-# Eine Besetzung = Instanz einer Rolle in genau einer Einheit (Team oder Projekt).
-# Ergänzt roles/registry.yaml (Bauplan/Routing) und teams/registry.yaml (Einheiten) —
-# ersetzt nichts. Beim Einsatz einer Instanz wird geladen:
-#   process/roles/<rolle>.md  +  <repo>/roles/<rolle>.md (falls vorhanden)
-#   + process/knowledge/<rolle>/  +  <repo>/docs/historie.md (falls vorhanden)
+# NEU in v2: der core_team-Block. Jedes AKTIVE Projekt (Projekt-Registry teams/registry.yaml
+# mit typ aspice|projekt sowie jedes per Discovery gefundene p*-Projekt mit steckbrief-status
+# aktiv) hat implizit ALLE Core-Rollen — sie stehen nicht mehr einzeln hier (eine Quelle,
+# keine Duplikate: B033). Explizit stehen nur noch:
+#   1. ABWEICHUNGEN vom Core-Default (gleicher Instanz-Schlüssel überschreibt die Expansion),
+#   2. PROJEKTSPEZIFISCHE Rollen (Domänen-Rollen),
+#   3. das PM-Team (kein Projekt -> kein Core Team, Besetzung explizit).
+# Auflösung: platform/scripts/organigramm.py `effektive_besetzungen()` — einziger Resolver;
+# tick.py (SWR-171), organisation.py (SWR-169/170, HMI) und die Organigramme nutzen ihn.
 #
-# Schema:
+# Schema je Eintrag:
 #   besetzungen.<INSTANZ>:            Instanz-ID = <ROLLE>@<einheit>
-#     rolle:    Kürzel aus roles/registry.yaml (oder Domänen-Rolle aus teams/registry.yaml)
-#     einheit:  Team-Kürzel oder Projekt (Discovery-Name, z. B. p11)
-#     motor:    cowork | ollama | api | script | mensch     (Kap. 4.2 des Konzepts)
+#     rolle:    Kürzel aus roles/registry.yaml (oder Domänen-Rolle)
+#     einheit:  Discovery-Name (z. B. p11, platform, team-mail)
+#     motor:    cowork | ollama | api | script | mensch     (Konzept 03, Kap. 4.2)
 #     modell:   nur bei ollama/api relevant (z. B. gemma3:27b)
 #     takt:     sprint | schnell
 #               sprint  = Session-/Sprint-Lauf. Seit pm/D006 ist jeder Session-Lauf ein
@@ -28,14 +33,21 @@
 #     ollama-schnelltakt.cmd (Einrichtung: ollama-schnelltakt-einrichten.cmd, einmalig).
 #   - Max. EINE Instanz je Rolle und Repo — F20 entschieden (pm/D012); Mehrfach erst nach
 #     gemessenem Durchsatz-Engpass per Klasse-B-Entscheid.
-#   - Pflege: PM-Team (Klasse B, PM-Decision-Log); der Mensch jederzeit direkt.
+#   - Pflege: PM-Team (Klasse B, PM-Decision-Log); der Mensch jederzeit direkt (auch via HMI).
 #
 # Gate-relevante Aufgaben-Typen laufen unabhängig vom Motor immer über die Ketten aus
 # roles/registry.yaml (guardrails routing.gate_relevant) — der Motor ist der Startpunkt,
 # nicht die Erlaubnis.
 
+# Core Team: gilt implizit für JEDES aktive Projekt (Konzept 04, Kap. 3.1).
+core_team:
+  rollen: [PL, RM, ARCH, DEV, TEST, QM, CM, PROB, CHG, COACH]
+  motor: cowork
+  takt: sprint
+  status: aktiv
+
 besetzungen:
-  # --- PM-Team (Koordination aller PL-Instanzen, Konzept Kap. 4.4) ---
+  # --- PM-Team (kein Projekt — Besetzung explizit; koordiniert alle PL, Charter v1.1) ---
   PL@pm:
     rolle: PL
     einheit: pm
@@ -55,53 +67,10 @@ besetzungen:
     motor: cowork
     takt: sprint
     status: aktiv
-    hinweis: LeLe-Register über alle Teams; kuratiert Wissensbasen (Lernzyklus)
+    hinweis: LeLe-Register über alle Projekte; kuratiert Wissensbasen (Lernzyklus)
 
-  # --- ASPICE-Team (Profil entwicklung; arbeitet in platform + Produkt-Repos) ---
-  PL@aspice:
-    rolle: PL
-    einheit: platform
-    motor: cowork
-    takt: sprint
-    status: aktiv
-  RM@aspice:
-    rolle: RM
-    einheit: platform
-    motor: cowork
-    takt: sprint
-    status: aktiv
-  ARCH@aspice:
-    rolle: ARCH
-    einheit: platform
-    motor: cowork
-    takt: sprint
-    status: aktiv
-  DEV@aspice:
-    rolle: DEV
-    einheit: platform
-    motor: cowork
-    takt: sprint
-    status: aktiv
-  TEST@aspice:
-    rolle: TEST
-    einheit: platform
-    motor: cowork
-    takt: sprint
-    status: aktiv
-  QM@aspice:
-    rolle: QM
-    einheit: platform
-    motor: cowork
-    takt: sprint
-    status: aktiv
-  CM@aspice:
-    rolle: CM
-    einheit: platform
-    motor: cowork
-    takt: sprint
-    status: aktiv
-    hinweis: Nimmt REL wahr (Stufe 1, registry.yaml)
-  PROB@aspice:
+  # --- Abweichungen vom Core-Team-Default ---
+  PROB@platform:
     rolle: PROB
     einheit: platform
     motor: ollama
@@ -109,20 +78,8 @@ besetzungen:
     takt: schnell        # F18 (pm/D010): Aufgabenplanung alle 15 min, ollama-schnelltakt.cmd
     status: aktiv
     hinweis: Klassifikation/Trend lokal; Ursachenanalyse per Kette auf Claude
-  CHG@aspice:
-    rolle: CHG
-    einheit: platform
-    motor: cowork
-    takt: sprint
-    status: aktiv
-  COACH@aspice:
-    rolle: COACH
-    einheit: platform
-    motor: cowork
-    takt: sprint
-    status: aktiv
 
-  # --- Projekt-Teams (Profil wiederkehrend) ---
+  # --- Projektspezifische Rollen (Konzept 04, Kap. 3.2) ---
   MAIL-RED@team-mail:
     rolle: MAIL-RED
     einheit: team-mail
@@ -130,49 +87,18 @@ besetzungen:
     modell: gemma3:27b
     takt: schnell        # F18 (pm/D010): Aufgabenplanung alle 15 min, ollama-schnelltakt.cmd
     status: aktiv
-    hinweis: Datenklasse sensibel — lokal, nie API/Cloud
+    hinweis: P13 Mail — Datenklasse sensibel, lokal, nie API/Cloud
   DASH-RED@team-dashboard:
     rolle: DASH-RED
     einheit: team-dashboard
     motor: cowork
     takt: sprint
     status: aktiv
+    hinweis: P14 Dashboard — fachlicher Auftraggeber der Ergebnis-Darstellung
   PROMPT-OPT@promt-team:
     rolle: PROMPT-OPT
     einheit: promt-team
     motor: cowork
     takt: sprint
     status: aktiv
-    hinweis: Liest Transkripte (sensibel) — lokal; Vorschläge bleiben Vorschläge
-
-  # --- Aktive Entwicklungsprojekte ---
-  PL@p11:
-    rolle: PL
-    einheit: p11
-    motor: cowork
-    takt: sprint
-    status: aktiv
-  DEV@p11:
-    rolle: DEV
-    einheit: p11
-    motor: cowork
-    takt: sprint
-    status: aktiv
-  TEST@p11:
-    rolle: TEST
-    einheit: p11
-    motor: cowork
-    takt: sprint
-    status: aktiv
-  PL@p12:
-    rolle: PL
-    einheit: p12
-    motor: cowork
-    takt: sprint
-    status: aktiv
-  DEV@p12:
-    rolle: DEV
-    einheit: p12
-    motor: cowork
-    takt: sprint
-    status: aktiv
+    hinweis: P15 Prompt — liest Transkripte (sensibel), Vorschläge bleiben Vorschläge
