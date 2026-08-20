@@ -671,3 +671,53 @@ Haus: Sprint 15 hat einen Buchungsfehler benannt, Sprint 16 die Vorkehrung darau
 **Regel 2 — nicht glätten.** Der Verstoß ist ab jetzt der **vierte** stehende Befund des
 Preflights und der einzige, der diesem Lauf gehört. Er steht im Ticket, im Sprintplan und
 im Bericht.
+
+---
+
+## L-2026-08-20ca — Ein Rückbau, der während seiner Ausführung wächst, ist genau der Rückbau, der etwas kaputt macht
+
+**Anlass (Sprint 24, `projects/p11/T-0015`).** Der Rückbau der Kachelhälfte hatte eine
+enge DoD: Route, Funktion, Konstante, Teststrecke, Anforderung. Beim Bauen fiel der Rand
+auf — `regeln.js` trägt die Frontend-Hälfte derselben Anzeige und hat seit SWR-148 keinen
+Aufrufer: **4 Bausteine, 11 von 111 JS-Zusicherungen**, gemessen.
+
+Er ist **gezählt und aufgemacht** worden (`p11/T-0016`) und **nicht mitgenommen**.
+
+**Regel 1 — der Grund, aus dem ein Rückbau dreimal verschoben wurde, gilt auch für seinen
+eigenen Rand.** *Ein Rückbau liefert nichts und kann alles kaputt machen.* Wer ihn während
+der Ausführung erweitert, hebt genau die Sorgfalt auf, wegen der er so lange gewartet hat.
+
+**Regel 2 — der Beleg lag im selben Lauf.** `zustaende_von` sah aus wie Dashboard-Code und
+trägt eine fremde, abgenommene Anforderung. `feldText` steht eine Datei weiter in derselben
+Lage: zwei lebende Funktionen verweisen in ihren Docstrings **namentlich** auf sie als
+Vorbild. Ein gelöschtes Vorbild macht zwei Kommentare unlesbar.
+
+**Regel 3 — „nicht mitgenommen" muss aktenkundig werden, sonst ist es von „übersehen"
+nicht zu unterscheiden.** Deshalb die Zählung im Ticket und ein eigenes Ticket, nicht ein
+Satz im Abschlussbericht.
+
+---
+
+## L-2026-08-20cb — Eine Messgrundlage, die ihr eigener Anlass ist, misst sich selbst
+
+**Anlass (Sprint 24, `promt-team/T-0010`, Entscheidung Klasse C).** Zehn von zwölf Rollen
+haben **null** aufgezeichnete Läufe, unverändert seit Sprint 18. Zur Wahl standen: (a) je
+Sprint eine Rolle für eine ohnehin anfallende Aufgabe aufrufen, (b) Übungsläufe, (c) die
+Rollen ungemessen lassen und das Goldset-Ticket schneiden.
+
+(a) und (b) fallen an derselben Stelle: beide erzeugen einen Lauf **um der Messung willen**.
+
+> **Ein Goldset folgt dem Betrieb. Es geht nicht voran und es wird nicht nachgeholt.**
+
+**Regel 1 — (a) sieht harmloser aus als (b) und ist es nicht.** „Die Aufgabe fällt ohnehin
+an" stimmt für die Aufgabe und **nicht für die Rollenwahl**: wer die Rolle danach aussucht,
+dass ihr ein Lauf fehlt, hat den Lauf wegen der Messung erzeugt.
+
+**Regel 2 — ein ersatzloser Schnitt beantwortet eine Frage dauerhaft, die sich ändern
+kann.** Richtig ist deshalb nicht „schneiden", sondern **umdrehen**: nicht *„zehn Rollen
+vermessen"*, sondern *„bemerken, wenn eine Rolle vermessbar wird"*.
+
+**Regel 3 — eine so umgedrehte Aufgabe braucht ihre Prüfung im selben Zug.** Eine Regel
+ohne Vertreter hält keine drei Sprints (SWR-125, gemessen an den 14 zurückgekehrten
+Kalenderdaten). Deshalb steht die Prüfung *„welche Rolle hat Läufe und kein Goldset?"* als
+DoD-Punkt und nicht als Absicht.

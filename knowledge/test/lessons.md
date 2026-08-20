@@ -321,3 +321,62 @@ die kürzeste Änderung gewesen und hätte „keine Daten" mit „nicht für dic
 **Regel 4 — die Kachel verschwindet nicht.** *Eine Kachel, die ohne PIN weg ist, verrät
 nichts und behauptet dabei, es gäbe hier nichts.* Sie bleibt stehen und sagt, dass ihr
 Inhalt eine Freigabe braucht.
+
+---
+
+## L-2026-08-20bz — Eine Zusicherung, die von einem neuen Bau rot wird, wird geschärft und nicht gelöscht — zum dritten Mal dieselbe Bewegung
+
+**Anlass (Sprint 24, SWR-163).** `test_ohne_pfade_gibt_es_kein_zwischenraeumen` verlangte,
+dass ohne `add` **überhaupt nicht** geräumt wird. SWR-163 räumt nach dem gelungenen Commit
+hinter sich her — der Test wurde rot.
+
+Er war **richtig** und seine Formulierung war **zu grob**. Seine Absicht war nie „nie
+räumen", sondern **kein Räumen ohne Nachweis**. Nach dem Commit gibt es einen Nachweis, und
+zwar einen stärkeren als vorher: der eigene Aufruf ist zurück.
+
+> **Zugesichert wird ab jetzt die REIHENFOLGE und nicht mehr die Abwesenheit.**
+
+**Regel 1 — dieselbe Bewegung ist in diesem Haus jetzt dreimal gefallen** (Sprint 16 an der
+Nachbarmethode, Sprint 17 an `kompaktKachel`, Sprint 24 hier). Dreimal ist ein Muster:
+**eine Zusicherung, die eine Abwesenheit misst, ist fast immer die grobe Fassung einer
+Zusicherung über eine Reihenfolge oder eine Bedingung.** Wer eine schreibt, sollte sie
+gleich in der feineren Form schreiben.
+
+**Regel 2 — der Beleg dafür, dass geschärft und nicht aufgeweicht wurde, gehört in den
+Docstring, nicht in die Commit-Nachricht.** Sonst ist eine Verschärfung von einer
+Aufweichung nach zwei Sprints nicht mehr zu unterscheiden — beide sehen aus wie „Test
+angepasst".
+
+**Regel 3 — eine Zusicherung darf ihren Gegenstand nicht selbst erzeugen.** `_nachraeumen`
+darf **kein git** aufrufen (Auflage aus SWR-159); geprüft wird das, indem der Test
+`subprocess.run` beobachtet — nicht indem der Code es verspricht.
+
+---
+
+## L-2026-08-20cd — Ein Zähltest über ein Literal hat in zwei Läufen zweimal den eigenen Entwurf verworfen
+
+**Anlass (Sprint 24, SWR-165).** Die Anforderung verlangt wörtlich, der Rumpfmarker einer
+Inbox-Entscheidung stehe an **einer** Stelle. Ihr erster Entwurf legte in `aggregation`
+eine **zweite** Konstante dafür an. Rot gemacht hat das nicht der Autor, sondern
+`test_dr_verbuchung.test_keine_zweite_kopie_des_markers_im_quelltext` — eine Zusicherung
+aus **Sprint 17**, die nichts anderes tut, als zu zählen, wie viele Dateien das Literal
+`"**Entscheidung ("` führen.
+
+> **Zum zweiten Lauf in Folge hat eine ältere Zusicherung den eigenen Entwurf verworfen.**
+> Sprint 23: SWR-134 gegen die Uhrenprobe (`test_die_messung_ruft_KEIN_git_auf`).
+> Sprint 24: SWR-131 gegen den eigenen Marker. **Beide Male sah der Entwurf für seinen
+> Autor richtig aus.**
+
+**Regel 1 — Zähltests über Literale wirken pedantisch und sind die billigste
+B033-Bremse, die dieses Haus hat.** Sie prüfen nichts über das Verhalten und alles über
+die Bauart. Wer sie beim Aufräumen entfernt, weil sie „nichts testen", entfernt genau den
+Wächter, der in zwei aufeinanderfolgenden Läufen zugeschlagen hat.
+
+**Regel 2 — die gefährlichste Dopplung entsteht beim Bau der Anforderung, die sie
+verbietet.** Der Autor hat den Satz im Kopf und schreibt trotzdem die zweite Stelle, weil
+die erste in einer anderen Datei liegt. Ein Satz im Docstring hätte es nicht verhindert —
+er stand da.
+
+**Regel 3 — die Zählung gehört an EINE Stelle, auch als Test.** Die neue Teststrecke prüft
+deshalb nur, dass `inbox` den Marker aus derselben Konstante schreibt; die Zählung der
+Kopien bleibt drüben. Sie hier zu wiederholen wäre dieselbe Dopplung eine Ebene höher.

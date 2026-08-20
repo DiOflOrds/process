@@ -1568,3 +1568,88 @@ Die nächste Verschachtelungsebene wäre sonst wieder unsichtbar.
 **Regel 4 — eine Prüfung, die zwei Drittel des Bestands prüft, ist nicht zu zwei
 Dritteln gut, sie ist grün.** Der korrigierte Filter kostet über alle 17 Repos rund
 **36 s statt 10 s**. Der Preis ist gemessen, genannt und bezahlt.
+
+---
+
+## L-2026-08-20bx — Eine Reparatur gegen den Fehlerpfad kann wirkungslos sein, während sie drei Sprints lang richtig aussieht
+
+**Anlass (Sprint 24, `platform/T-0021`, vierte Berührung).** Seit SWR-134 räumt der
+Schreibweg die Git-Sperre weg, **nachdem ein Versuch gescheitert ist**. Das ist richtig
+gebaut, geprüft und hat mehrfach geholfen. Die Messung aus Sprint 21 zeigt trotzdem, dass
+es den eigentlichen Fall **nicht berührt**:
+
+| Aufruf | Exit | Sperre bleibt liegen |
+|---|---|---|
+| `git status --porcelain` | **0** | **JA** |
+| `git add`, `git commit`, `git log`, `git diff` | 0 | nein |
+
+> **Umbenennen ist auf diesem Mount erlaubt, Löschen nicht. Git beendet einen SCHREIBENDEN
+> Indexvorgang durch Umbenennen — das geht durch. Einen bloß LESENDEN Refresh beendet es
+> durch LÖSCHEN — und das scheitert. Der harmlose Lesevorgang hinterlässt die Sperre, an
+> der der nächste Aufruf stirbt.**
+
+**Regel 1 — wer nur den Fehlerpfad absichert, verlegt die Kosten auf den nächsten
+Aufrufer.** Der Rückfall repariert den Aufruf, der gescheitert ist. Der Aufruf, der die
+Sperre erzeugt, **gelingt** — und merkt nichts. Der Nächste sieht eine Fehlermeldung, die
+nach einem fremden Prozess aussieht und der Rückstand des eigenen vorigen Laufs ist.
+
+**Regel 2 — bei einem Werkzeugfehler ist die erste Frage nicht *warum ist es
+gescheitert*, sondern *wer hat den Zustand erzeugt, an dem es gescheitert ist*.** Diese
+beiden Fragen haben hier zwei verschiedene Antworten und drei Sprints Abstand.
+
+**Regel 3 — ein Ticketkopf ist eine Vermutung und wird mitgemessen.** Dieses Ticket heißt
+nach `tmp_obj`-Resten. Die sind **Müll und keine Sperre**: ein Commit lief mit fünf
+`unlink`-Warnungen und Exit 0 durch. Seine **Frage 2** („nach dem Commit räumen?") war
+dadurch **falsch gestellt** — nach dem Commit ist nichts zu räumen.
+
+---
+
+## L-2026-08-20by — Ein Wächter gegen die Rückkehr muss ein Paar sein, sonst ist er nach einem Kahlschlag ebenfalls grün
+
+**Anlass (Sprint 24, `projects/p11/T-0015`).** Der Rückbau entfernte `aggregation.dashboard`
+und `KACHEL_FELDER`. Der naheliegende Wächter prüft, was **weg** ist. Er hat eine Lücke in
+genau der Richtung, in der der Schaden liegt: `_zustand` und `zustaende_von` stehen in
+derselben Datei, tragen dieselben Konstanten und sehen aus wie Dashboard-Code. Sie sind es
+nicht — `zustaende_von` liefert seit SWR-146 den `zustaende`-Block des **Cockpits**.
+
+> **Eine Prüfung, die nur Abwesenheit misst, ist nach einem Kahlschlag ebenfalls grün. Wer
+> etwas entfernt, muss neben jedes „das ist weg" ein „und das ist noch da" schreiben.**
+
+**Regel — jede Löschzusicherung bekommt eine Gegenprobe mit echter Auswertung.** Nicht nur
+`hasattr(...)` ist wahr, sondern: `letzte_baseline: None` → `nicht_geliefert`,
+`team.letzter_digest: ""` → `echte_null`. Ein Name kann stehenbleiben, während die Bedeutung
+darunter weg ist.
+
+**Nebenregel — zwei Orte, zwei Prüfungen.** Das Modul kann leer sein, während die Route noch
+verdrahtet ist; dann stirbt sie erst beim Aufruf, und das ist der Leser und nicht der Test.
+
+---
+
+## L-2026-08-20cc — Der achte geschätzte Wert stand in einem Abschnitt mit der Überschrift „gezählt, nicht übersehen"
+
+**Anlass (Sprint 24, Abschluss von `projects/p11/T-0015`).** Der Rückbau nannte den nicht
+angefassten Rand mit einer Zahl: **9** betroffene JS-Zusicherungen. Sie war am Bildschirm
+abgezählt. Gemessen — ein Durchlauf je Testblock nach `R.feldText` / `R.kachelFelder` /
+`R.dashboardGruppen` — sind es **11**.
+
+Es ist der **achte** Fall in sieben Sprints, in dem im Abschlussbericht eine
+fortgeschriebene oder geschätzte statt einer gemessenen Zahl stand. Alle acht sind durch
+**Nachzählen** gefunden worden und kein einziger durch eine Zusicherung.
+
+> **Diesmal stand die falsche Zahl unter einer Überschrift, die das Gegenteil verspricht.
+> Eine aufgeschriebene Lehre schließt diese Lücke nicht — dieser Lauf hatte sie beim
+> Schreiben vor Augen, in einem Ticket, das er selbst dafür geöffnet hat.**
+
+**Regel 1 — wo im Bericht eine Zahl steht, gehört der Einzeiler daneben, der sie erzeugt
+hat.** Nicht „ich habe nachgesehen", sondern der Ausdruck. Er kostet eine Minute und ist
+wiederholbar.
+
+**Regel 2 — Überschriften wie „gemessen", „gezählt", „nachzählbar" sind eine Zusage und
+kein Stil.** Wer sie schreibt, hat sich zur Messung verpflichtet; sie über eine Schätzung
+zu setzen ist schlimmer als die Schätzung allein.
+
+**Regel 3 — dieser Fall widerlegt einen naheliegenden Zuschnitt von `platform/T-0027`.**
+Die dort genannten fünf Rubriken (Testzahl, Testdateizahl, Matrixgröße, Lückenzahl,
+Briefkastenstand) hätten ihn **nicht** gefunden: die Zahl gehörte zu keiner von ihnen. Und
+eine **Schablone** hätte ihn auch nicht gefunden — sie stand in Fließtext. Was ihn gefunden
+hat, war ein Skript über die Datei.
