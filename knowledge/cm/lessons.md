@@ -1440,3 +1440,60 @@ SWR-153/154/155 (10/17/10 statt 12/20/9) — derselbe Fehlertyp eine Etage tiefe
 **Regel:** „Grund im Ticket" wird **an der Verschiebung** geprüft, nicht am Vorhandensein
 eines Sprint-Abschnitts. Und eine Zahl in einem Nachweistext („N Tests") wird gezählt,
 nicht geschrieben — sie steht neben dem Nachweis, der sie widerlegen könnte.
+
+## L-2026-08-20bm — Zwei Konstanten, die sich nie begegnen, widersprechen sich jahrelang leise
+
+*Anlass: Sprint 22, `platform/T-0025` (SWR-156), beim Bau der Pausenmessung.*
+
+`session.TAKT_MINUTEN` stand auf **30**. `sprint_register.TAKT_MIN_STANDARD` stand auf
+**60**, und jeder Sprinteintrag im Register trägt `takt_min: 60` seit dem 17.08. Beide
+Zahlen beschreiben denselben Sachverhalt: wie oft die Routine läuft.
+
+Die Folge war keine Fehlermeldung, sondern eine **falsche Aussage**: die Kachel „Letzte
+Session" meldete Stille nach 2x30 statt nach 2x60 Minuten. Sie hat es drei Tage lang
+getan, und die einzige Zeit, in der sie damit hätte auffallen können, war ausgerechnet
+der 60-Stunden-Ausfall — in dem sie sachlich recht behielt.
+
+**Regel 1 — B033 hat eine leise Gestalt.** Der bekannte Fall sind *zwei Anzeigen, die
+sich widersprechen*; man sieht ihn, weil beide gleichzeitig dastehen. Der leise Fall
+sind **zwei Konstanten in zwei Modulen**, die einander nie begegnen. Nichts wird rot,
+niemand vergleicht sie, und beide sehen für sich plausibel aus.
+
+**Regel 2 — wo eine Tatsache mitgeschrieben wird, ist die mitgeschriebene die Quelle.**
+Das Register schreibt `takt_min` bei **jedem** Lauf. Eine Konstante im Quelltext daneben
+ist eine Annahme über die Vergangenheit; sie kann nur veralten. Sie darf **Rückfall**
+sein und heißt dann auch so.
+
+**Regel 3 — der Test ist die dritte Kopie und fällt zuletzt auf.**
+`test_session_kachel` schrieb `minutes=95` fest und nannte es „zwei Takte". Er war grün,
+solange der Irrtum galt, und wurde in dem Moment rot, in dem die beiden anderen Kopien
+in Einklang kamen.
+> **Ein Test, der eine Zahl festschreibt, die anderswo eine Tatsache ist, hält nicht
+> den Code fest, sondern den Irrtum.**
+Er ist deshalb nicht auf 121 gesetzt worden, sondern rechnet aus dem geltenden Takt.
+
+## L-2026-08-20bn — Eine negative Zeitdifferenz ist kein hässlicher Wert, sondern der einzige Beleg dafür, dass zwei Uhren uneinig waren
+
+*Anlass: Sprint 22, `platform/T-0025` Frage 1; verbucht als `platform/T-0026`.*
+
+Beim Messen aller Pausen im Sprintregister war **eine von sieben negativ**: Sprint 17
+nennt einen Start (16:49) vor dem Ende von Sprint 16 (17:10). Die **Reihenfolge der
+Ereignisse** in der append-only-Datei ist dabei einwandfrei — die `ende`-Zeile steht
+über der `start`-Zeile, und `beginne()` hat korrekt gearbeitet.
+
+> **Wenn die Reihenfolge stimmt und die Uhrzeiten sich widersprechen, dann stammen die
+> Uhrzeiten nicht aus derselben Uhr.**
+
+**Regel 1 — `max(0, x)` ist die teuerste Zeile, die man hier schreiben kann.** Der
+negative Wert ist der **einzige** Beleg dafür, dass es das Problem gibt. Wer ihn kappt,
+bekommt eine glatte Anzeige und verliert den Befund; das ist B027/B038 in einer Zeile.
+
+**Regel 2 — die Ursache wird gemessen und nicht geraten.** Drei Erklärungen sind
+möglich (verschiedene Hosts, Zeitzonenverschiebung, nachträglich geschriebenes `ende`)
+und führen zu verschiedenen Antworten. Der Fall trat **einmal in 22 Sprints** auf: das
+rechtfertigt eine Messung und keine Umstellung der Zeitrechnung.
+
+**Regel 3 — jede Aussage, die aus Differenzen dieser Stempel entsteht, ruht auf einer
+Annahme, die einmal messbar verletzt war.** Betroffen sind vier Stellen (SWR-156,
+SWR-153, SWR-106, die Taktmessung). Keine ist dadurch falsch — aber die Annahme stand
+bis zu diesem Lauf nirgends geschrieben.

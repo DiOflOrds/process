@@ -208,3 +208,57 @@ nicht"). Sie hält ihn aber gegen ein **fest eingetragenes Datum** (`"2026-08-16
 („der jüngste Digest ist der jüngste"), keine Momentaufnahme („es ist der vom 16.08.").
 Und die richtige Reaktion auf so ein rotes Kreuz ist **nie**, die Erwartung
 hochzuzählen — das verschiebt den Befund nur bis zum nächsten Digest.
+
+## L-2026-08-20bp — Erst zählen, dann reparieren: die Zählung war der Ertrag, nicht die Reparatur
+
+*Anlass: Sprint 22, `platform/T-0024` Frage 3 (SWR-157).*
+
+Ein Test hielt den jüngsten Mail-Digest gegen das feste Datum `2026-08-16` und war seit
+drei Tagen rot. Die Reparatur einer einzelnen Zeile hätte zehn Minuten gedauert. Das
+Ticket verlangte davor eine **Zählung**: *wie viele Zusicherungen derselben Bauart gibt
+es?*
+
+Gemessen über alle 66 Testdateien mit dem **Syntaxbaum**:
+
+| Bauart | Fundstellen |
+|---|---|
+| fester Wert gegen den echten Bestand (`assertEqual`) | **1** |
+| **Schranke** gegen den echten Bestand (`assertGreaterEqual`) | **2** |
+
+**Regel 1 — die beruhigende Zahl war nicht die interessante.** Dass es nur eine
+Fundstelle gibt, heißt: die Reparatur ist eine und keine Kampagne. Dass die **richtige**
+Gegenbauart an zwei Stellen längst existierte, heißt etwas anderes:
+> **Der Fehler war nicht Unwissen, sondern eine Gelegenheit — die Zahl stand gerade da
+> und war richtig.** Das Haus konnte es; an dieser einen Stelle hat es zugegriffen.
+Eine Regel, die „kennt die richtige Bauart nicht" unterstellt, hätte nichts geändert.
+
+**Regel 2 — gezählt wird mit dem Syntaxbaum und nicht mit einer Textsuche.** Diese
+Organisation hat an zwei Tagen **fünf** Fehlalarme kassiert, weil eine dateiweite Suche
+an einem Kommentar oder einer richtigen Nachbarregel ansprang. Der erste Wurf dieser
+Zählung fand entsprechend 15 statt 1 — darunter ein `len(ZUSTAENDE) == 3`, das eine
+Konstante im Code prüft und kein Verzeichnis.
+
+**Regel 3 — eine Zählung, die auf 0 steht, braucht eine Gegenprobe.** Sie ist sonst von
+einer kaputten Zählung nicht zu unterscheiden (`L-2026-08-17ai`). Die Prüfung stellt
+deshalb ein Testmodul mit genau der alten Bauart **her** und muss es finden.
+
+**Regel 4 — und sie sagt, was sie nicht kann.** Sie erkennt ein ISO-Datum als Literal,
+keine beliebige festgeschriebene Zahl. Das steht im Docstring, weil eine Prüfung, die
+mehr zu decken scheint als sie deckt, schlimmer ist als keine.
+
+## L-2026-08-20bq — Die tragende Annahme einer Auswahl stand als Kommentar daneben
+
+*Anlass: Sprint 22, Nebenbefund beim Reparieren von `platform/T-0024`.*
+
+`post_widget` nimmt je Takt das **erste** Vorkommen aus der Digestliste und begründet das
+im Kommentar: *„`digest_liste` liefert neueste zuerst — es wird hier nicht ein zweites
+Mal sortiert."* Die gesamte Auswahl „jüngster Digest" hing daran. Keine Zusicherung hat
+je geprüft, dass die Liste wirklich absteigend sortiert ist.
+
+Der rote Test daneben prüfte stattdessen, dass das Ergebnis **an einem bestimmten Tag**
+`2026-08-16` lautete — also die Folge der Annahme an einem Stichtag statt der Annahme
+selbst.
+
+**Regel — wo ein Kommentar eine Annahme trägt, gehört die Annahme in eine Zusicherung**
+(`L-2026-08-17ag`, hier zum wiederholten Mal). Der Kommentar darf bleiben; er erklärt.
+Prüfen tut er nichts.

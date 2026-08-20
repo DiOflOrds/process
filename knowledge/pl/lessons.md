@@ -584,3 +584,37 @@ jeden Ablauf nicht.*
 überhaupt stattgefunden?". Und eine Messung, die eine Ansicht anstellt, gehört an die
 Stelle, die den Ablauf steuert — sonst ist sie für den Ablauf nicht vorhanden. Als
 `platform/T-0025` verbucht.
+
+## L-2026-08-20bo — Eine Messung, die nur eine Schwelle nicht bestimmen kann, hat trotzdem alles geleistet
+
+*Anlass: Sprint 22, `platform/T-0025` Frage 1 (*ab wann ist eine Pause ein Befund?*).*
+
+Das Ticket verlangte ausdrücklich: **erst am Bestand messen, welche Pausen normal sind**,
+weil eine geratene Schwelle entweder ein Daueralarm wird oder bei 60 Stunden schweigt.
+Gemessen wurde, und das Ergebnis war in Vielfachen des Takts: −0,35 · 0,0 · 0,1 · 0,23 ·
+0,7 · 0,93 · **60,2**.
+
+Zwischen der größten unauffälligen Pause und der einen auffälligen liegen fast zwei
+Zehnerpotenzen. **Jede** Zahl dazwischen trennt die Daten gleich gut — die Messung sagt
+also, wo die Grenze *nicht* liegen darf, und lässt offen, wo sie liegt.
+
+**Regel 1 — das ist kein Fehlschlag der Messung.** Sechs Werte hätten jede daran
+angepasste Grenze zu einer gefitteten gemacht. Der Unterschied zwischen „geraten" und
+„gefittet" ist für den, der die Prüfung später liest, keiner.
+
+**Regel 2 — wenn die Daten die Wahl nicht treffen, trifft sie der vorhandene
+Regelbestand und nicht die Meinung des Laufs.** Gewählt ist `STILLE_TAKTE = 2` —
+**dieselbe** Zahl, mit der die Kachel seit SWR-102 Stille meldet. Damit ist die Schwelle
+begründbar, ohne neu zu sein, und Kachel und Preflight sagen über dieselbe Stille
+dasselbe.
+
+**Regel 3 — die Messung war trotzdem der Ertrag des Tickets.** Sie hat zwei Befunde
+geliefert, nach denen niemand gefragt hatte (`L-2026-08-20bm`, `L-2026-08-20bn`), und
+drei der vier Vorabfragen beantwortet. Eine Messung rechtfertigt sich nicht an der
+Frage, die sie beantworten sollte.
+
+**Regel 4 — „der Fall kommt nicht vor" ist eine vollwertige Antwort.** Frage 4 des
+Tickets (*zählt ein abgebrochener Lauf als gelaufen?*) endete bei **0 von 22**. Nach der
+eigenen Auflage wurde **keine Regel erfunden**. Eine Regel für einen Fall, den es nicht
+gibt, ist eine Prüfung, die nie etwas prüft — dieselbe Familie wie `L-2026-08-17ai`, nur
+vor dem Bauen bemerkt statt danach.
