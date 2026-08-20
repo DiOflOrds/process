@@ -556,3 +556,31 @@ Bestand grün ist, in dem der geprüfte Zustand gar nicht vorkommt, prüft nicht
 wird vor dem Antworten **nachgemessen, ob sie wirkt** — nicht, ob sie dasteht. Und eine
 neue Prüfung auf einen Zustand wird erst gebaut, nachdem belegt ist, dass der Zustand im
 Bestand überhaupt vorkommt.
+
+## L-2026-08-20bk — Wir messen, ob ein Lauf sauber endete, nicht ob der nächste jemals anfing — der ausgefallene Lauf ist der einzige, der sich nicht selbst melden kann
+
+**Anlass (Nachtrag zu Sprint 21, Brief `team-mail/N-0004`).** Der Auftraggeber meldet, die
+Routine sei zwei Tage nicht gelaufen, *„aber im aktuellen sprint müsste das aufgefallen
+sein!?"* Gemessen aus dem eigenen Register: die Pause zwischen dem Ende von Sprint 20 und
+dem Start von Sprint 21 betrug **3 612 Minuten = 60,2 Stunden** bei einem hinterlegten
+Takt von **60 Minuten** — das **Sechzigfache**. Sprint 21 hat es nicht gemeldet.
+
+`sprint_register.nicht_beendete()` prüft Sprints **ohne `ende`**, also Läufe, die
+mittendrin abbrachen. Das ist eine Prüfung auf eine **Spur**.
+
+> **Ein Lauf, der ausfällt, hinterlässt keine Spur. Alle unsere Prüfungen sehen Spuren —
+> also sehen sie alles außer dem Ausfall selbst.**
+
+⚠ Verschärfend: **derselbe Lauf hat an genau dieser Stelle gearbeitet.** SWR-153 hat der
+Kachel „Letzte Session" den Zeitpunkt und die Sprintnummer des letzten Laufs gegeben —
+und niemand hat gefragt, warum dieser Zeitpunkt zweieinhalb Tage zurücklag. Die Angabe
+existierte, die Frage nicht.
+
+⚠ Und `session.stille()` (SWR-102) beantwortet die Frage seit Sprint 16 — aber nur
+**gegenüber der Ansicht**. *Eine Messung, die nur in einer Kachel steht, existiert für
+jeden Ablauf nicht.*
+
+**Regel:** Zu jeder Prüfung „ist X sauber beendet worden?" gehört die Gegenfrage „hat X
+überhaupt stattgefunden?". Und eine Messung, die eine Ansicht anstellt, gehört an die
+Stelle, die den Ablauf steuert — sonst ist sie für den Ablauf nicht vorhanden. Als
+`platform/T-0025` verbucht.

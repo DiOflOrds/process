@@ -1416,3 +1416,27 @@ lesender Aufruf** und hinterlässt die Sperre für den, dem er den Weg frei mach
 **Regel:** Auf einem Mount ohne `unlink`-Recht wird **vor** jedem Git-Aufruf geräumt und
 nicht danach — und die Vermutung über die Ursache eines Werkzeugfehlers wird gemessen,
 bevor sie repariert wird. Die Vermutung im Ticketkopf war drei Sprints lang die falsche.
+
+## L-2026-08-20bl — Ein Teilerfolg im selben Ticket macht die Lücke daneben unsichtbar
+
+**Anlass (Nachprüfung des Abschlusses von Sprint 21).** `platform/T-0021` wurde von
+`geplant_sprint: 20` auf `22` gezogen, und der Abschlussbericht behauptete an **zwei**
+Stellen „Grund im Ticket". Im Ticket stand keiner.
+
+Warum ausgerechnet dort: Sprint 21 hat in dasselbe Ticket einen langen Abschnitt
+geschrieben — *„✅ Sprint 21: FRAGE 1 IST BEANTWORTET"*. Wer die Datei aufschlug, sah
+einen Sprint-21-Abschnitt und hakte ab.
+
+> **Ein Ticket, in dem in diesem Sprint etwas Gutes passiert ist, sieht bearbeitet aus.
+> Die Verschiebung daneben verschwindet hinter dem Teilerfolg — nicht weil sie versteckt
+> wäre, sondern weil das Auge die Überschrift für die Antwort hält.**
+
+⚠ Es ist wörtlich `L-2026-08-17ag`, verletzt von dem Lauf, der die Regel im eigenen Plan
+zitiert — und der **vierte** Beleg für **Frage 3 von `platform/T-0020`**: der
+Abschlussbericht hat für seine eigenen Aussagen keine Zusicherung. Im selben Lauf gefunden
+wurden außerdem drei **geschätzte statt gezählte** Testzahlen in den Anforderungszeilen
+SWR-153/154/155 (10/17/10 statt 12/20/9) — derselbe Fehlertyp eine Etage tiefer.
+
+**Regel:** „Grund im Ticket" wird **an der Verschiebung** geprüft, nicht am Vorhandensein
+eines Sprint-Abschnitts. Und eine Zahl in einem Nachweistext („N Tests") wird gezählt,
+nicht geschrieben — sie steht neben dem Nachweis, der sie widerlegen könnte.
