@@ -392,10 +392,16 @@ Kopien bleibt drüben. Sie hier zu wiederholen wäre dieselbe Dopplung eine Eben
 | Sprint 24 | SWR-165 legte eine **zweite** Markerkonstante an | Zähltest aus Sprint 17 (`test_dr_verbuchung`) |
 | **Sprint 25** | `p12/T-0012` behauptete, es gehe **nicht** in die Inbox | **`board.py`** wies den DR ab (`optionen` fehlt); `inbox.py` legt **jeden** offenen DR vor |
 | **Sprint 25** | `scripts/organigramm.py` (Orga-Rework) ohne `konsole.sichere_ausgabe()` | `test_konsole.test_jeder_einstiegspunkt_sichert_seine_ausgabe` (platform/T-0009) |
+| **Sprint 25** | `p12/T-0012` **ohne Frist** — „eine Darstellungsfrage darf nicht drängen" | **`preflight`** meldete es als unterminiertes Ticket (SWR-114): *ein DR ohne `frist` ist unterminiert* |
 
-> **Zweimal in EINEM Lauf, und beide Male war der Entwurf plausibel: der eine beschrieb,
-> wie er behandelt werden wollte, der andere vergaß eine Regel, die für allen
-> Produktionscode gilt. Kein Mensch hat beides beim Lesen bemerkt.**
+> **DREIMAL in EINEM Lauf, und jedes Mal war der Entwurf plausibel: der erste beschrieb,
+> wie er behandelt werden wollte, der zweite vergaß eine Regel für allen Produktionscode,
+> der dritte hielt Rücksicht für Freundlichkeit. Kein Mensch hat eines davon beim Lesen
+> bemerkt.**
+
+**Regel 0 — eine Frage ohne Frist ist keine schonende Frage**, sondern eine, deren Ausgang
+niemand aufgeschrieben hat. Rücksicht gehört in den **Default**, nicht in die Abwesenheit
+einer Frist.
 
 **Regel 1 — eine Prüfung, die über den GESAMTEN Produktionscode läuft, erfasst auch den
 Code, den es beim Schreiben der Prüfung noch nicht gab.** Das ist ihr eigentlicher Wert und
