@@ -262,3 +262,62 @@ selbst.
 **Regel — wo ein Kommentar eine Annahme trägt, gehört die Annahme in eine Zusicherung**
 (`L-2026-08-17ag`, hier zum wiederholten Mal). Der Kommentar darf bleiben; er erklärt.
 Prüfen tut er nichts.
+
+## L-2026-08-20bt — Die Zusicherung, die den eigenen Entwurf verwirft, ist die wertvollste im Bestand
+
+*Anlass: Sprint 23, `platform/T-0026` → SWR-159.*
+
+Der erste Entwurf der Uhrenprobe holte sein Material mit einem eigenen `git log` **in
+`sprint_register`**. Er wurde rot an `test_die_messung_ruft_KEIN_git_auf` — einer
+Zusicherung aus **Sprint 16**, die seit SWR-134 im Bestand steht: auf diesem Mount
+hinterlässt schon ein **lesender** Git-Aufruf eine `index.lock`, die niemand mehr löschen
+kann.
+
+> **Eine Prüfung, die Uneinigkeit zwischen zwei Läufen erkennen soll und dabei selbst
+> sperrt, ist ihr eigener Schadensfall. Gefunden hat das nicht der Entwurf, sondern eine
+> Regel, die sieben Sprints früher jemand aufgeschrieben und in einen Test gegossen hat.**
+
+**Regel 1 — eine Regel, die nur in einem Kommentar steht, hätte hier nichts verhindert.**
+Der neue Code hat den Kommentar nie gelesen; der Test hat ihn gestoppt. Das ist die
+Gegenprobe zu `L-2026-08-20bs` aus demselben Lauf, und beide zeigen dasselbe von zwei
+Seiten.
+
+**Regel 2 — die Reparatur trennt Material und Regel, statt die Zusicherung zu
+erweichen.** Die Versuchung war, den Test „für diesen Fall" auszunehmen. Stattdessen holt
+`uebergang_historie` das Material (dort ist Git-Lesen ohnehin zu Hause), die Zeitregel
+bleibt beim Sprintzähler (dort wohnt `_wanduhr`), und der Preflight fügt beides zusammen.
+*Eine Zusicherung, die man beim ersten Widerspruch aufweicht, hätte man nicht schreiben
+müssen.*
+
+**Regel 3 — wiederhole die Zusicherung dort, wo der nächste Erweiterer sie sucht.** Sie
+steht jetzt zusätzlich in der Teststrecke der neuen Prüfung. Wer diese Prüfung erweitert,
+liest nicht die Tests des Sprintzählers.
+
+## L-2026-08-20bu — Wer eine Sperre baut, muss zuerst sagen, was genau der Inhalt ist
+
+*Anlass: Sprint 23, `projects/p11/T-0013` → SWR-160.*
+
+Das Ticket lautete „Mail-Widget hinter dem PIN-Lesegate". Beim Bauen war die schwierige
+Frage nicht *wie* gesperrt wird, sondern *was*. Die Antwort steckte in **derselben
+Rubrik** des Digests:
+
+> **Die ANZAHL offener Punkte ist eine Kennzahl. Ihr WORTLAUT sind Betreffzeilen,
+> Absender und Links.**
+
+**Regel 1 — Zahl und Wortlaut müssen aus DERSELBEN Auswahl kommen.** Zwei
+Auswahlregeln über eine Rubrik wären B033: die offene Kachel zählte dann andere Punkte,
+als hinter dem Gate stehen — und niemandem fiele es auf, weil beide Zahlen plausibel
+aussehen.
+
+**Regel 2 — die Gegenprobe lautet „nichts", nicht „weniger".** Geprüft wird gegen
+Zeichenfolgen, die im **echten** Digest nachweislich vorkommen. Ein Gate, das eine
+gekürzte Fassung durchlässt, ist grün, solange man nur „weniger" prüft — *ein Leck mit
+gutem Gewissen*.
+
+**Regel 3 — eine Sperre ist kein Datenzustand.** `wert`/`echte_null`/`nicht_geliefert`
+sagen, WAS die Quelle liefert; eine Sperre sagt, WER es sehen darf. Ein vierter Wert wäre
+die kürzeste Änderung gewesen und hätte „keine Daten" mit „nicht für dich" verwechselt.
+
+**Regel 4 — die Kachel verschwindet nicht.** *Eine Kachel, die ohne PIN weg ist, verrät
+nichts und behauptet dabei, es gäbe hier nichts.* Sie bleibt stehen und sagt, dass ihr
+Inhalt eine Freigabe braucht.

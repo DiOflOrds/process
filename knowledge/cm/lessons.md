@@ -1497,3 +1497,74 @@ rechtfertigt eine Messung und keine Umstellung der Zeitrechnung.
 Annahme, die einmal messbar verletzt war.** Betroffen sind vier Stellen (SWR-156,
 SWR-153, SWR-106, die Taktmessung). Keine ist dadurch falsch — aber die Annahme stand
 bis zu diesem Lauf nirgends geschrieben.
+
+## L-2026-08-20br — Wenn die Reihenfolge stimmt und die Uhrzeit nicht, entscheidet der Commit, welcher der beiden Werte falsch ist
+
+*Anlass: Sprint 23, `platform/T-0026` → SWR-159.*
+
+`L-2026-08-20bn` hat festgestellt, **dass** zwei Uhren uneinig waren. Dieser Lauf hat
+gemessen, **welche**: Registerzeit gegen die Commit-Zeit des Commits, der die Zeile
+brachte, über alle 31 Ereignisse. Sechs reguläre `ende` liegen bei **+0,6 bis +1,1
+Minuten**, der dokumentierte Nachtrag bei **+21,3**, und **eines bei −37,4**.
+
+> **Ein Prozess kann nicht 38 Minuten vor seiner eigenen Uhr liegen. Der Commit ist der
+> Zeuge, den man hat, wenn zwei Uhren sich widersprechen — nicht weil er richtiger geht,
+> sondern weil er beweisbar SPÄTER ist als das, was er trägt.**
+
+**Regel 1 — verdächtige zuerst den früheren Wert, nicht den auffälligen.** Das Ticket
+verdächtigte den *Start* von Sprint 17 (16:49), weil er zu früh aussah. Falsch ist das
+*Ende* von Sprint 16 (17:10), weil sein Commit um 16:32:36 liegt. Die auffällige Zahl
+und die falsche Zahl sind nicht dieselbe.
+
+**Regel 2 — eine Hypothese ist ausgeschlossen, sobald ihr Vorzeichen nicht passt.** Ein
+nachträglich geschriebenes `ende` liefert einen **positiven** Abstand — genau so sieht
+der belegte Nachtrag aus. Eine Zeitzone liefert ein Vielfaches von 15 Minuten, eine
+Sommerzeitumstellung genau 60. **37,4 ist keines von beidem.** Zwei der drei Erklärungen
+fallen damit ohne weitere Messung.
+
+**Regel 3 — die vorgeschlagene Abhilfe muss den belegten Fall FINDEN, sonst ist sie
+keine.** Das Ticket schlug vor, das Register künftig **mit Offset** zu schreiben. Beide
+Commits des Fensters tragen `+02:00`; der Offset hätte **nichts** gemeldet. Ein
+Formatwechsel an einer append-only-Datei mit 30 Zeilen Altbestand ist dafür ein hoher
+Preis (B038).
+
+**Regel 4 — was nicht entschieden werden kann, wird nicht behauptet.** *Welche* der
+beiden Uhren richtig ging, ist aus dem Bestand nicht zu klären: die einzigen zwei Zeugen
+sind die streitenden Uhren. Gesucht wurde ein dritter (Run-Registry, Telemetrie,
+Zeitstempel in Dateiinhalten des Fensters) — es gibt keinen.
+
+## L-2026-08-20bs — Ein Kommentar, der beschreibt, was der Code tun soll, ist keine Zusicherung
+
+*Anlass: Sprint 23, SWR-162 — die Übergangsprüfung sah das Sammel-Repo seit Sprint 9 nicht.*
+
+`uebergang_historie` war auf **zwei** voneinander unabhängigen Wegen blind für
+`projects` (p10, p11, p12), und beide sahen für sich harmlos aus:
+
+1. `pruefe_alle` übersprang jedes Projekt ohne eigenes `.git` — **während der Kommentar
+   direkt daneben sagte, dass dann das Sammel-Repo zählt.**
+2. `status_wechsel` filterte `git log -- tickets/`, und das ist **relativ zur
+   Repo-Wurzel**; im Sammel-Repo liegen die Tickets eine Ebene tiefer.
+
+**66 Statuswechsel sind seit SWR-118 nie geprüft worden.** Darin verborgen: vier
+Altfälle und ein neuer.
+
+> **Der Kommentar hat drei Sprints lang das Gegenteil dessen behauptet, was danebenstand,
+> und niemand hat die beiden verglichen. Ein Kommentar altert nicht mit — er wird nur
+> irgendwann unwahr.**
+
+**Regel 1 — wo ein Kommentar eine Regel formuliert, gehört ein Test daneben.** Der Satz
+„Projekte im Sammel-Repo teilen sich dessen .git — dann zählt das Sammel-Repo" ist eine
+prüfbare Aussage. Er war falsch, und es war kostenlos, das nicht zu bemerken.
+
+**Regel 2 — zwei unabhängige Ursachen für denselben blinden Fleck sind der Normalfall,
+nicht die Ausnahme.** Wer nur eine repariert, hat den Befund verschoben und nicht
+behoben. Deshalb: nach der ersten Ursache **weitermessen**, bis der Gegenstand wirklich
+auftaucht.
+
+**Regel 3 — ein Pfadfilter braucht eine ausdrückliche Tiefenzusicherung.** `tickets/`
+und `*/tickets/` sind beides Präfixe; erst `:(glob)**/tickets/*` sagt „in jeder Tiefe".
+Die nächste Verschachtelungsebene wäre sonst wieder unsichtbar.
+
+**Regel 4 — eine Prüfung, die zwei Drittel des Bestands prüft, ist nicht zu zwei
+Dritteln gut, sie ist grün.** Der korrigierte Filter kostet über alle 17 Repos rund
+**36 s statt 10 s**. Der Preis ist gemessen, genannt und bezahlt.

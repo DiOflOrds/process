@@ -618,3 +618,56 @@ Tickets (*zählt ein abgebrochener Lauf als gelaufen?*) endete bei **0 von 22**.
 eigenen Auflage wurde **keine Regel erfunden**. Eine Regel für einen Fall, den es nicht
 gibt, ist eine Prüfung, die nie etwas prüft — dieselbe Familie wie `L-2026-08-17ai`, nur
 vor dem Bauen bemerkt statt danach.
+
+## L-2026-08-20bv — Bei der vierten Berührung gibt es drei ehrliche Ausgänge, und „noch ein Termin" ist keiner davon
+
+*Anlass: Sprint 23 — `projects/p11/T-0013` (gebaut) und `promt-team/T-0008` (blockiert).*
+
+Zwei Tickets standen in diesem Lauf bei der vierten Berührung. Sie sind **verschieden**
+ausgegangen, und der Unterschied ist die eigentliche Lehre.
+
+`p11/T-0013` wartete auf **Kapazität** — dreimal richtig verschoben, weil ein
+PIN-Lesegate eine Zugriffsentscheidung ist und nicht nebenbei erledigt gehört. Der
+vierte Ausgang war: **bauen**.
+
+`promt-team/T-0008` wartete nicht auf Kapazität. Gemessen: die Run-Registry führt
+**4 Läufe für `dev`, 3 für `cm` und 0 für die übrigen zehn Rollen** — unverändert seit
+Sprint 18, fünf Sprints ohne einen einzigen neuen. Der vierte Ausgang war: **`blocked`
+mit `blocked_by`**, und die Vorbedingung bekam ein eigenes Ticket.
+
+> **Ein Ticket viermal auf „Kapazität" zu terminieren, während es in Wahrheit auf eine
+> Tatsache wartet, die kein Lauf herstellt, indem er das Ticket anfasst, heißt den Grund
+> viermal falsch aufzuschreiben.**
+
+**Regel 1 — vor dem vierten Termin steht die Frage, WORAUF gewartet wird**, und die
+Antwort ist messbar: Kapazität, ein Mensch, eine Umgebung oder eine Tatsache.
+
+**Regel 2 — die drei ehrlichen Ausgänge sind bauen, zerlegen/blockieren, schneiden.**
+Schneiden ist kein Scheitern; `promt-team/T-0010` führt es ausdrücklich als eine von drei
+Optionen.
+
+**Regel 3 — ein Verschiebungsgrund mit Verfallsdatum darf nicht dreimal wortgleich
+dastehen.** Wo er das tut, ist er kein Grund mehr, sondern eine Gewohnheit.
+
+## L-2026-08-20bw — Ein eigener Buchungsfehler ist die billigste Sonde, die man je bekommt
+
+*Anlass: Sprint 23 — `projects/p11/T-0009` sprang `in_progress → done`.*
+
+Dieser Lauf hat einen Statuswechsel falsch gebucht: der Schritt `in_review` fehlt, und
+`board.UEBERGAENGE` verbietet den Sprung seit Sprint 1. Der Fehler steht in der Historie
+und bleibt dort — die Historie wird nicht umgeschrieben.
+
+Die Frage danach war nicht *„wie mache ich es weg"*, sondern **„warum ist dabei nichts
+rot geworden?"** — und die Antwort war ungleich größer als der Fehler: die
+Übergangsprüfung hat `projects/` seit **Sprint 9** nie angesehen (SWR-162).
+
+> **Ein eigener Fehler an einer geprüften Stelle ist ein kostenloser Test der Prüfung.
+> Wer ihn schnell wegräumt, bezahlt mit der Antwort auf die einzige interessante Frage.**
+
+**Regel 1 — nach jedem selbstverschuldeten Verstoß gegen eine geprüfte Regel wird
+zuerst nachgesehen, ob die Prüfung ihn gemeldet hat.** Zweiter Fall dieser Art in diesem
+Haus: Sprint 15 hat einen Buchungsfehler benannt, Sprint 16 die Vorkehrung daraus gebaut.
+
+**Regel 2 — nicht glätten.** Der Verstoß ist ab jetzt der **vierte** stehende Befund des
+Preflights und der einzige, der diesem Lauf gehört. Er steht im Ticket, im Sprintplan und
+im Bericht.
