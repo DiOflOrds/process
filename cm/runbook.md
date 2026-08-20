@@ -106,3 +106,45 @@ gehalten wurde. Vier übereinstimmende Abschriften sehen aus wie eine Bestätigu
 **Zwei Werte unterscheiden.** `Statusdrift Plan/Ticket: 0` heißt „geprüft, nichts gefunden".
 `nicht prüfbar` heißt „die Sprintsicht war nicht ladbar" — das ist **kein** Erfolg und wird
 wie ein Befund behandelt.
+
+## 15. Lehren mit Gegenmaßnahme bekommen im selben Lauf einen Vertreter (Sprint 27, platform/T-0034)
+
+**Regel.** Wird eine Lesson geschrieben, die eine Gegenmaßnahme in **Befehlsform** enthält
+(*„… prüfen", „… nachziehen", „… ergänzen"*), entsteht im **selben Lauf** entweder ein
+Ticket mit dieser Gegenmaßnahme als DoD oder eine Zusicherung, die sie vertritt. Andernfalls
+wird die Lesson ausdrücklich als **Beobachtung** gekennzeichnet — dann ist sie keine
+offene Zusage.
+
+**Warum die Regel existiert.** `L-003` (2026-08-06) nannte die Gegenmaßnahme wörtlich, lag
+an drei Stellen und trug den Erwartungswert *„Wiederholungsquote in Sprint 2 = 0"*. In
+Sprint 26 war die Quote **3 von 3**; die ersten drei Ticks, die je durch den Preflight
+kamen, sind alle an genau diesem Modellnamen gestorben. **Vierzehn Tage, drei Ablagen,
+null Wirkung.**
+
+⚠ **Diese Regel ist ausdrücklich ein Provisorium.** Sie ist selbst eine Runbook-Zeile, und
+eine Runbook-Zeile ist genau das, was hier versagt hat. Der Vertreter, der von allein
+wiederkommt, ist `platform/T-0034` (Sprint 28).
+
+## 16. Ticketstatus wird über die Übergangsmatrix gesetzt, nicht ins Frontmatter geschrieben (Sprint 27, L-2026-08-20cn)
+
+**Regel.** Statuswechsel laufen über `board.py` bzw. `tick.setze_status` — die Stelle, die
+`UEBERGAENGE` **vor** dem Schreiben anwendet. Wird doch von Hand geschrieben, muss
+`python platform/scripts/board.py <repo>` **grün** sein, **bevor** committet wird; die
+Verkettung in der Konsole ist `&&` und nicht `;`.
+
+**Warum die Regel existiert.** In Sprint 27 wurde `platform/T-0033` mit einem einzigen
+Commit von `open` auf `done` gesetzt. `board.py` hat den Übergang korrekt abgelehnt — die
+Ablehnung lief mit `;` verkettet **neben** dem Commit, nicht davor, und der unzulässige
+Übergang stand in der Historie. Repariert über den richtigen Weg (`open → in_progress →
+in_review → done`, je ein Commit).
+
+## 17. Git auf diesem Mount läuft über den einen Schreibweg — auch reset, log und show (Sprint 27, L-2026-08-20co)
+
+**Regel.** Alle Git-Aufrufe gehen über `platform/backend/git_schreiben.ruf` (SWR-134/163).
+Ein direkter `git`-Aufruf aus der Konsole hinterlässt auf diesem Mount eine `index.lock`
+oder `HEAD.lock`, die Git selbst nicht löschen darf — sie blockiert den **nächsten**
+Aufruf, nicht den eigenen.
+
+**Warum die Regel existiert.** In Sprint 27 sind ein `git reset --soft HEAD~1` und ein
+darauf folgender `git commit` an genau solchen Resten gescheitert; derselbe Commit lief
+über `git_schreiben.ruf` sofort durch.

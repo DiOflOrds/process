@@ -1783,3 +1783,66 @@ hatte, zeigte: die Funktion bekommt Rolle und Einheit zur Laufzeit nie, weil das
 nur die Einheit übergibt. **Die Anforderung war grün, die Wirkung null.** Wer eine
 Auflösung baut, prüft mindestens einmal, **womit sie aufgerufen wird** — sonst ist der
 Nachweis ein Selbstgespräch. `platform/T-0033`.
+
+---
+
+## L-2026-08-20cm — Eine Mutationsprobe ohne Nachweis, dass die Mutation wirkte, misst den Zustand von vorhin
+
+**Sprint 27, `platform/T-0033`.** Zur Abnahme von `SWR-171` sollte die Gegenprobe zeigen,
+dass eine **ausgeschaltete** Prüfung Tests rot macht. Der erste Durchgang meldete **grün**.
+
+Das war kein Testfehler, sondern ein Messfehler: die Mutation stand zum Testzeitpunkt noch
+nicht auf der Platte (der Mount schreibt verzögert), und ein alter `__pycache__` lag
+daneben. Der zweite Durchgang — Mutation **nachgelesen**, Cache geleert — zeigte die zwei
+roten Zusicherungen.
+
+> **⚠⚠ Grün ist zweideutig: es kann heißen „die Prüfung greift nicht" oder „die Mutation
+> ist nicht angekommen". Ohne den Nachweis, dass die Mutation wirklich im Code steht, ist
+> die Gegenprobe eine Messung des vorigen Zustands — und sie hätte in genau dem Bericht
+> als „Gegenprobe bestanden" gestanden, der aus einer Gegenprobe entstanden ist, die die
+> falsche Hälfte gemessen hat.**
+
+**Regel.** Eine Mutationsprobe hat drei Schritte, nicht zwei: mutieren, **die Mutation im
+Code nachlesen und die Bytecode-Caches leeren**, dann testen. Und sie ist erst vollständig,
+wenn auch die **Rücknahme** wieder grün ist — sonst bleibt eine Mutation im Bestand stehen,
+wie es in diesem Lauf beinahe geschehen wäre.
+
+---
+
+## L-2026-08-20cn — Ein Statuswechsel `open -> done` in einem Commit, und die Prüfung stand daneben statt davor
+
+**Sprint 27, beim Schließen von `platform/T-0033`.** Der Abschluss schrieb `status: done`
+direkt auf ein `open`-Ticket. `board.py` hat das korrekt abgelehnt — **nach** dem Schreiben
+und **neben** dem Commit: die Kette in der Konsole war `board.py …; git commit`, und das
+Semikolon lässt den Commit auch nach einer abgelehnten Validierung laufen. Der unzulässige
+Übergang stand damit in der Historie.
+
+Repariert durch den richtigen Weg — `open → in_progress → in_review → done`, je ein
+Commit, wie ihn Sprint 26 an `T-0031` gegangen ist. Der Fehlcommit war lokal und ungepusht
+und ist zurückgenommen; **das steht hier, weil es sonst stillschweigend geschähe.**
+
+> **Eine Prüfung, die neben dem Schreibvorgang läuft statt vor ihm, ist eine Meinung.
+> Genau das ist die Frage 3 von `platform/T-0027`, hier an der eigenen Konsole
+> vorgeführt: läuft die Prüfung vor oder nach dem Zeitpunkt, an dem der Fehler Schaden
+> anrichtet?**
+
+**Regel.** Ticketstatus wird über `board.py --status` bzw. den Weg gesetzt, der die
+Übergangsmatrix **vor** dem Schreiben anwendet — nie durch direktes Ersetzen im
+Frontmatter. Wo doch von Hand geschrieben wird, gilt: `board.py` muss **grün** sein, und
+die Verkettung ist `&&`, nicht `;`.
+
+---
+
+## L-2026-08-20co — Der Mount hinterlässt Sperren, die auch `git reset` blockieren
+
+**Sprint 27.** `git reset --soft HEAD~1` scheiterte an einer `HEAD.lock`, die ein früherer
+Aufruf liegengelassen hatte, und ein direkter `git commit` danach ebenso. Was durchlief,
+war der **eine Schreibweg** dieses Hauses (`backend/git_schreiben.ruf`, `SWR-134/163`) —
+er räumt die Sperre, die der eigene gelingende Aufruf hinterlässt.
+
+> **Die Reparatur lag seit Sprint 5 im Haus und wurde in diesem Lauf zweimal umgangen,
+> weil `git` aus der Konsole schneller getippt ist als der eigene Weg.**
+
+**Regel.** Git-Aufrufe dieses Hauses laufen über `git_schreiben.ruf` — auch die seltenen
+(`reset`, `show`, `log`). Ein direkter `git`-Aufruf auf diesem Mount ist ein Aufruf, der
+beim nächsten Mal jemand anderen blockiert.
