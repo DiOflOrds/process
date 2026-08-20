@@ -748,3 +748,28 @@ Hier war es die Zusicherung, nicht der Bau.
 **Regel 3 — „gemessen" und „benannt" sind zwei Zusicherungen.** Eine Zahl ohne ihren
 Gegenstand kann Stillstand nicht von Tausch unterscheiden (dieselbe Bewegung wie
 `L-2026-08-20by`, eine Ebene höher).
+
+---
+
+## L-2026-08-20cl — Fünfmal terminiert, einmal gefragt, fünf Minuten Antwortzeit (Sprint 26)
+
+**Der Fall.** `p12/T-0012` ist die Frage, die fünf Sprints lang als **Aufgabe** im Plan
+stand und jedes Mal mit „Kapazität" verschoben wurde. Sprint 25 hat sie als Frage erkannt
+und in die Inbox gestellt, Frist 27.08., Default A. Der Auftraggeber hat am **20.08. um
+20:34** geantwortet — **fünf Minuten** nach Beginn des nächsten Sprints, sieben Stunden
+nach dem Stellen der Frage.
+
+> **Der Aufwand lag nie im Beantworten. Er lag darin, die Frage überhaupt als Frage zu
+> erkennen — und fünf Läufe lang hat niemand hingesehen, weil ein Ticket mit einem Termin
+> aussieht wie Arbeit.**
+
+**Regel 1 — eine Aufgabe, die dreimal am selben Punkt hängenbleibt, enthält eine Frage.**
+Das stand schon in `L-2026-08-20ch`. Neu ist die **Messung des Preises**: fünf
+Verschiebungen kosteten sieben Stunden Wartezeit auf eine Antwort, die in fünf Minuten kam.
+
+**Regel 2 — die Antwort kann teurer aussehen, als sie ist.** Der Einwand gegen das Fragen
+war, es erhöhe den Zähler „auf dich wartende Entscheidungen". Er tat es für sieben Stunden.
+
+**Regel 3 — „A = Ist-Zustand" heißt auch: kein Nachfolgeticket.** Die DoD sah eines für den
+Bau-Fall vor. Bei A gibt es keinen Bau; ein Ticket „nichts tun" wäre ein Vorgang ohne
+Gegenstand. **Geschlossen ist geschlossen.**

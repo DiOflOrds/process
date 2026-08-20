@@ -413,3 +413,34 @@ er der Kommentar, der drei Sprints lang das Gegenteil des Codes sagt (SWR-162).
 
 **Regel 3 — Zähl- und Regeltests wirken pedantisch und haben in vier aufeinanderfolgenden
 Läufen je einen Fehler verhindert.** Das ist das Argument, sie zu behalten.
+
+---
+
+## L-2026-08-20ck — Eine Bedingung, die ein Fehlschlag erfüllt, ist keine Bedingung (Sprint 26)
+
+**Der Fall.** Drei Tickets warteten auf *„mindestens einen durchgelaufenen Tick"*. Drei
+Ticks liefen durch — alle drei mit `status=fehler` und null Artefakten. Die Bedingung war
+**wörtlich erfüllt und inhaltlich nicht**.
+
+Im selben Lauf stand daneben derselbe Fehler eine Ebene tiefer: `print("Tick
+abgeschlossen…")` lief unbedingt vor `return 0`.
+
+> **Beides misst das ENDE eines Vorgangs und nennt es sein ERGEBNIS. „Durchgelaufen" und
+> „abgeschlossen" sind Aussagen über den Kontrollfluss, nicht über die Arbeit.**
+
+**Regel 1 — eine Bedingung nennt das Ergebnis, nicht den Abschluss.** Nicht „ein Tick ist
+gelaufen", sondern „ein Tick hat `status: ok` **und** mindestens ein Artefakt".
+
+**Regel 2 — Zusicherungen über den ECHTEN Bestand fangen, was zwischen zwei Läufen
+passiert.** `test_dr_verbuchung` wurde mitten in diesem Lauf rot, weil der Auftraggeber um
+20:34 eine Entscheidung eingetragen hatte. Kein Preflight hätte das gefunden — er war
+vorher gelaufen. *Die rote Zeile war nicht die Störung des Laufs, sie war sein Ergebnis.*
+
+**Regel 3 — eine Prüfung auf ein WORT prüft den Text, nicht den Code.** Der erste Entwurf
+von `test_kein_return_im_finally` suchte nach „return" und wurde von dem Kommentar rot
+gemacht, der das Verbot **erklärt**. Geprüft werden Anweisungen.
+
+**Regel 4 — Namen werden abgelesen, nicht gebildet.** Der erste Entwurf von
+`test_am_echten_bestand…` erwartete `MAIL-RED@mail`, aus dem Team-Kürzel abgeleitet. Die
+Instanz heißt `MAIL-RED@team-mail`. *Zwei Entwürfe, zwei Tests, beide Male hat das Werkzeug
+seinen eigenen Verfasser widerlegt — zum fünften Lauf in Folge.*

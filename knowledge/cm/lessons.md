@@ -1716,3 +1716,61 @@ jeden Test, in der gar nichts mehr blockiert.
 **Regel 4 — Logdateien der Automatik gehören in den Startcheck einer Session.** Der Befund
 war drei Tage lang lesbar und wurde nur gefunden, weil ein Brief des Auftraggebers danach
 fragte.
+
+---
+
+## L-2026-08-20ci — Eine Lehre ohne Vertreter ist ein Zettel, kein Schutz (Sprint 26)
+
+**Der Fall.** Die ersten drei Ticks, die je durch den Preflight kamen, starben alle an
+`404: model 'llama3.1:8b' not found`. Genau dieser Fall stand seit dem **2026-08-06** als
+`L-003` im Bestand — an **drei** Stellen abgelegt, mit der Gegenmaßnahme wörtlich benannt
+(*„Modell-Defaults gegen das Geräteregister prüfen; Abweichungen als Registry-/Guardrails-CR
+nachziehen"*) und an der dritten Stelle mit **Erwartungswert: Wiederholungsquote in Sprint
+2 = 0**. Die Quote war **3 von 3**.
+
+> **Es fehlte nicht die Sorgfalt beim Aufschreiben. Die Lehre war vorbildlich formuliert,
+> dreifach abgelegt und mit einer Zahl versehen — und hatte vierzehn Tage lang exakt null
+> Wirkung, weil der Satz, der ihren Vollzug trug, nie ein Ticket geworden ist.**
+
+**Regel 1 — jede Lehre, die eine Gegenmaßnahme nennt, bekommt im selben Zug ein Ticket
+oder eine Prüfung.** Ohne einen von beiden ist sie Text; Text wird nicht ausgeführt.
+
+**Regel 2 — ein Erwartungswert ohne Messstelle ist eine Hoffnung.** „Wiederholungsquote =
+0" war richtig gedacht und hat nichts gehalten, weil niemand die Quote je gemessen hat.
+Wer eine Zahl als Ziel aufschreibt, schreibt dazu, **wer sie wann misst**.
+
+**Regel 3 — dreifache Ablage ersetzt keinen Vertreter.** Dass dieselbe Lehre an drei
+Stellen stand, hat sie nicht wirksamer gemacht, sondern nur schwerer widerlegbar. *Kopien
+erhöhen die Sichtbarkeit, nicht die Wirkung.*
+
+**Gegenprobe, die im selben Lauf gelungen ist.** `SWR-170` wurde mit der Ansage gebaut, sie
+müsse am ersten Tag **2** melden. Sie meldet 2. *Eine Prüfung, deren erwarteter Wert vor
+dem Bauen aufgeschrieben wird, prüft beim ersten Lauf sich selbst mit.*
+
+---
+
+## L-2026-08-20cj — Was ein Lauf hinterlässt, prüft niemand (Sprint 26)
+
+**Der Fall.** Der Tick prüft **vor** der Arbeit gründlich (saubere Arbeitskopie, `p0/T-0014`
+aus Sprint 1) und **nach** der Arbeit gar nicht. Um 20:15 misslang die Rückkehr auf `main`
+— stillschweigend, weil sie mit `fehler_ok=True` dastand. Der Ergebnis-Commit landete auf
+dem Feature-Branch, `main` behielt `status: in_progress`, der Arbeitsbaum zeigte `open`.
+
+> **⚠⚠ Und deshalb war der Preflight blind für genau das, wofür er gebaut ist: `SWR-155`
+> liest den ARBEITSBAUM und meldete „In Arbeit liegengeblieben: 0" für ein Ticket, das auf
+> `main` seit einer Viertelstunde auf `in_progress` stand.**
+
+**Regel 1 — eine Prüfung, die den Arbeitsbaum liest, prüft den Branch, auf dem sie zufällig
+steht.** Solange niemand den Branch wechselt, ist das dasselbe — und genau deshalb fällt es
+nicht auf, wenn es einmal nicht dasselbe ist.
+
+**Regel 2 — `fehler_ok=True` an einem Rückweg ist keine Toleranz, sondern ein blinder
+Fleck.** Wo ein Fehlschlag folgenlos bleiben darf, muss er trotzdem **genannt** werden.
+
+**Regel 3 — ein Vorgang endet dort, wo er begonnen hat, und das wird nachgemessen.** Nicht
+„wir kehren zurück", sondern „wir stehen wieder da" — mit einer Abfrage, nicht mit einem
+Aufruf.
+
+**Regel 4 — ein `return` im `finally` verschluckt eine fliegende Ausnahme.** Der naheliegende
+Bau hätte einen Absturz des Gateways wie ein ordentliches Ende aussehen lassen. Befund
+merken, **nach** dem `finally` werten.
