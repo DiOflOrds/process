@@ -183,3 +183,28 @@ versprochen.
 **Regel:** Wer einen Zustand als Zahl oder als Negativzusicherung einfriert, schreibt in ihren
 Docstring, **welches Ticket sie umdreht und wie**. Und der Lauf, der sie rot macht, prüft
 zuerst, ob **genau die erwarteten** rot sind.
+
+## L-2026-08-20bj — Eine Zusicherung gegen den echten Bestand, die eine Momentaufnahme festschreibt, prüft ab morgen die Uhr
+
+**Anlass (Sprint 21, `platform/T-0024`).** `test_widget_post.BestandTest` liest den
+**echten** Bestand — richtig, und ausdrücklich die Lehre aus SWR-128 („Attrappen genügen
+nicht"). Sie hält ihn aber gegen ein **fest eingetragenes Datum** (`"2026-08-16"`). Am
+**2026-08-17 um 22:22** ist ein neuer Digest entstanden; seitdem ist die Zusicherung rot.
+
+⚠ Zwei Dinge machen das teuer:
+
+1. Der Digest kam **vier Minuten nach dem Abschlussbericht von Sprint 20** (22:18). Das
+   ist wortwörtlich der Befund jenes Sprints — nur mit einem Artefakt statt einer
+   Entscheidung. **Was nach dem Abschlussbericht eintrifft, ist für ihn unsichtbar und
+   für den nächsten Lauf Altbestand.**
+2. Die Zusicherung stand **drei Tage rot**, ohne dass es jemandem aufgefallen wäre, weil
+   in diesen drei Tagen niemand die volle Suite gelaufen ist.
+
+> **Ein Test gegen den echten Bestand prüft mehr als eine Attrappe. Schreibt er dabei
+> eine Momentaufnahme fest, prüft er ab dem nächsten Tag die Uhr statt den Code — und
+> sein rotes Kreuz sagt nichts über die Software.**
+
+**Regel:** Eine Zusicherung gegen einen wachsenden Bestand formuliert eine **Invariante**
+(„der jüngste Digest ist der jüngste"), keine Momentaufnahme („es ist der vom 16.08.").
+Und die richtige Reaktion auf so ein rotes Kreuz ist **nie**, die Erwartung
+hochzuzählen — das verschiebt den Befund nur bis zum nächsten Digest.

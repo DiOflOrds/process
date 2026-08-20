@@ -526,3 +526,33 @@ Aufschreibung allein nicht wirkt.
 Testzahl über die Sammlung (`TestLoader.discover`), nicht über den letzten Bericht. Und die
 richtige Reaktion auf eine zum zweiten Mal aufgelaufene Lesson ist **kein dritter Merksatz**,
 sondern eine Prüfung.
+
+## L-2026-08-20bh — Eine Regel kann formal erfüllt und in der Sache verfehlt sein; die Prüfung, die sie erzwingt, merkt davon nichts
+
+**Anlass (Sprint 21, Brief `pm/N-0043` Punkt 3).** Der Auftraggeber verlangte, dass eine
+Aufgabe beim Start auf `in_progress` geht. Die Regel **gibt es seit Sprint 1**:
+`board.UEBERGAENGE` erzwingt `open → in_progress → in_review → done`, und ein Sprung
+darüber hinweg ist seit SWR-118 ein Prüfbefund. Die bequeme Antwort wäre „haben wir
+schon" gewesen, und sie wäre belegbar richtig gewesen.
+
+Gemessen über die committete Historie, **320 Ticketdateien**:
+
+| | |
+|---|---|
+| geschlossene Aufgaben, die **nie** `in_progress` waren | **159** |
+| Median-Aufenthalt in `in_progress` bei den übrigen 141 | **22 Sekunden** |
+| Maximum über den gesamten Bestand | 30 Minuten |
+
+> **Der Status wurde gesetzt, weil die Prüfung ihn verlangt, und nicht, weil er jemandem
+> etwas sagt. Die Übergangsprüfung kennt die REIHENFOLGE der Zustände und nicht ihre
+> DAUER — der Mensch, der auf die Anzeige sieht, prüft genau umgekehrt.**
+
+⚠ Und daraus folgte unmittelbar der zweite Befund: Punkt 4 desselben Briefes („am
+Sprintende steht kein `in_progress` mehr") war **bereits erfüllt** — nicht durch
+Disziplin, sondern weil der Zustand 22 Sekunden lebt. *Eine Prüfung, die auf einem
+Bestand grün ist, in dem der geprüfte Zustand gar nicht vorkommt, prüft nichts.*
+
+**Regel:** Wenn ein Wunsch des Auftraggebers eine Regel beschreibt, die es schon gibt,
+wird vor dem Antworten **nachgemessen, ob sie wirkt** — nicht, ob sie dasteht. Und eine
+neue Prüfung auf einen Zustand wird erst gebaut, nachdem belegt ist, dass der Zustand im
+Bestand überhaupt vorkommt.

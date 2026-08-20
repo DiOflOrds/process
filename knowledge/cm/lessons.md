@@ -1385,3 +1385,34 @@ beim Sessionstart. Das ist die **Umgehung** und nicht die Reparatur — welche d
 Reparaturen richtig ist, hängt an einer Messung, die `platform/T-0021` als erste Frage
 stellt: ist `tmp_obj_*` eine Sperre oder nur Müll, den `verbuche` fälschlich als Fehlschlag
 liest? Die Meldungen kamen als `warning:` und der Exit-Code war trotzdem ungleich 0.
+
+## L-2026-08-20bi — Auf diesem Mount ist Umbenennen erlaubt und Löschen nicht; deshalb hinterlässt der LESENDE Git-Aufruf die Sperre, nicht der schreibende
+
+**Anlass (Sprint 21, `platform/T-0021` Frage 1).** Die erste DoD des Tickets war eine
+Messung: Ist `objects/**/tmp_obj_*` eine Sperre oder Müll? Gemessen an den eigenen
+Commits dieses Laufs:
+
+* `tmp_obj_*` → **Warnung, Exit 0.** Der Commit läuft durch. **Müll, keine Sperre.**
+* `.git/index.lock`, das nicht entfernt werden konnte → **Exit 128** beim nächsten
+  Aufruf, `fatal: Unable to create '…index.lock': File exists.`
+
+Und die eigentliche Ursache, gemessen über je einen Aufruf mit Vorab-Räumung:
+
+| Aufruf | Sperre bleibt liegen |
+|---|---|
+| `git status --porcelain` | **JA** |
+| `git add`, `git commit` | nein |
+| `git log`, `git diff`, `git ls-files` | nein |
+| `git reset --hard` | **JA** (Exit 128) |
+
+> **Git beendet einen SCHREIBENDEN Indexvorgang, indem es `index.lock` über `index`
+> umbenennt — Umbenennen ist erlaubt. Einen bloß LESENDEN Refresh beendet es, indem es
+> die Sperre löscht — Löschen ist nicht erlaubt. Der harmlose Lesevorgang hinterlässt
+> die Sperre, an der der nächste Aufruf stirbt.**
+
+⚠ Das erklärt, warum der Preflight das Problem nicht lösen kann: **er selbst ist ein
+lesender Aufruf** und hinterlässt die Sperre für den, dem er den Weg frei machen sollte.
+
+**Regel:** Auf einem Mount ohne `unlink`-Recht wird **vor** jedem Git-Aufruf geräumt und
+nicht danach — und die Vermutung über die Ursache eines Werkzeugfehlers wird gemessen,
+bevor sie repariert wird. Die Vermutung im Ticketkopf war drei Sprints lang die falsche.
