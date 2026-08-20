@@ -1,0 +1,178 @@
+# Besetzungs-Registry v1 (Rollenmodell v2, process/docs/03-rollenmodell-v2-orga-rework.md)
+#
+# Eine Besetzung = Instanz einer Rolle in genau einer Einheit (Team oder Projekt).
+# Ergänzt roles/registry.yaml (Bauplan/Routing) und teams/registry.yaml (Einheiten) —
+# ersetzt nichts. Beim Einsatz einer Instanz wird geladen:
+#   process/roles/<rolle>.md  +  <repo>/roles/<rolle>.md (falls vorhanden)
+#   + process/knowledge/<rolle>/  +  <repo>/docs/historie.md (falls vorhanden)
+#
+# Schema:
+#   besetzungen.<INSTANZ>:            Instanz-ID = <ROLLE>@<einheit>
+#     rolle:    Kürzel aus roles/registry.yaml (oder Domänen-Rolle aus teams/registry.yaml)
+#     einheit:  Team-Kürzel oder Projekt (Discovery-Name, z. B. p11)
+#     motor:    cowork | ollama | api | script | mensch     (Kap. 4.2 des Konzepts)
+#     modell:   nur bei ollama/api relevant (z. B. gemma3:27b)
+#     takt:     sprint | schnell
+#               sprint  = Session-/Sprint-Lauf. Seit pm/D006 ist jeder Session-Lauf ein
+#                         vollwertiger Sprint (Register-Takt 60 min) — ein eigener Wert
+#                         "session" wäre dieselbe Sache unter zweitem Namen (B033-Falle).
+#               schnell = Windows-Aufgabenplanung alle 15 min (F18, pm/D010), nur ollama.
+#     status:   aktiv | geplant | pausiert
+#     hinweis:  optional
+#
+# Regeln:
+#   - Ollama-Serialisierung: je Team-Node arbeitet nur EINE ollama-Besetzung gleichzeitig
+#     (ein geladenes Modell); Vergabe nacheinander nach Prio, dann Fälligkeit.
+#   - motor: api ist NICHT aktiviert — F19 entschieden mit NEIN (pm/D011, 0-€-Politik).
+#   - takt: schnell ist per F18 freigegeben (pm/D010): Windows-Aufgabenplanung alle 15 min,
+#     ollama-schnelltakt.cmd (Einrichtung: ollama-schnelltakt-einrichten.cmd, einmalig).
+#   - Max. EINE Instanz je Rolle und Repo — F20 entschieden (pm/D012); Mehrfach erst nach
+#     gemessenem Durchsatz-Engpass per Klasse-B-Entscheid.
+#   - Pflege: PM-Team (Klasse B, PM-Decision-Log); der Mensch jederzeit direkt.
+#
+# Gate-relevante Aufgaben-Typen laufen unabhängig vom Motor immer über die Ketten aus
+# roles/registry.yaml (guardrails routing.gate_relevant) — der Motor ist der Startpunkt,
+# nicht die Erlaubnis.
+
+besetzungen:
+  # --- PM-Team (Koordination aller PL-Instanzen, Konzept Kap. 4.4) ---
+  PL@pm:
+    rolle: PL
+    einheit: pm
+    motor: cowork
+    takt: sprint
+    status: aktiv
+    hinweis: Koordiniert alle PL-Instanzen (Session-Agenda, Prioritäten, Besetzungen)
+  QM@pm:
+    rolle: QM
+    einheit: pm
+    motor: cowork
+    takt: sprint
+    status: aktiv
+  COACH@pm:
+    rolle: COACH
+    einheit: pm
+    motor: cowork
+    takt: sprint
+    status: aktiv
+    hinweis: LeLe-Register über alle Teams; kuratiert Wissensbasen (Lernzyklus)
+
+  # --- ASPICE-Team (Profil entwicklung; arbeitet in platform + Produkt-Repos) ---
+  PL@aspice:
+    rolle: PL
+    einheit: platform
+    motor: cowork
+    takt: sprint
+    status: aktiv
+  RM@aspice:
+    rolle: RM
+    einheit: platform
+    motor: cowork
+    takt: sprint
+    status: aktiv
+  ARCH@aspice:
+    rolle: ARCH
+    einheit: platform
+    motor: cowork
+    takt: sprint
+    status: aktiv
+  DEV@aspice:
+    rolle: DEV
+    einheit: platform
+    motor: cowork
+    takt: sprint
+    status: aktiv
+  TEST@aspice:
+    rolle: TEST
+    einheit: platform
+    motor: cowork
+    takt: sprint
+    status: aktiv
+  QM@aspice:
+    rolle: QM
+    einheit: platform
+    motor: cowork
+    takt: sprint
+    status: aktiv
+  CM@aspice:
+    rolle: CM
+    einheit: platform
+    motor: cowork
+    takt: sprint
+    status: aktiv
+    hinweis: Nimmt REL wahr (Stufe 1, registry.yaml)
+  PROB@aspice:
+    rolle: PROB
+    einheit: platform
+    motor: ollama
+    modell: gemma3:27b
+    takt: schnell        # F18 (pm/D010): Aufgabenplanung alle 15 min, ollama-schnelltakt.cmd
+    status: aktiv
+    hinweis: Klassifikation/Trend lokal; Ursachenanalyse per Kette auf Claude
+  CHG@aspice:
+    rolle: CHG
+    einheit: platform
+    motor: cowork
+    takt: sprint
+    status: aktiv
+  COACH@aspice:
+    rolle: COACH
+    einheit: platform
+    motor: cowork
+    takt: sprint
+    status: aktiv
+
+  # --- Projekt-Teams (Profil wiederkehrend) ---
+  MAIL-RED@team-mail:
+    rolle: MAIL-RED
+    einheit: team-mail
+    motor: ollama
+    modell: gemma3:27b
+    takt: schnell        # F18 (pm/D010): Aufgabenplanung alle 15 min, ollama-schnelltakt.cmd
+    status: aktiv
+    hinweis: Datenklasse sensibel — lokal, nie API/Cloud
+  DASH-RED@team-dashboard:
+    rolle: DASH-RED
+    einheit: team-dashboard
+    motor: cowork
+    takt: sprint
+    status: aktiv
+  PROMPT-OPT@promt-team:
+    rolle: PROMPT-OPT
+    einheit: promt-team
+    motor: cowork
+    takt: sprint
+    status: aktiv
+    hinweis: Liest Transkripte (sensibel) — lokal; Vorschläge bleiben Vorschläge
+
+  # --- Aktive Entwicklungsprojekte ---
+  PL@p11:
+    rolle: PL
+    einheit: p11
+    motor: cowork
+    takt: sprint
+    status: aktiv
+  DEV@p11:
+    rolle: DEV
+    einheit: p11
+    motor: cowork
+    takt: sprint
+    status: aktiv
+  TEST@p11:
+    rolle: TEST
+    einheit: p11
+    motor: cowork
+    takt: sprint
+    status: aktiv
+  PL@p12:
+    rolle: PL
+    einheit: p12
+    motor: cowork
+    takt: sprint
+    status: aktiv
+  DEV@p12:
+    rolle: DEV
+    einheit: p12
+    motor: cowork
+    takt: sprint
+    status: aktiv

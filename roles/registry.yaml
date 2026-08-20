@@ -143,7 +143,24 @@ roles:
     besetzung: ki
     wahrgenommen_durch: CM    # Stufe 1
     script_tasks: [release-paket, katalog-eintrag]
-    status: planned           # Sprint 5
+    status: planned           # Sprint 5; Rollenkarte v2 liegt vor (pm/T-0072)
+  # --- Domänen-Rollen der Projekt-Teams (Genesis 2.0; Rollenkarten pm/T-0072) ---
+  MAIL-RED:
+    name: Mail-Redakteur
+    besetzung: ki
+    provider_chain: [ollama, session]   # Datenklasse sensibel: NIE Cloud-API
+    script_tasks: [mail-abholen]        # tools/mail_digest.py (readonly)
+    status: active            # Rollenkarte v2 (pm/T-0072); Team team-mail
+  DASH-RED:
+    name: Dashboard-Redakteur
+    besetzung: ki
+    provider_chain: [session]
+    status: active            # Rollenkarte v2 (pm/T-0072); Team team-dashboard
+  PROMPT-OPT:
+    name: Prompt- und Kontext-Optimierer
+    besetzung: ki
+    provider_chain: [session]           # liest Transkripte (sensibel): lokal/Session
+    status: active            # Rollenkarte v2 (pm/T-0072); Team promt-team; Meta-Rolle
   MENSCH:
     name: Auftraggeber / Eskalationsinstanz
     besetzung: mensch
