@@ -1653,3 +1653,66 @@ Die dort genannten fünf Rubriken (Testzahl, Testdateizahl, Matrixgröße, Lück
 Briefkastenstand) hätten ihn **nicht** gefunden: die Zahl gehörte zu keiner von ihnen. Und
 eine **Schablone** hätte ihn auch nicht gefunden — sie stand in Fließtext. Was ihn gefunden
 hat, war ein Skript über die Datei.
+
+---
+
+## L-2026-08-20ce — Eine Umgebungsmessung ohne ihren ORT ist keine Auskunft (Sprint 25)
+
+**Der Fall, dreimal in Folge und jedes Mal mit dem Wort „gemessen" davor.** Die Tickets
+`team-mail/T-0001` und `promt-team/T-0003` standen seit Sprint 22 auf *„wartet auf die
+Umgebung — erneut GEMESSEN, nicht angenommen"*: `MAIL_IMAP_*` = **0**, `which ollama` =
+leer, `localhost:11434` ohne Antwort.
+
+Alle Zahlen stimmen. Sie sind in der **Cowork-Sandbox** erhoben — einer Linux-VM, die den
+Projektordner sieht und sonst nichts vom Rechner des Auftraggebers. Dort **kann** keine
+dieser Zahlen anders ausfallen.
+
+> **Die Messung hat ihr Ergebnis erzeugt. Eine Umgebungsmessung gilt für die Maschine, auf
+> der sie lief — und in der Angabe stand nur die Zahl, nie der Ort.**
+
+⚠⚠ **Der Gegenbeweis lag im selben Commit.** `70d5aa1` (20.08. 16:01:05) hat den
+Tages-Digest vom 20.08. (26 Mails, lokales Ollama), 231 Zeilen IMAP-Rohdaten **und** den
+Absatz „Gesetzte `MAIL_IMAP_*`-Variablen: 0" in einem Zug verbucht. Eine Sekunde später
+ging derselbe Satz in den Sprintplan.
+
+**Regel 1 — jede Messung über die Umgebung nennt den Ort, an dem sie lief.** „0 Variablen"
+ist unvollständig; „0 Variablen in der Cowork-Sandbox" ist eine Auskunft.
+
+**Regel 2 — ein Wartegrund, der bei jeder Messung gleich bleibt, weil die Messung ihn
+erzeugt, ist kein Wartegrund**, sondern eine Eigenschaft des Messplatzes. Er gehört
+widerlegt, nicht fortgeschrieben.
+
+**Regel 3 — das Wort „gemessen" beendet keine Prüfung.** Es hat hier drei Sprints lang
+genau das getan, wogegen es eingeführt wurde.
+
+---
+
+## L-2026-08-20cg — Ein Wächter, der auf Unbehebbares blockiert, ist ein Schalter (Sprint 25)
+
+**Gemessen, nicht argumentiert.** Der Auto-Push-Wächter hat zuletzt am **17.08. 11:32:30**
+gepusht und seither **83-mal hintereinander** abgebrochen — drei Tage, nichts auf GitHub.
+Der Ollama-Schnelltakt, den der Auftraggeber selbst eingerichtet hatte, lief **6-mal** und
+brach **alle 12** Ticks ab. Grund in beiden Fällen: `preflight` gab Exit 1 zurück, solange
+irgendein Befund dastand — und vier Befunde waren Statusübergänge aus **abgeschlossenen**
+Sprints, die niemand mehr reparieren kann.
+
+> **Ein Wächter, der auf eine Tatsache blockiert, die niemand mehr ändern kann, ist kein
+> Wächter mehr, sondern ein Schalter, den jemand umgelegt und niemand bemerkt hat.**
+
+⚠⚠ **Die Regel dagegen stand im selben Modul und wurde dort zweimal angewandt** (Altbestand
+vor dem Stichtag; Uhrenprobe-Altbestand), an der dritten Stelle nicht. Das ist B033 — nur
+ist die vergessene Kopie diesmal **keine Codestelle, sondern eine Begründung**.
+
+**Regel 1 — ein Befund blockiert den, der etwas dagegen tun kann.** Wer die Tatsache nicht
+mehr ändern kann, bekommt sie **gemeldet**, nicht als Sperre.
+
+**Regel 2 — ein Dauerbefund ist ein Betriebsrisiko und kein Gewissen.** Zwei Logdateien
+haben drei Tage lang dasselbe geschrieben, und keine Session hat hineingesehen.
+
+**Regel 3 — wer eine Sperre lockert, baut ein PAAR.** Neben „der Altfall kommt durch"
+gehört „der frische kommt nicht durch". Ohne die zweite Hälfte besteht auch eine Fassung
+jeden Test, in der gar nichts mehr blockiert.
+
+**Regel 4 — Logdateien der Automatik gehören in den Startcheck einer Session.** Der Befund
+war drei Tage lang lesbar und wurde nur gefunden, weil ein Brief des Auftraggebers danach
+fragte.

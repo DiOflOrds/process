@@ -380,3 +380,30 @@ er stand da.
 **Regel 3 — die Zählung gehört an EINE Stelle, auch als Test.** Die neue Teststrecke prüft
 deshalb nur, dass `inbox` den Marker aus derselben Konstante schreibt; die Zählung der
 Kopien bleibt drüben. Sie hier zu wiederholen wäre dieselbe Dopplung eine Ebene höher.
+
+---
+
+## L-2026-08-20cf — Zum VIERTEN Lauf in Folge hat ein Werkzeug den frischen Entwurf verworfen (Sprint 25)
+
+| Lauf | Entwurf | Was ihn rot gemacht hat |
+|---|---|---|
+| Sprint 22 | Uhrenprobe rief git auf | `test_die_messung_ruft_KEIN_git_auf` (SWR-134, Sprint 16) |
+| Sprint 23 | SWR-159, dieselbe Stelle | dieselbe Zusicherung |
+| Sprint 24 | SWR-165 legte eine **zweite** Markerkonstante an | Zähltest aus Sprint 17 (`test_dr_verbuchung`) |
+| **Sprint 25** | `p12/T-0012` behauptete, es gehe **nicht** in die Inbox | **`board.py`** wies den DR ab (`optionen` fehlt); `inbox.py` legt **jeden** offenen DR vor |
+| **Sprint 25** | `scripts/organigramm.py` (Orga-Rework) ohne `konsole.sichere_ausgabe()` | `test_konsole.test_jeder_einstiegspunkt_sichert_seine_ausgabe` (platform/T-0009) |
+
+> **Zweimal in EINEM Lauf, und beide Male war der Entwurf plausibel: der eine beschrieb,
+> wie er behandelt werden wollte, der andere vergaß eine Regel, die für allen
+> Produktionscode gilt. Kein Mensch hat beides beim Lesen bemerkt.**
+
+**Regel 1 — eine Prüfung, die über den GESAMTEN Produktionscode läuft, erfasst auch den
+Code, den es beim Schreiben der Prüfung noch nicht gab.** Das ist ihr eigentlicher Wert und
+der Grund, sie nicht auf eine Liste umzustellen.
+
+**Regel 2 — ein Ticket beschreibt nicht, wie es behandelt wird.** Der Satz „das geht nicht
+in die Inbox" ist eine Behauptung über `inbox.py` und gehört dort nachgesehen — sonst ist
+er der Kommentar, der drei Sprints lang das Gegenteil des Codes sagt (SWR-162).
+
+**Regel 3 — Zähl- und Regeltests wirken pedantisch und haben in vier aufeinanderfolgenden
+Läufen je einen Fehler verhindert.** Das ist das Argument, sie zu behalten.

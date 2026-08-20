@@ -721,3 +721,30 @@ vermessen"*, sondern *„bemerken, wenn eine Rolle vermessbar wird"*.
 ohne Vertreter hält keine drei Sprints (SWR-125, gemessen an den 14 zurückgekehrten
 Kalenderdaten). Deshalb steht die Prüfung *„welche Rolle hat Läufe und kein Goldset?"* als
 DoD-Punkt und nicht als Absicht.
+
+---
+
+## L-2026-08-20ch — Bei der fünften Berührung war der Grund nie Kapazität (Sprint 25)
+
+`p12/T-0011` ist seit dem 17.08. **fünfmal** terminiert worden, jedes Mal mit „Kapazität",
+und jedes Mal stimmte das. Sprint 24 hat im Plan festgehalten, die Regel der vierten
+Berührung sei hier bereits **überzogen**.
+
+Beim Hinsehen in Sprint 25 war der eigentliche Grund ein anderer:
+
+> **In der Aufgabe steckte eine Entscheidung, die niemandem vorgelegt worden ist — und der
+> einzige, der sie treffen kann, ist der, der die Ansichten liest.**
+
+Was tatsächlich fällig war, war kleiner als der Bau und wurde in einem Lauf erledigt: die
+Prüfung, die den Folgepunkt vertritt, maß **wie viele** Rohtext-Ansichten es gibt und nicht
+**welche**. Ein Tausch — eine umgestellt, anderswo eine neue angelegt — wäre grün geblieben.
+
+**Regel 1 — ein Ticket, das dreimal am selben Punkt hängenbleibt, enthält eine ungestellte
+Frage.** Vor der vierten Terminierung wird gesucht, wer sie beantworten muss.
+
+**Regel 2 — beim Umschneiden fragen: was davon ist HEUTE fällig und braucht niemanden?**
+Hier war es die Zusicherung, nicht der Bau.
+
+**Regel 3 — „gemessen" und „benannt" sind zwei Zusicherungen.** Eine Zahl ohne ihren
+Gegenstand kann Stillstand nicht von Tausch unterscheiden (dieselbe Bewegung wie
+`L-2026-08-20by`, eine Ebene höher).
