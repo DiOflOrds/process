@@ -451,3 +451,30 @@ war; der Entscheidungsantrag darin war offen. Der Preflight hat es als Plan-Drif
 *Hätte die Zeile so gestanden, wäre der Zähler „auf dich wartende Entscheidungen" um eins
 zu niedrig gewesen — in genau dem Bericht, der ihn nennt.* **Dritte Werkzeug-Widerlegung
 in diesem Lauf.**
+
+---
+
+## L-2026-08-20cq — Eine Prüfung kann dadurch falsch werden, dass ein Ticket erledigt wird
+
+**Sprint 27.** Der Preflight meldete bei der Schlussverifikation einen Plan-Drift für
+`promt-team/T-0008` — Planzeile und Ticket sagten beide **Sprint 28**. Ausgelöst hat den
+Befund eine **andere** Zeile: `p9/T-0008`, in genau diesem Lauf geschlossen und deshalb
+nicht mehr in der Menge der offenen Tickets. Die Auflösung fiel auf die nackte `T-0008`
+zurück, und die war **unter den offenen** eindeutig.
+
+> **⚠⚠ Die Eindeutigkeitsprüfung lief über die offenen Tickets, die Planzeile gehörte
+> einem geschlossenen. Eine ID wird nicht dadurch eindeutig, dass die Restmenge klein
+> ist.**
+
+⚠ Das Schwestermodul `statusdrift` beantwortet dieselbe Frage über **alle** Tickets und ist
+nie in diese Falle gelaufen. Zwei Funktionen, eine Frage, zwei Grundmengen — und nur eine
+davon war richtig gewählt.
+
+**Regel.** Wer eine Kennung über eine **Teilmenge** auf Eindeutigkeit prüft, prüft nicht
+Eindeutigkeit, sondern Seltenheit. Die Grundmenge einer Namensauflösung ist der
+**Gesamtbestand**; die Teilmenge darf höchstens entscheiden, was danach gemeldet wird.
+
+⚠ Und die Beobachtung, die über den Einzelfall hinausgeht: **eine Prüfung kann durch das
+Schließen eines Tickets falsch werden.** Der Befund existierte vor diesem Lauf nicht und
+wäre ohne ihn nie entstanden. Wer Grundmengen aus dem Bestand bildet, ändert sie mit jeder
+Statusänderung mit.
