@@ -1774,3 +1774,12 @@ Aufruf.
 **Regel 4 — ein `return` im `finally` verschluckt eine fliegende Ausnahme.** Der naheliegende
 Bau hätte einen Absturz des Gateways wie ein ordentliches Ende aussehen lassen. Befund
 merken, **nach** dem `finally` werten.
+
+**Regel 5 (Nachtrag Sprint 26) — eine Gegenprobe, die die Funktion prüft und nicht ihren
+Aufrufer, misst die Hälfte, die man selbst geschrieben hat.** `SWR-169` wurde mit vier
+gefahrenen Gegenproben abgenommen — alle über die Auflösungsfunktion, keine über die
+Argumente, mit denen sie im Betrieb gerufen wird. Ein Lauf um 21:30, den niemand geplant
+hatte, zeigte: die Funktion bekommt Rolle und Einheit zur Laufzeit nie, weil das Startskript
+nur die Einheit übergibt. **Die Anforderung war grün, die Wirkung null.** Wer eine
+Auflösung baut, prüft mindestens einmal, **womit sie aufgerufen wird** — sonst ist der
+Nachweis ein Selbstgespräch. `platform/T-0033`.
