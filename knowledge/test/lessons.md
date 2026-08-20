@@ -444,3 +444,10 @@ gemacht, der das Verbot **erklärt**. Geprüft werden Anweisungen.
 `test_am_echten_bestand…` erwartete `MAIL-RED@mail`, aus dem Team-Kürzel abgeleitet. Die
 Instanz heißt `MAIL-RED@team-mail`. *Zwei Entwürfe, zwei Tests, beide Male hat das Werkzeug
 seinen eigenen Verfasser widerlegt — zum fünften Lauf in Folge.*
+
+**Regel 5 (Nachtrag Sprint 26) — ein beantworteter Brief ist keine getroffene
+Entscheidung.** Die Planzeile zu `p9/T-0008` sagte „erledigt", weil der Brief beantwortet
+war; der Entscheidungsantrag darin war offen. Der Preflight hat es als Plan-Drift gemeldet.
+*Hätte die Zeile so gestanden, wäre der Zähler „auf dich wartende Entscheidungen" um eins
+zu niedrig gewesen — in genau dem Bericht, der ihn nennt.* **Dritte Werkzeug-Widerlegung
+in diesem Lauf.**
