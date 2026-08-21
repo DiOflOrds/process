@@ -69,3 +69,48 @@ zwischen zwei Wegen** gebaut. Zwei Prüfungen gehören dazu:
 **heilt**, macht ihn unsichtbar. Ob das Anlegen in den Schreibweg gehört oder als Befund in
 den Preflight, ist offen (Frage 3 in `platform/T-0022`) — die Entscheidung „erst mal heilen,
 damit die Entscheidung nicht verloren geht" ist bewusst und nicht endgültig.
+
+---
+
+## L-2026-08-21cj — Eine Prüfung NACH der Auswahl ist kein Filter, sondern ein Veto gegen genau einen Kandidaten
+
+**Sprint 30, `SWR-196` / `platform/T-0048`.** Der Ollama-Schnelltakt lief zum ersten Mal
+bis zur Ticketauswahl durch (`SWR-191` hatte den falschen Preflight-Befund beseitigt, der
+65 Ticks vorher abgebrochen hatte) — und **2 von 2** Ticks endeten trotzdem ohne Ergebnis.
+`waehle_ticket()` gab `kandidaten[0]` zurück; die Besetzungsprüfung lief **danach** und
+brach ab. Ein Ticket der besetzten Rolle auf Platz 2 wäre nie angesehen worden.
+
+> **Der Unterschied ist nicht kosmetisch: ein Filter entscheidet über die MENGE, ein Veto
+> über ein EXEMPLAR. Wer die Prüfung ans Ende stellt, hat die Menge nie geprüft.**
+
+⚠ Die Gegenprobe muss den Unterschied treffen können: eine Zusicherung, die nur *„am Ende
+kommt nichts heraus"* misst, ist bei einem Veto **ebenfalls grün**. Nur ein Kandidat, der
+**hinter** einem untauglichen steht, trennt die beiden Bauformen.
+
+**Regel:** Ein Auswahlkriterium gehört in die Auswahl. Steht eine Prüfung hinter einer
+Sortierung, gehört zu ihr eine Zusicherung mit einem **hinteren** Treffer — sonst ist
+nicht belegt, dass sie mehr als den Sieger ansieht.
+
+---
+
+## L-2026-08-21cl — Eine wahre, aber zu enge Meldung über einen strukturellen Zustand ist der Zwilling des falschen Befunds
+
+**Sprint 30, `SWR-196`.** Die alte Meldung — *„Rolle CM hat in Einheit 'platform' keine
+Besetzung … T-0001 bleibt unangetastet"* — war **wahr**. Sie las sich aber wie ein
+Zufall: *dieses eine Ticket* passte nicht. Gemessen war ein Zustand: **0 von 8** offenen
+Tickets der Organisation trugen eine ollama-besetzte Rolle.
+
+> **Die enge Aussage lädt zum Wiederkommen in 15 Minuten ein — und der Takt hat das
+> 90-mal getan. Die weite sagt, dass Warten die falsche Handlung ist.**
+
+`L-2026-08-21ce` hat gelernt: *ein falscher Befund ist teurer als kein Befund*, weil er
+keine Handlung kennt, die ihn abstellt. Dies ist der Zwilling: eine **wahre** Meldung, die
+zu klein zugeschnitten ist, erneuert bei jedem Lauf die Hoffnung auf eine andere Antwort.
+**Sie trainiert dasselbe Wegsehen mit besserem Gewissen.**
+
+⚠ Der Zustand war seit dem 20.08. gemessen — die Zahl stand im **Docstring einer
+Funktion**, nicht in der Meldung, die der Betrieb 90-mal gedruckt hat.
+
+**Regel:** Eine Absage nennt den **Bestand** und nicht das Exemplar: wie viele geprüft
+wurden, welcher Art sie sind, und welche Handlung den Zustand abstellt. Eine gemessene
+Zahl über einen Betriebszustand gehört dorthin, wo der Betrieb sie liest.

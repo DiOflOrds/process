@@ -1846,3 +1846,35 @@ er räumt die Sperre, die der eigene gelingende Aufruf hinterlässt.
 **Regel.** Git-Aufrufe dieses Hauses laufen über `git_schreiben.ruf` — auch die seltenen
 (`reset`, `show`, `log`). Ein direkter `git`-Aufruf auf diesem Mount ist ein Aufruf, der
 beim nächsten Mal jemand anderen blockiert.
+
+---
+
+## L-2026-08-21ck — Der Mangel war ein Präfix des Nummernraums, keine Eigenschaft des Korpus
+
+**Sprint 30, `SWR-197` / `platform/T-0047`.** `T-0036` hatte **1003** praefixlose
+Entscheidungs-Zitate gezählt und selbst gewarnt, *„die 1003 sind nicht 1003 Probleme"*.
+Die ehrliche Untermenge ist gemessen: **743 (73 %)** stehen im besitzenden Repo, **65
+(6 %)** nennen eine nur einmal vergebene ID, **214 (21 %)** sind echt mehrdeutig — und
+**alle 214 nennen eine von vierzehn IDs (`D000`–`D013`)**. Ab `D014` ist jede ID
+organisationsweit einmal vergeben.
+
+> **Damit ist nicht der Korpus krank, sondern ein Anfangsstück des Nummernraums. Gebaut
+> wird an der Vergabe: eine Sperrklinke hält die mehrdeutige Menge bei vierzehn. Der
+> einzige Weg, auf dem der Schaden wächst, ist ein Repo, das seine Entscheidungen wieder
+> bei `D001` zu zählen beginnt — und eine Zeile ist billig zu fangen, zweihundert
+> Zitatstellen sind es nicht.**
+
+⚠⚠ Das entscheidende Argument gegen den ursprünglich geplanten Zuschnitt ist **an dieser
+Session selbst gemessen**: während des Baus stiegen die Zahlen von 1023/214 auf 1030/216 —
+allein dadurch, dass Ticket und Anforderung **über** das Problem schrieben und dabei IDs
+nannten. **Eine Prüfung auf die Zitatzahl hätte jeden Bericht bestraft, der den Befund
+erklärt: ein Dauerbefund, den das Erklären selbst füttert.**
+
+⚠ Ein Grenzfall, den erst eine Zusicherung fand: `D001` ist mehrfach vergeben, aber ein
+`D001` **in** `pm` ist trotzdem nicht mehrdeutig — die naheliegende Lesart ist die eigene.
+**Eine ID ist nicht mehrdeutig, weil sie doppelt vergeben ist, sondern weil sie an ihrer
+Fundstelle keine naheliegende Lesart hat.**
+
+**Regel:** Vor einem Korpus-Umbau wird die schädliche Untermenge gemessen und nach ihrer
+**Ursache** gruppiert, nicht nach ihrer Fundstelle. Trägt die Ursache eine endliche Menge
+(hier: 14 IDs), sichert man diese Menge — und niemals den Korpus, der über sie berichtet.
