@@ -1,6 +1,124 @@
 
 ---
 
+## L-2026-08-21dp — Eine Verschiebung, die nur im Bericht steht, zündet erst am nächsten `--beginne`
+
+*Anlass: Folgelauf 2026-08-21 (kein Sprint 36, Shell ausgefallen). Gefunden beim Lesen,
+nicht von einer Prüfung.*
+
+Der Abschluss von Sprint 35 hat **neun Tickets in Prosa nach Sprint 36 verschoben** und
+dazu „Grund je im Ticket" zugesichert. Am Bestand nachgezählt: **kein einziges Ticket
+trägt die Verschiebung** — weder im Feld `geplant_sprint` noch als Notiz. Alle neun stehen
+auf **35**, dazu `platform/T-0060` (`in_review`): **zehn**.
+
+**Warum das monatelang still bleiben kann:** `sprint_vergangen` (SWR-112) vergleicht
+`geplant_sprint` gegen `sprint_register.aktuell()` — die Nummer des **zuletzt begonnenen**
+Sprints. Solange 35 der laufende ist, ist `35 < 35` falsch, und die Prüfung schweigt
+vollkommen zu Recht.
+
+> **Regel: Eine Verschiebung ist erst verschoben, wenn das TICKET sie trägt. Bericht und
+> Plan sind Leser, nicht Quelle. Und die Nachziehung gehört VOR `--beende`/`--beginne`,
+> nicht hinter die Planung des Folgesprints — sonst schlägt der ganze Rückstand in dem
+> Moment auf, in dem der neue Sprint entsteht.**
+
+⚠ **Präzise gezählt (Korrektur einer eigenen Formulierung dieses Laufs):** der Preflight
+meldet **einen** Befund, der zehn Tickets namentlich nennt (`befunde += 1`), nicht zehn
+Befunde. Für den Exit-Code und damit für den Schnelltakt ist das gleichwertig; für jede
+Zählung ist es das nicht.
+
+⚠ **Und die Auslösung braucht zwei Schritte:** solange die letzte Registerzeile kein
+`ende` trägt, verweigert `beginne()` nach SWR-136 und nennt den laufenden Sprint. Der
+Befund entsteht also nach `--beende` **und** `--beginne` — genau in der Reihenfolge, die
+die „Erste Aufgabe des Folgelaufs" bis zu dieser Lehre vorschrieb.
+
+---
+
+## L-2026-08-21dq — Ohne `git` ist die Ticketdatei tabu, der Rest des Hauses frei
+
+*Anlass: derselbe Lauf. Die Lehre ist die scharfe Grenze zu `L-2026-08-21db`.*
+
+`L-2026-08-21db` sagt, bei Werkzeugausfall sei die nützlichste Arbeit die Teilmenge der
+Blockade, die das Werkzeug ohnehin nicht gelöst hätte. Sie sagt **was**, nicht **wo** —
+und ohne das **Wo** ist sie eine Haltung statt einer Regel.
+
+Das Wo steht nachlesbar in `preflight.ist_verifikationsquelle`: drei Sorten Datei liest
+eine Verifikation — `BOARD.md`, `*/requirements/**/software-requirements.md` und **jede**
+Datei unter `*/tickets/`. Eine geänderte, **nicht committete** Verifikationsquelle **ist**
+ein Preflight-Befund.
+
+> **Regel: In einem Lauf ohne `git` wird keine Verifikationsquelle angefasst. Zehn Tickets
+> richtigzustellen hieße, einen neuen Blocker anzulegen, um einen künftigen zu vermeiden.
+> Erzähl-, Plan- und Lehrdateien sind frei — und dort gehört die Arbeit dann hin.**
+
+⚠ **Zwei Einschränkungen, die das Gegenlesen gefunden hat und die die Regel nicht
+aufheben, aber schärfen:**
+
+1. `pm/management/sprint-aktuell.md` ist zwar keine Verifikationsquelle, wird aber von
+   `plandrift`, `statusdrift` und `plannachlauf` **gelesen** — und
+   `test_berichtskennzahlen` vergleicht ihren Kennzahlenblock gegen `kennzahlen.miss()`.
+   **Wer sie ohne Shell anfasst, lässt Plantabelle und Kennzahlenblock in Ruhe.**
+   `plan_tabelle` schneidet ausschließlich die **erste** Tabelle nach der
+   Plan-Überschrift; jede weitere Tabelle der Datei ist für den Plan unsichtbar.
+2. Dateien in der **Arbeitswurzel** (`PROJEKTSTATUS-UPDATE.md`, `PUSH-ANFORDERUNG.txt`)
+   sind aus einem **anderen** Grund unbedenklich: die Wurzel ist kein Git-Repo, sie
+   erscheinen in keinem `git status`. Die richtige Antwort aus dem falschen Grund ist
+   keine Messung.
+
+⚠ **Nebenbefund über das Gegenlesen selbst:** die unabhängige Prüfung meldete diese ID als
+„bereits vergeben" — sie las die Dateien, die **derselbe Lauf gerade geschrieben hatte**.
+
+> **Eine Prüfung, die gegen die Arbeitskopie läuft, kann „vergeben" nicht von „soeben von
+> dir vergeben" unterscheiden. Sie prüft den Stand, nicht die Herkunft — dieselbe Familie
+> wie „Anwesenheit ist nicht Verwendung".**
+
+⚠ Verbleib: `process/roles/pl.md` (Punkte 11–12), `pm/docs/historie.md`.
+
+---
+
+## L-2026-08-21dj — Ein Sprint-Abschluss kann den Nachweis blockieren, den derselbe Sprint für unmöglich erklärt
+
+*Anlass: `platform/T-0060`, Sprint 35 (2026-08-21).*
+
+Vier Sprints lang trug die Frage „warum läuft Ollama nie?" vier verschiedene Antworten.
+Sprint 34 schloss, der Nachweis sei „aus dieser Sandbox nicht führbar", und belegte das
+sauber: `localhost:11434` tot, `host.docker.internal` von der Allowlist gesperrt.
+
+**Beides stimmt und beides misst den falschen Rechner.** Der Takt läuft per
+`ollama-schnelltakt.cmd` auf dem Rechner des Auftraggebers — **87 Läufe, 138 Abbrüche,
+0 Erfolge** —, und sein Protokoll lag unangetastet im Arbeitsordner.
+
+Alle 138 Abbrüche tragen wörtlich dieselbe Zeile: *„Preflight hat Befunde"*. Die zwei
+Befunde hat **Sprint 34 selbst erzeugt** — vier Planzeilen mit der alten Sprintnummer und
+neun Tickets ohne Sprint aus der eigenen Projektgründung.
+
+> **Regel: Bevor eine Diagnose „nicht führbar" lautet, wird gemessen, WO der Gegenstand
+> läuft. Und ein Preflight-Befund am Sprintende ist keine Fußnote — er ist eine Sperre für
+> jeden Automatiklauf bis zum nächsten Sprint.**
+
+Der Preis war nicht die falsche Zahl, sondern die Richtung: eine Diagnose über die eigene
+Umgebung erzeugt Arbeit an der eigenen Umgebung, und der Gegenstand bleibt unberührt.
+
+---
+
+## L-2026-08-21dk — Die vierte Berührung zählt Terminierungen, nicht Verschiebungen
+
+*Anlass: Sprint-Planung 35 (2026-08-21).*
+
+Der Plan von Sprint 34 schrieb: *„Alle sind zweite Verschiebungen; die Regel der vierten
+Berührung ist nicht berührt."* Nachgezählt tragen sechs Tickets in Sprint 35 ihre
+**dritte Terminierung** — `platform/T-0055`, `T-0060`, `pm/T-0080`, `T-0082`,
+`team-dashboard/T-0004`, `team-mail/T-0006`.
+
+`pl.md` Regel 2 spricht von *„zum vierten Mal terminiert"*. Verschiebungen und
+Terminierungen sind verschiedene Zählungen: ein Ticket, das im Sprint seiner Entstehung
+terminiert wird, hat eine Terminierung mehr als Verschiebungen.
+
+> **Regel: Die Zählung der vierten Berührung steht VOR der Arbeit im Plan, nicht danach im
+> Abschluss — und sie zählt Terminierungen. Wer die bequemere der beiden Zählungen nimmt,
+> verschiebt die Entscheidung um genau einen Sprint.**
+
+---
+
 ## L-2026-08-17s — Eine Messung vor der Änderung misst den Ausgangszustand
 
 *Anlass: `platform/T-0011`, Sprint 10 (2026-08-17).*

@@ -1,4 +1,71 @@
 
+## L-2026-08-21dl — Ein Negativbeispiel, dem der Teil fehlt, an dem die Prüfung greift, prüft nichts
+
+**Anlass (Sprint 35, `SWR-213`, Befund 4 des Gegenlesens).** Die Erweiterung von
+`DATUM_IM_KOPF` bekam eine Gegenprobe: „die Klassifikation `_ist_beitragskopf` wandert
+NICHT". Sie nannte drei Negativbeispiele aus dem echten Bestand — und **alle drei hatten
+keine Klammer am Ende**. `KLAMMER_AM_ENDE` scheitert dann vorher, und der Ausdruck, den
+die Zusicherung bewachen soll, **wird nie ausgeführt**.
+
+Gemessen: `DATUM_IM_KOPF` um die deutsche Datumsform erweitert → Bestand springt von 74
+auf **75** Beiträge, Testlauf **11/11 grün**.
+
+> **Regel: Ein Negativbeispiel muss den Pfad bis zu der Stelle durchlaufen, die es prüft.
+> Beispiele aus dem echten Bestand sind richtig gewählt und trotzdem am falschen Ende
+> abgeschnitten, wenn eine frühere Bedingung sie vorher abfängt.**
+
+---
+
+## L-2026-08-21dm — Ein Feld, das den Wert seines Vorgängers erbt, behauptet einen Versuch, den es nicht gab
+
+**Anlass (Sprint 35, `SWR-212`, Befund 2 des Gegenlesens).** Der Gateway-Kern merkte sich
+das Modell des letzten Executors mit `getattr(e, "modell", "") or letztes_modell`. Bei der
+Kette `[ollama, claude]` schrieb die Run-Registry daraufhin
+`provider='claude' modell='gemma3:27b'` — **claude hat gemma3 nie angefasst.**
+
+Das `or` sollte „nimm den besseren Wert" heißen und heißt in Wahrheit „erbe vom
+Vorgänger". Bei Diagnosedaten ist das keine Bequemlichkeit, sondern eine Falschaussage —
+in einer Anforderung, die genau gegen Falschaussagen in diesem Feld gebaut wurde.
+
+> **Regel: In einem Protokolleintrag gehört jedes Feld dem Ereignis, das es beschreibt.
+> Ein `or` über die Schleifeniteration hinweg ist eine Vererbung, und leer ist besser als
+> geerbt.**
+
+---
+
+## L-2026-08-21dn — Wer eine Zerlegung teilt, prüfe im selben Bau, ob er dabei eine andere kopiert hat
+
+**Anlass (Sprint 35, `SWR-213`, Befund 8 des Gegenlesens).** Die DoD verlangte
+ausdrücklich, die Brief-Zerlegung zu **teilen** statt zu kopieren. Sie wurde geteilt. Im
+selben Bau entstand **zwanzig Zeilen tiefer** eine neue Kopie: die Zeitregel aus
+`SWR-206` stand danach in zwei Funktionen derselben Datei, samt doppelt ausformulierter
+Begründung.
+
+Der vorhandene Quelltext-Wächter kannte nur die **ältere** Kopie: eine Mutation an der
+jüngeren machte 1 Test rot statt 2.
+
+> **Regel: Eine Regel, deren Wächter nur eine ihrer Kopien kennt, ist zur Hälfte
+> unbewacht — und die unbewachte Hälfte ist immer die jüngere. Wer eine Doppelung
+> auflöst, zählt am Ende des Baus nach, ob er eine neue angelegt hat.**
+
+---
+
+## L-2026-08-21do — Erweitert man einen Ausdruck, kann nicht nur die Klassifikation wandern, sondern auch der WERT
+
+**Anlass (Sprint 35, `SWR-213`, Befund 17 des Gegenlesens).** `DATUM_IM_KOPF` musste die
+volle ISO-Zeit erfassen, damit eine Kennzahl die Uhrzeit eines Beitrags lesen kann. Die
+Zusicherung dagegen hielt fest, dass die **Klassifikation** sich nicht verschiebt — und
+das tat sie nicht.
+
+Verschoben hat sich der **Rückgabewert**: `beitraege()[].zeit` liefert seither
+`2026-08-21T10:26:10+00:00` statt `2026-08-21`, und dieser Wert ging **unformatiert** in
+die Briefansicht des Auftraggebers.
+
+> **Regel: Beim Erweitern eines Ausdrucks werden BEIDE Wirkungen gesichert — was er
+> auswählt und was er zurückgibt. Die zweite ist die, die der Mensch sieht.**
+
+---
+
 ## L-2026-08-17bb — Eine gespeicherte Auswahl altert gegen einen wachsenden Bestand
 
 **Anlass (Sprint 19, `p11/T-0011`/SWR-151).** Die Dashboard-Konfiguration speichert, welche
