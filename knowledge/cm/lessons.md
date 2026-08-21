@@ -1983,3 +1983,28 @@ Bedeutungen — die B033-Familie mit einem *Gründungsweg* als vergessener Kopie
 
 **Verbleib:** Rollenkarte CM, Vertreter
 `platform/tests/test_datenklasse_platziert.py` (7 Zusicherungen, `SWR-208`).
+
+
+## L-2026-08-21df
+
+**Regel:** Eine erteilte Abnahme ist erst vollzogen, wenn ihr **Artefakt** existiert.
+Entscheidung und Baseline sind zwei Schritte — und der zweite braucht eine Prüfung, sonst
+merkt ihn niemand.
+
+`p12/D003` hat am 17.08. um 21:57 die Baseline `p12-v1.0` abgenommen (Option A auf
+`p12/T-0010`, *„DR/G4: Baseline p12-v1.0 abnehmen"*). Der Tag wurde nie gesetzt.
+
+> **⚠⚠ Vier Tage lang war ein Projekt abgenommen, ohne dass es einen abgenommenen Stand
+> gab. Der Steckbrief sagte „abgeschlossen", die Entscheidung stand im Log — und der
+> Gegenstand, auf den sich beide beriefen, existierte nicht.**
+
+⚠ Ein nachträglich gesetzter Tag gehört auf den **Abschluss-Commit des damaligen Laufs**
+und nicht auf HEAD: ein Tag auf heute behauptet, der heutige Stand sei abgenommen worden.
+
+⚠ **Und die Ursachensuche selbst trägt eine Lehre:** das Ticket bot zwei plausible
+Ursachen an (Ollama-Guardrail, stehender Push). Beide waren falsch, und beide klangen
+richtig. **Eine Ursache, die man ausschließen kann, ist mehr wert als zwei, die man
+plausibel findet.**
+
+**Verbleib:** Rollenkarte CM, Vertreter
+`platform/tests/test_baseline_folgt_der_abnahme.py` (5 Zusicherungen, `SWR-211`).
