@@ -96,24 +96,51 @@ Verifikationsquelle bleibe als Preflight-Befund liegen. Am **selben Tag** hat de
 genau der Zeile, die ihr den Grund nimmt. Beide Absätze stammen aus **einem** Lauf,
 aus **einer** Datei, von **einem** Autor.
 
+⚠⚠ **Und auch diese Berichtigung war beim ersten Schreiben zu bequem — gefunden im
+selben Lauf, im selben Protokoll, das sie zitiert.** „Der Verbucher macht die
+Ticketdatei unbedenklich" stimmt nicht; er macht sie **vorübergehend** bedenklich.
+Gemessen an den vier Tickets, die dieser Lauf angelegt hat:
+
+| Wirkung | Beleg |
+|---|---|
+| Ollama-Tick **abgebrochen**, solange sie unverbucht lagen | `ollama-schnelltakt.log`: `UNVERBUCHT tickets/T-0068.md … T-0070.md` → *„PREFLIGHT: 1 Befund(e)"* → *„Tick abgebrochen"* |
+| Eine Minute später **geheilt** | `abschluss-20260821-215500.log:4` — `platform: Nachverbuchung...` |
+| `test_berichtskennzahlen` **neu rot** | ebd. `:10025` — `[('tickets_offen', 34, 38), ('wartet_auf_mensch', 0, 1)]` |
+
 > **Regel (ersetzt die obige): Eine Schutzregel nennt die Bedingung, unter der sie gilt,
 > und die Messung, mit der man sie prüft. „Ohne `git` tabu" nennt keine — deshalb hat sie
 > zwei Läufe lang gegolten, obwohl sie schon nicht mehr galt. Richtig ist: eine
 > Verifikationsquelle darf ein Lauf ohne `git` anfassen, SOLANGE ein Verbucher hinter ihm
-> läuft; wer sich darauf beruft, misst ihn (`git status` bzw. das Protokoll des letzten
-> Abschlusslaufs) und schreibt die Messung dazu.**
+> läuft — aber das Fenster zwischen Schreiben und Verbuchen ist ein AUSGEFALLENER TICK
+> und kein Nichts. Wer es öffnet, misst den Verbucher (`abschluss-logs/review-*.md`),
+> nennt den Preis und schreibt die Kennzahl nach, die sein Ticket veraltet.**
 
 **Zweite Hälfte — „Erzähl-, Plan- und Lehrdateien sind frei".** Diese Hälfte war die
 Erlaubnis, auf die sich zwei Läufe berufen haben. Sie ist teurer als die erste:
 
-> **⚠⚠ Die zwei Läufe, die sich das Bauen versagt haben, um nichts rot zu machen, haben
-> mit dem Einzigen, was sie sich erlaubt haben, DREI Zusicherungen rot gemacht.** Acht
-> neue Lehren (`L-2026-08-21dj`…`dq`, diese eingeschlossen) tragen eine ausformulierte
-> `**Regel:**` und werden von keiner Zusicherung zitiert; `test_keine_NEUE_lehre_ohne_vertreter`,
-> `test_erweitern_und_weglassen_sind_dasselbe_ergebnis` und
-> `test_ohne_vertreter_ist_wieder_genau_die_basis` sind genau daran rot
-> (Host-Lauf 21:14). **Keiner der beiden Läufe konnte es merken — Merken hätte die Shell
-> gebraucht, die ihnen fehlte.**
+**Acht** Lehren (`L-2026-08-21dj`…`dq`, diese eingeschlossen) tragen eine ausformulierte
+`**Regel:**` und werden von **keiner** Zusicherung zitiert.
+`test_keine_NEUE_lehre_ohne_vertreter`, `test_erweitern_und_weglassen_sind_dasselbe_ergebnis`
+und `test_ohne_vertreter_ist_wieder_genau_die_basis` sind genau daran rot (Host-Lauf
+21:14). Behandlung: `platform/T-0070`.
+
+⚠⚠ **Die Erstfassung dieses Nachtrags hat daraus eine falsche Geschichte gemacht, und
+das Gegenlesen hat sie im selben Lauf zerlegt.** Sie schrieb: *„Die zwei Läufe, die sich
+das Bauen versagt haben, haben mit dem Einzigen, was sie sich erlaubt haben, drei
+Zusicherungen rot gemacht."* Nachgezählt: **sechs der acht stammen aus Sprint 35** — einem
+Lauf **mit** Shell, der gebaut hat (`SWR-213`). Nur `dp` und `dq` stammen aus Läufen ohne
+Shell. **Die drei Tests waren am Ende von Sprint 35 bereits rot**; die zwei Läufe haben
+den Befund um zwei Namen **vergrößert**, nicht erzeugt.
+
+> **Regel: Wer beim Aufschreiben eines Befunds die Schuldigen zusammenfasst, hat aufgehört
+> zu zählen. „Alle acht" war eine bessere Geschichte als „sechs und zwei" — und die
+> bessere Geschichte hätte die eigentliche Ursache verdeckt: nicht der Ausfall der Shell,
+> sondern ein Sprint MIT Shell, der 1551 Tests als Verifikation führte und 1136 davon
+> nicht ausführte.**
+
+⚠ Was von der zweiten Hälfte trotzdem bleibt: die zwei Läufe konnten ihren eigenen
+Beitrag **nicht merken** — Merken hätte die Prüfstrecke gebraucht. Das ist der Kern und
+er trägt auch ohne die Übertreibung.
 
 > **Regel: „Frei" heißt nicht „folgenlos". Ein Lauf, der eine Datei anfasst, deren Wirkung
 > er nicht messen kann, hat nicht vorsichtig gehandelt, sondern blind — und die Blindheit
