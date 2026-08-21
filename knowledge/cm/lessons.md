@@ -1878,3 +1878,29 @@ Fundstelle keine naheliegende Lesart hat.**
 **Regel:** Vor einem Korpus-Umbau wird die schädliche Untermenge gemessen und nach ihrer
 **Ursache** gruppiert, nicht nach ihrer Fundstelle. Trägt die Ursache eine endliche Menge
 (hier: 14 IDs), sichert man diese Menge — und niemals den Korpus, der über sie berichtet.
+
+## L-2026-08-21co
+
+**Die Frage hat ihre eigene Antwort überlebt: sie wurde dreimal weitergereicht, während
+zwei andere Tickets sie nebenbei beantwortet haben — und niemand hat die Weiterreichung
+daraufhin geprüft, weil eine Verschiebung nur ihren Grund braucht und nicht ihre
+Gültigkeit.**
+
+`platform/T-0049` fragte seit Sprint 27 nach einer Nummernvergabe für den „zweiten
+Schreibweg" ins Entscheidungslog. Bei der vierten Berührung ergab die Messung: es gibt
+**keine zweite Funktion** — der zweite Weg ist die **Hand**, und er ist mit 103 von 158
+Zeilen (65 %) die **Mehrheit**. Der Schaden, den eine Vergabe verhindert hätte, war
+längst von `SWR-195` (Sprint 29) und `SWR-197` (Sprint 30) gefangen, also von Tickets,
+die **nach** der Frage entstanden sind.
+
+⚠ Nebenbefund derselben Messung: die Herkunftsspalte des Logs ist die Aussage dessen, der
+schreibt, über sich selbst — eine Session hat eine Inbox-Entscheidung zwei Minuten später
+nachgeschrieben und dabei weiter *„via Inbox"* behauptet. **Eine Provenienz, die der
+Beschriebene selbst einträgt, trennt nichts.**
+
+**Regel:** Bei jeder Terminierung eines weitergereichten Tickets wird nicht nur der Grund
+der Verschiebung geprüft, sondern die **Gültigkeit der Frage**: Was ist seit der letzten
+Berührung gebaut worden, das sie beantwortet oder erübrigt?
+
+*Verbleib: Rollenkarte CM · `platform/tests/test_entscheidungslog_schreibwege.py` ·
+Historie `platform`.*

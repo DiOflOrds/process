@@ -114,3 +114,52 @@ Funktion**, nicht in der Meldung, die der Betrieb 90-mal gedruckt hat.
 **Regel:** Eine Absage nennt den **Bestand** und nicht das Exemplar: wie viele geprüft
 wurden, welcher Art sie sind, und welche Handlung den Zustand abstellt. Eine gemessene
 Zahl über einen Betriebszustand gehört dorthin, wo der Betrieb sie liest.
+
+## L-2026-08-21cm
+
+**Ein Stellvertreter, der lange mit der Sache zusammenfiel, wird zum Loch in dem Moment,
+in dem die Sache einen eigenen Namen bekommt.**
+
+`sprint_vergangen` nahm `decision-request` aus, mit wörtlich der Begründung, die
+`blocked` braucht: *„das Team kann ihn nicht bewegen, und eine Sprintnummer daneben wäre
+eine Zusage, die das Team nicht halten kann."* Die Ausnahme saß an einem **Typ**, weil
+`decision-request` bis Sprint 29 der einzige Weg war, „das Team kann hier nicht handeln"
+auszudrücken. Seit `SWR-193` gibt es `blocked` mit `blocked_by` — **einen Sprint alt** —,
+und damit war die Ausnahme älter als der Zustand, den sie meinen müsste.
+
+Die Folge war eine **Zange**: für ein gesperrtes Ticket gab es keinen zulässigen
+Terminwert. Alter Sprint → Befund, leer → Befund, Zukunft → still, aber eine Zusage über
+fremdes Handeln.
+
+> **Eine Lage, in der die bequeme Handlung die einzige ist, die grün macht, ist die
+> Bauart, gegen die `SWR-166` gebaut wurde.**
+
+**Regel:** Wenn ein Zustand einen eigenen Namen bekommt, sind alle Ausnahmen zu prüfen,
+die bisher an seinem Stellvertreter hingen — und die Ausnahme bindet sich an das
+**Merkmal**, das die Sache trägt (hier: den `blocked_by`-Verweis), nicht an das Wort, das
+sie behauptet.
+
+*Verbleib: Rollenkarte DEV · `platform/tests/test_gesperrt_terminzange.py` ·
+`platform/tests/test_termin_zange_blocked.py` · Historie `platform`.*
+
+## L-2026-08-21cp
+
+**Eine Zerlegefunktion, die an ihrem eigenen Ergebnis scheitert, ist nicht idempotent —
+und Idempotenz ist genau das, was ein Aufrufer erwartet, der nicht weiß, ob vor ihm schon
+jemand zerlegt hat.**
+
+`board.parse_liste` kannte nur Text aus dem Frontmatter und brach mit `AttributeError`,
+sobald ein Aufrufer `blocked_by` als echte Liste übergab. Gefunden hat es **eine
+Zusicherung aus dem Vorsprint**, die ihre Vorrichtung so baut, wie ein Mensch die Angabe
+denkt — nicht eine der neuen Zusicherungen dieses Laufs.
+
+> **Der Fund gehört zum Ertrag der Umkehr-Bauform: eine alte Zusicherung, die einen
+> Mangel BENENNT, wird beim Beheben rot und prüft den Fix an einer Vorrichtung, die der
+> Autor des Fixes nicht geschrieben hat.**
+
+**Regel:** Eine Funktion, die eine Angabe in eine Form bringt, akzeptiert diese Form auch
+als Eingabe. Wer nur den Weg testet, auf dem die Daten heute ankommen, prüft die eigene
+Gewohnheit.
+
+*Verbleib: Rollenkarte DEV · `platform/scripts/board.py` (`parse_liste`) ·
+`platform/tests/test_termin_zange_blocked.py` · Historie `platform`.*
