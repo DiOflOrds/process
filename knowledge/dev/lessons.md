@@ -329,3 +329,30 @@ lösen **Code**-Pfade auf und sind zu Recht relativ zum eigenen Quelltext.
 
 **Verbleib:** Rollenkarte DEV, Vertreter
 `platform/tests/test_org_wurzel_vom_aufrufer.py` (9 Zusicherungen, `SWR-207`).
+
+
+## L-2026-08-21de
+
+**Regel:** Wenn eine Vorlage nach einer Zahl fragt, die die Quelle nicht herstellt, wird
+**keine erfunden**. Die Anzeige sagt „keine Daten", nennt den **Grund** und das **Ticket**,
+unter dem die Zahl entstehen kann.
+
+Die Design-Vorlage des Auftraggebers für das Post-Widget verlangt vier Kacheln
+(`IN`, `Reaktion`, `Rechnung`, `SPAM`); `team-mail` liefert drei — eine SPAM-Rubrik gibt es
+im Digest nicht.
+
+> **⚠⚠ `0` anzuzeigen hieße „kein Spam" behaupten. Niemand sieht einer `0` an, dass sie
+> erfunden ist — das ist die Verwechslung von „echte Null" und „nicht erhoben" aus
+> `SWR-108`, diesmal von einer Vorlage erzwungen statt von einem Bau.**
+
+⚠ Der zweite Teil der Regel ist der wichtigere: ein Dauerbefund **ohne** Weg nach vorn ist
+die Bauform, die `SWR-166` 83 abgebrochene Läufe gekostet hat. Die Kachel nennt deshalb
+`team-mail/T-0007` im Klartext.
+
+⚠ Und ein scheinbarer Widerspruch zwischen Wunsch und Schranke war keiner: die Vorlage
+zeigt den Wortlaut in der Kachel, `SWR-160` hat ihn hinter das PIN-Gate gestellt.
+Aufgelöst hat es der Auftraggeber selbst — *„wenn man auf reaktion klickt"*. **Ein Klick
+ist genau die Stelle, an der ein Lesegate hingehört.**
+
+**Verbleib:** Rollenkarte DEV, Vertreter `platform/tests/test_widget_raster.py` (14
+Zusicherungen) und `platform/tests/js/widget_raster.test.cjs` (7), `SWR-210`.
