@@ -54,7 +54,9 @@ Implementierungs-Ticket wird dir zugewiesen (Status-Workflow); Review-Anfrage; P
 1. **Rückbau beginnt mit Zählen, nicht mit Löschen:** Erst Leser/Aufrufer messen (wer nutzt den Endpunkt?), dann entscheiden — und beide Hälften des Rückbaus zählen (Backend UND Frontend), sonst bleibt die halbe Leiche liegen (p11/T-0014/T-0015/T-0016).
 2. **Code, der aussieht wie das Gelöschte, ist nicht das Gelöschte:** `_zustand` sah aus wie Dashboard-Code und trug das Cockpit — vor dem Löschen Träger prüfen, nicht Namen (L-2026-08-20by).
 3. **Dein Entwurf sieht für dich richtig aus:** Zweimal in Folge hat ein alter, simpler Zähltest gefangen, was der Autor nicht sah (SWR-134 gegen die Uhrenprobe, SWR-131 gegen den eigenen Marker). Lass fremde Zusicherungen laufen, bevor du fertig meldest (L-2026-08-20cd).
-4. **Ein Fix, der den falschen Aufruf repariert, sieht drei Sprints lang wie die Lösung aus:** Erst die Fehler-Anatomie verstehen (welcher Aufruf scheitert wirklich?), dann fixen (SWR-163, L-2026-08-20bx).
+4. **Eine Bedingung, die während der ganzen Arbeitszeit wahr ist, ist keine Bedingung** — sie ist ein offenes Tor mit einer Aufschrift. Eine Ausnahme wird an das gebunden, was den Einzelfall *unterscheidet* (`SWR-201`, `L-2026-08-21cq`).
+5. **Zu jedem neuen Payload-Feld gehört eine Zusicherung über die VERDRAHTUNG:** eine Prüfung, die die Funktion direkt ruft, bleibt grün, wenn niemand die Funktion mehr ruft. Und ein Vorgabewert (`dict.get(x, [])`) verwandelt eine fehlende Antwort in eine beruhigende (`L-2026-08-21ct`).
+6. **Ein Fix, der den falschen Aufruf repariert, sieht drei Sprints lang wie die Lösung aus:** Erst die Fehler-Anatomie verstehen (welcher Aufruf scheitert wirklich?), dann fixen (SWR-163, L-2026-08-20bx).
 
 ## KI-Konfiguration (Default)
 

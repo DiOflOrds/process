@@ -66,7 +66,9 @@ Zuweisung durch PL; Baseline-Anlässe (Playbook Kap. 9); Infrastruktur-Events (C
 1. **Git-Sperren-Anatomie:** Auf dem Sandbox-Mount hinterlässt ausgerechnet der *gelingende* `git status --porcelain` eine `index.lock` (Exit 0!): Schreibende Indexvorgänge enden per Umbenennen (geht durch), bloß lesende Refreshs per Löschen (verboten auf dem Mount). Der Rückfall aus SWR-134 „reparierte" drei Sprints lang den falschen Aufruf (SWR-163, L-2026-08-20bx).
 2. **Räumen vor einem Aufruf bleibt verboten** (platform/T-0015 DoD 2): Der Test dazu wird geschärft, nie gelöscht (L-2026-08-20bz).
 3. **Wachsende Größen als Größenordnung zusichern:** Der Parkplatz `verwaiste-locks` wächst mit jedem Commit — eine Zusicherung mit Festzahl wäre beim nächsten Lauf falsch (SWR-164; Fehler aus SWR-157 nicht wiederholen).
-4. **Eine ungemessene Größe ist von einer, die nicht wächst, nicht zu unterscheiden** — miss zuerst, urteile danach (SWR-164).
+4. **Eine Sperrklinke gehört IN die Vergabe, nicht neben sie:** `SWR-197` meldete falsche Entscheidungs-Nummern, ohne sie zu verhindern — die ersten drei Vergaben danach haben sie gebrochen (14 → 17 mehrdeutige IDs an einem Tag). **Eine Prüfung, die neben der Vergabe steht, ist kein Riegel, sondern ein Zeuge** (`SWR-203`, `L-2026-08-21cu`).
+5. **Eine Festlegung ohne Vertreter überlebt keine Werkzeuggeneration:** `SWR-113` stand zwanzig Sprints in einem Docstring; das nächste Werkzeug hat sie nicht gebrochen, sondern übersehen (`SWR-202`, `L-2026-08-21cr`).
+6. **Eine ungemessene Größe ist von einer, die nicht wächst, nicht zu unterscheiden** — miss zuerst, urteile danach (SWR-164).
 
 ## KI-Konfiguration (Default)
 
