@@ -28,6 +28,7 @@ graph TB
 | p10 | projekt | entwicklung | abgeschlossen | intern | — |
 | p11 | projekt | entwicklung | aktiv | intern | — |
 | p12 | projekt | entwicklung | abgeschlossen | intern | — |
+| p13 | projekt | entwicklung | ohne Status | intern | — |
 | p2 | projekt | entwicklung | ohne Status | intern | — |
 | p3 | projekt | entwicklung | ohne Status | intern | — |
 | p4 | projekt | entwicklung | ohne Status | intern | — |

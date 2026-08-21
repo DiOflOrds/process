@@ -804,3 +804,28 @@ Handlung**, und das ist die schärfere Lage.
 bisher einen **Typ** nennen — sie meinten möglicherweise den Zustand. Und wo zwei
 Prüfungen zusammen einen Zustand ohne zulässigen Wert erzeugen, wird die Zange als solche
 gemeldet, nicht der bequeme Wert eingetragen.
+
+## L-2026-08-21cs
+
+**Regel:** „Briefkasten zuerst" ist eine **Reihenfolge** und keine Zusicherung. Ein
+Zustand, der einmal am Anfang gemessen und am Ende als Ergebnis berichtet wird, ist eine
+Momentaufnahme in der Aufmachung einer Garantie — der Briefkasten wird deshalb **am Ende
+erneut** gemessen, bevor „0 offen" im Bericht steht.
+
+Sprint 32 sichtete den Briefkasten als erstes: **0 offen** über 60 Briefe, richtig
+gemessen. Beim Zusammenstellen der Abschlusszahlen meldete `kennzahlen.py` **7** — alle
+sieben zwischen **06:32 und 07:03** eingegangen, also **nach** dem Durchgang. Der Haken
+hinter „erfüllt" war beim Setzen wahr und zwei Stunden später falsch.
+
+⚠⚠ Dieselbe Familie wie `platform/T-0052` aus **demselben** Sprint, in entgegengesetzter
+Richtung: dort war der Bestand *während* des Laufs widersprüchlich und wurde nur am **Ende**
+gemessen; hier ist er *während* des Laufs gewachsen und wurde nur am **Anfang** gemessen.
+**Zweimal derselbe Messzeitpunkt-Fehler in einem Sprint.**
+
+⚠ Zweiter Befund im selben Vorgang: der Handlauf suchte nur `*/management/briefkasten/`,
+das Werkzeug liest zusätzlich `*/*/management/briefkasten/`. **Zwei Discovery-Wege mit
+verschieden weiten Grundmengen** — heute hat das nichts verdeckt, aber das ist Glück und
+keine Eigenschaft.
+
+**Verbleib:** Rollenkarte PL (`process/roles/pl.md`), Ticket `platform/T-0057`
+(Vertreter wird dort gebaut — Häufigkeit zuerst gezählt, dann gebaut).

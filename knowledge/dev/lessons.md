@@ -163,3 +163,53 @@ Gewohnheit.
 
 *Verbleib: Rollenkarte DEV · `platform/scripts/board.py` (`parse_liste`) ·
 `platform/tests/test_termin_zange_blocked.py` · Historie `platform`.*
+
+## L-2026-08-21cq
+
+**Regel:** Eine Ausnahme, deren Bedingung während der gesamten Arbeitszeit wahr ist, ist
+keine Ausnahme — sie ist ein offenes Tor mit einer Aufschrift. Eine Bedingung wird an das
+gebunden, was den Einzelfall **unterscheidet**, nicht an den Zustand, in dem man sich
+ohnehin immer befindet.
+
+`SWR-201` (`platform/T-0052`) nahm den Plannachlauf des **laufenden** Sprints aus der
+Statusdrift. Die erste Fassung band die Ausnahme daran, **dass** ein Sprint läuft — und
+während gearbeitet wird, läuft immer einer. Eine Planzeile aus **Sprint 7** mit längst
+`done` Ticket wäre damit ebenfalls unterdrückt worden, obwohl die DoD des Tickets
+ausdrücklich verlangte, dass `SWR-115` für vergangene Sprints **unverändert** wirkt. Die
+Anforderung behauptete die Garantie im selben Satz, in dem sie sie brach.
+
+⚠ Gefunden hat es das **unabhängige Review**, nicht der Autor und keine der sechs
+Zusicherungen — sie prüften „kein Sprint läuft", einen Zustand, der während der Arbeit nie
+eintritt.
+
+⚠⚠ Zweiter Befund derselben Bauart im selben Bau: die Ausnahme hörte auf „geschlossen",
+und `TICKET_GESCHLOSSEN` enthält `done` **und** `rejected`. **Eine Session hätte einen
+unbequemen Befund loswerden können, indem sie das Ticket verwirft.** Ein verworfenes
+Ticket ist kein „fertig, der Plan hinkt nach" — es ist eine Entscheidung, die der Plan
+abbilden muss.
+
+**Verbleib:** Rollenkarte DEV (`process/roles/dev.md`), Vertreter
+`platform/tests/test_plan_nachlauf.py::test_vergangene_planzeile_bleibt_befund_obwohl_ein_sprint_laeuft`
+und `::test_rejected_ist_kein_nachlauf`.
+
+## L-2026-08-21ct
+
+**Regel:** Eine Zusicherung, die eine Funktion direkt aufruft, sagt nichts darüber, ob der
+Betrieb sie jemals ruft. Zu jedem neuen Payload-Feld gehört eine Zusicherung über die
+**Verdrahtung** — und der Leser darf einen **fehlenden** Schlüssel nie per Vorgabewert in
+eine leere Antwort verwandeln.
+
+Das Review von `SWR-201` hat Aufruf **und** Payload-Schlüssel aus `sprint.plan` entfernt.
+**Alle sechs** Zusicherungen blieben grün, weil sie `plan_nachlauf` direkt riefen, und der
+Preflight meldete still „0", weil `sicht.get("plan_nachlauf", [])` den fehlenden Schlüssel
+in eine leere Liste verwandelte.
+
+> **Ein Vorgabewert verwandelt eine fehlende Antwort in eine beruhigende.**
+
+⚠ Die Ironie steht drei Zeilen darüber: der Nachbar `statusdrift` gibt ausdrücklich `None`
+zurück, wenn die Sicht nicht ladbar ist, *„weil ‚konnte nicht prüfen' und ‚nichts
+gefunden' zwei Aussagen sind"*. Dieselbe Begründung, dieselbe Datei, im neuen Code nicht
+angewandt — `B033` mit einer **Begründung** als Kopie.
+
+**Verbleib:** Rollenkarte DEV, Vertreter
+`platform/tests/test_plan_nachlauf.py::test_die_verdrahtung_in_plan_wird_geprueft`.

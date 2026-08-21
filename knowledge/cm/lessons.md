@@ -1904,3 +1904,28 @@ Berührung gebaut worden, das sie beantwortet oder erübrigt?
 
 *Verbleib: Rollenkarte CM · `platform/tests/test_entscheidungslog_schreibwege.py` ·
 Historie `platform`.*
+
+## L-2026-08-21cr
+
+**Regel:** Eine Festlegung, die nur in einem Docstring wohnt, wird von der nächsten
+Werkzeuggeneration nicht gebrochen, sondern **übersehen**. Jede Zählregel, die mehr als
+ein Werkzeug betrifft, bekommt eine Zusicherung, die **alle Erzeuger gegeneinander** hält
+— und die Konstante wird im **Code** zitiert, nicht nur im Modul geführt.
+
+`SWR-113` hat in Sprint 7 festgelegt, was „offen" heißt. Zwanzig Sprints später zählte
+`kennzahlen.py` **9**, während `sprint.kennzahlen` und `aggregation.uebersicht` **12**
+zählten. Nicht aus Widerspruch — es hat die Festlegung nur niemand vertreten.
+
+⚠⚠ Die Messung hat die Frage umgestellt: gefragt war „welche von **zwei** Zählweisen
+bleibt", gezählt sind **drei** Erzeuger, und **zwei von dreien folgten der Festlegung
+bereits**. Ausgerechnet die beiden, die sich den **Namen** `tickets_offen` teilten, waren
+die, die sich widersprachen. Es gab also nie zwei berechtigte Größen unter einem Namen,
+sondern **eine** Größe mit einem abweichenden Erzeuger — dem jüngsten.
+
+⚠ Der Vertreter dieser Lehre hatte im ersten Entwurf **den Fehler, den er prüft**: er
+prüfte die **Anwesenheit** der Konstante und blieb grün, während der Nachbar drei Zeilen
+darüber weiter das Literal benutzte. Eine Konstante, die dasteht und nicht gerufen wird,
+ist so viel wert wie der Docstring, an dem der Befund hängt.
+
+**Verbleib:** Rollenkarte CM (`process/roles/cm.md`), Vertreter
+`platform/tests/test_offen_zaehlweise.py` (6 Zusicherungen, am echten Bestand).
