@@ -88,7 +88,7 @@ Verifikationsquelle bleibe als Preflight-Befund liegen. Am **selben Tag** hat de
 |---|---|
 | Repos mit unverbuchter Arbeitskopie um 21:15 | **0 von 18** (`ollama-schnelltakt.log`) |
 | CM-Review 21:14, Prüfpunkt „Nachverbuchung" | **OK — nichts liegengeblieben** |
-| Abschlussläufe des Hosts am 21.08. | **5** |
+| Abschlussläufe des Hosts am 21.08. | **8 und wachsend** (20:44 – 22:25) |
 
 ⚠⚠ **Und das Beunruhigende ist nicht der Irrtum, sondern wo er steht:**
 `NOTBETRIEB-OHNE-SHELL.md` trägt die Warnung *„Ticketdateien sind ohne git TABU"* und
@@ -101,19 +101,29 @@ selben Lauf, im selben Protokoll, das sie zitiert.** „Der Verbucher macht die
 Ticketdatei unbedenklich" stimmt nicht; er macht sie **vorübergehend** bedenklich.
 Gemessen an den vier Tickets, die dieser Lauf angelegt hat:
 
-| Wirkung | Beleg |
-|---|---|
-| Ollama-Tick **abgebrochen**, solange sie unverbucht lagen | `ollama-schnelltakt.log`: `UNVERBUCHT tickets/T-0068.md … T-0070.md` → *„PREFLIGHT: 1 Befund(e)"* → *„Tick abgebrochen"* |
-| Eine Minute später **geheilt** | `abschluss-20260821-215500.log:4` — `platform: Nachverbuchung...` |
-| `test_berichtskennzahlen` **neu rot** | ebd. `:10025` — `[('tickets_offen', 34, 38), ('wartet_auf_mensch', 0, 1)]` |
+| Schnelltakt-Lauf | Befund | Tick |
+|---|---|---|
+| **21:55** | `UNVERBUCHT tickets/T-0068.md · T-0069.md · T-0070.md` | **abgebrochen** |
+| **22:10** | `UNVERBUCHT tickets/T-0070.md`, `T-0086.md` | **abgebrochen** |
+| **22:25** | `UNVERBUCHT tickets/T-0069.md`, `T-0070.md`, `T-0086.md` | **abgebrochen** |
+| dazu | `test_berichtskennzahlen` **neu rot** (`abschluss-...-215500.log:10025`, `[('tickets_offen', 34, 38), ('wartet_auf_mensch', 0, 1)]`) | |
+
+⚠⚠ **Die erste Fassung dieser Tabelle schrieb „eine Minute später geheilt" und nannte
+einen einzigen Lauf. Nachgezählt sind es DREI Schnelltakt-Läufe in Folge** — weil jede
+**Korrektur** an einem Ticket eine neue unverbuchte Fassung erzeugt und der Verbucher im
+15-Minuten-Takt hinterherläuft.
+
+> **⚠⚠ Der Lauf, der den Ollama-Nachweis LEGEN wollte, hat den Ollama-Takt drei Takte
+> lang blockiert — mit den Ticketdateien, die den Nachweis tragen sollen.**
 
 > **Regel (ersetzt die obige): Eine Schutzregel nennt die Bedingung, unter der sie gilt,
 > und die Messung, mit der man sie prüft. „Ohne `git` tabu" nennt keine — deshalb hat sie
 > zwei Läufe lang gegolten, obwohl sie schon nicht mehr galt. Richtig ist: eine
 > Verifikationsquelle darf ein Lauf ohne `git` anfassen, SOLANGE ein Verbucher hinter ihm
-> läuft — aber das Fenster zwischen Schreiben und Verbuchen ist ein AUSGEFALLENER TICK
-> und kein Nichts. Wer es öffnet, misst den Verbucher (`abschluss-logs/review-*.md`),
-> nennt den Preis und schreibt die Kennzahl nach, die sein Ticket veraltet.**
+> läuft — aber jedes Schreiben kostet einen Takt, und jede KORREKTUR kostet noch einen.
+> Wer eine Ticketdatei ohne `git` anfasst, schreibt sie EINMAL fertig, misst den Verbucher
+> (`abschluss-logs/review-*.md`) und nennt den Preis. Ein Ticket im Lauf mehrfach zu
+> überarbeiten ist ohne `git` teurer als das Ticket wert ist.**
 
 **Zweite Hälfte — „Erzähl-, Plan- und Lehrdateien sind frei".** Diese Hälfte war die
 Erlaubnis, auf die sich zwei Läufe berufen haben. Sie ist teurer als die erste:
