@@ -73,6 +73,57 @@ aufheben, aber schärfen:**
 
 ⚠ Verbleib: `process/roles/pl.md` (Punkte 11–12), `pm/docs/historie.md`.
 
+### ⚠⚠ NACHTRAG 2026-08-21 (vierter Lauf ohne Shell): BEIDE Hälften dieser Regel sind widerlegt — am Bestand, nicht in der Meinung
+
+Diese Lehre ist keine Woche alt und in beiden Hälften falsch. Sie steht hier
+**unverändert samt Nachtrag** und wird nicht umgeschrieben: eine Lehre, die man glättet,
+verliert den Grund, aus dem man sie geglaubt hat.
+
+**Erste Hälfte — „die Ticketdatei ist tabu".** Die Begründung war, eine unverbuchte
+Verifikationsquelle bleibe als Preflight-Befund liegen. Am **selben Tag** hat der Host
+`abschluss.cmd` um den Schritt **[0/6] Nachverbuchung** ergänzt: `git add -A` + Commit in
+**jedem** Repo, **vor** dem Preflight, alle 15 Minuten durch den Wächter.
+
+| Nachgemessen (21.08.) | Wert |
+|---|---|
+| Repos mit unverbuchter Arbeitskopie um 21:15 | **0 von 18** (`ollama-schnelltakt.log`) |
+| CM-Review 21:14, Prüfpunkt „Nachverbuchung" | **OK — nichts liegengeblieben** |
+| Abschlussläufe des Hosts am 21.08. | **5** |
+
+⚠⚠ **Und das Beunruhigende ist nicht der Irrtum, sondern wo er steht:**
+`NOTBETRIEB-OHNE-SHELL.md` trägt die Warnung *„Ticketdateien sind ohne git TABU"* und
+**neun Zeilen tiefer** die Tabelle *„Was der Host inzwischen von allein auffängt"* mit
+genau der Zeile, die ihr den Grund nimmt. Beide Absätze stammen aus **einem** Lauf,
+aus **einer** Datei, von **einem** Autor.
+
+> **Regel (ersetzt die obige): Eine Schutzregel nennt die Bedingung, unter der sie gilt,
+> und die Messung, mit der man sie prüft. „Ohne `git` tabu" nennt keine — deshalb hat sie
+> zwei Läufe lang gegolten, obwohl sie schon nicht mehr galt. Richtig ist: eine
+> Verifikationsquelle darf ein Lauf ohne `git` anfassen, SOLANGE ein Verbucher hinter ihm
+> läuft; wer sich darauf beruft, misst ihn (`git status` bzw. das Protokoll des letzten
+> Abschlusslaufs) und schreibt die Messung dazu.**
+
+**Zweite Hälfte — „Erzähl-, Plan- und Lehrdateien sind frei".** Diese Hälfte war die
+Erlaubnis, auf die sich zwei Läufe berufen haben. Sie ist teurer als die erste:
+
+> **⚠⚠ Die zwei Läufe, die sich das Bauen versagt haben, um nichts rot zu machen, haben
+> mit dem Einzigen, was sie sich erlaubt haben, DREI Zusicherungen rot gemacht.** Acht
+> neue Lehren (`L-2026-08-21dj`…`dq`, diese eingeschlossen) tragen eine ausformulierte
+> `**Regel:**` und werden von keiner Zusicherung zitiert; `test_keine_NEUE_lehre_ohne_vertreter`,
+> `test_erweitern_und_weglassen_sind_dasselbe_ergebnis` und
+> `test_ohne_vertreter_ist_wieder_genau_die_basis` sind genau daran rot
+> (Host-Lauf 21:14). **Keiner der beiden Läufe konnte es merken — Merken hätte die Shell
+> gebraucht, die ihnen fehlte.**
+
+> **Regel: „Frei" heißt nicht „folgenlos". Ein Lauf, der eine Datei anfasst, deren Wirkung
+> er nicht messen kann, hat nicht vorsichtig gehandelt, sondern blind — und die Blindheit
+> ist genau dann am größten, wenn sie sich Zurückhaltung nennt. Wer ohne Prüfstrecke eine
+> Lehre schreibt, legt sie als `**Beobachtung:**` an oder lässt sie liegen.**
+
+⚠ Behandlung der acht: `platform/T-0070` (je Lehre einzeln entschieden, Basis **nicht**
+nachgezogen). Betriebsmittelfrage: `pm/T-0086` (Klasse A). Verbleib dieses Nachtrags:
+`NOTBETRIEB-OHNE-SHELL.md` ist im selben Lauf berichtigt worden.
+
 ---
 
 ## L-2026-08-21dj — Ein Sprint-Abschluss kann den Nachweis blockieren, den derselbe Sprint für unmöglich erklärt
