@@ -98,3 +98,20 @@ teams:
     rollen: [MAIL-RED]     # projektspezifische Rolle; Core Team implizit
     datenklasse: sensibel
     wissensbasis: team-mail/docs/
+  team-termine:
+    name: P16 Termine (Kalender der Familie)
+    projekt: p16           # ⚠ p16 und NICHT p13: `projekt: p13` traegt bereits team-mail,
+                           # und `projects/p13` (Produkt-Architekturbilder) traegt dieselbe
+                           # Nummer ein zweites Mal — gemessen in Sprint 34, aufgeschrieben
+                           # als pm/T-0085. Eine dritte Vergabe waere die bequeme Handlung.
+    typ: projekt
+    profil: entwicklung
+    repo: team-termine     # LOKAL-ONLY: Datenklasse sensibel -> kein GitHub-Remote (.kein-remote)
+    status: aktiv
+    gegruendet: 2026-08-21 (pm/T-0078 -> pm/D016 = B, Brief pm/N-0044; ausgefuehrt pm/T-0083, Sprint 34)
+    rollen: []             # keine projektspezifische Rolle; Core Team implizit
+    datenklasse: sensibel  # Das Projekt liest und schreibt den Google-Kalender eines
+                           # FREMDEN Kontos (dimitri.john83@gmail.com, Familie). Termine
+                           # sind personenbezogene Daten Dritter; sie gehen nie an einen
+                           # Cloud-Provider und nie in ein Repo mit Remote.
+    wissensbasis: team-termine/docs/

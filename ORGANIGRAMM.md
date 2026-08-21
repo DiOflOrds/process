@@ -9,6 +9,8 @@ graph TB
   MENSCH --> PM
   p11["p11<br/>entwicklung · 10 Rollen"]
   PM --> p11
+  p13["p13<br/>entwicklung · 10 Rollen"]
+  PM --> p13
   p9["p9<br/>entwicklung · 10 Rollen"]
   PM --> p9
   platform["platform<br/>entwicklung · 10 Rollen"]
@@ -19,6 +21,8 @@ graph TB
   PM --> team_dashboard
   team_mail["team-mail<br/>wiederkehrend · 11 Rollen"]
   PM --> team_mail
+  team_termine["team-termine<br/>entwicklung · 10 Rollen"]
+  PM --> team_termine
 ```
 
 | Einheit | Typ | Profil | Status | Datenklasse | Besetzungen |
@@ -28,7 +32,7 @@ graph TB
 | p10 | projekt | entwicklung | abgeschlossen | intern | — |
 | p11 | projekt | entwicklung | aktiv | intern | — |
 | p12 | projekt | entwicklung | abgeschlossen | intern | — |
-| p13 | projekt | entwicklung | ohne Status | intern | — |
+| p13 | projekt | entwicklung | aktiv | intern | — |
 | p2 | projekt | entwicklung | ohne Status | intern | — |
 | p3 | projekt | entwicklung | ohne Status | intern | — |
 | p4 | projekt | entwicklung | ohne Status | intern | — |
@@ -41,3 +45,4 @@ graph TB
 | promt-team | projekt | wiederkehrend | aktiv | sensibel | PROMPT-OPT@promt-team |
 | team-dashboard | projekt | wiederkehrend | aktiv | intern | DASH-RED@team-dashboard |
 | team-mail | projekt | wiederkehrend | aktiv | sensibel | MAIL-RED@team-mail |
+| team-termine | projekt | entwicklung | aktiv | sensibel | — |
