@@ -773,3 +773,34 @@ war, es erhöhe den Zähler „auf dich wartende Entscheidungen". Er tat es für
 **Regel 3 — „A = Ist-Zustand" heißt auch: kein Nachfolgeticket.** Die DoD sah eines für den
 Bau-Fall vor. Bei A gibt es keinen Bau; ein Ticket „nichts tun" wäre ein Vorgang ohne
 Gegenstand. **Geschlossen ist geschlossen.**
+
+---
+
+## L-2026-08-21cm — Ein Stellvertreter wird zum Loch, sobald die Sache einen eigenen Namen bekommt
+
+**Sprint 30, `platform/T-0051`.** Drei gesperrte Tickets meldete der Preflight als *„offen
+auf vergangenem Sprint"*. Nach dem Leeren des Termins meldete eine **andere** Prüfung
+dieselben drei als *„Ticket ohne Sprint"*.
+
+> **Für ein gesperrtes Ticket gibt es keinen zulässigen Terminwert. Der einzige Wert, der
+> beide Prüfungen still hält, ist eine Terminzusage über fremdes Handeln — also die
+> falsche Handlung. Eine Lage, in der die bequeme Handlung die einzige ist, die grün
+> macht, ist die Bauart, gegen die `SWR-166` gebaut wurde.**
+
+⚠ Beide Prüfungen sind **einzeln richtig** und gut begründet. Der Fehler liegt **zwischen**
+ihnen: die Ausnahme steht an einem **Typ** (`decision-request`) statt an einem **Zustand**
+(*„das Team kann hier nicht handeln"*). Bis Sprint 29 war `decision-request` der einzige
+Weg, diese Lage auszudrücken — der Typ fiel mit der Sache zusammen. `SWR-193` hat der
+Sache mit `blocked`/`blocked_by` einen eigenen Namen gegeben, und in dem Moment wurde aus
+dem Stellvertreter ein Loch.
+
+⚠ **Und es stellt die Vorgänger-Session richtig:** der Termin war in Sprint 29 nicht aus
+Nachlässigkeit stehengeblieben. Es gab nichts Besseres. `L-2026-08-21cc` hielt fest, dass
+*eine Begründung, die mit der einzigen möglichen Handlung zusammenfällt, von einer
+Rationalisierung nicht zu unterscheiden ist*; **hier gibt es überhaupt keine mögliche
+Handlung**, und das ist die schärfere Lage.
+
+**Regel:** Bekommt ein Zustand einen eigenen Namen, werden alle Ausnahmen geprüft, die
+bisher einen **Typ** nennen — sie meinten möglicherweise den Zustand. Und wo zwei
+Prüfungen zusammen einen Zustand ohne zulässigen Wert erzeugen, wird die Zange als solche
+gemeldet, nicht der bequeme Wert eingetragen.
