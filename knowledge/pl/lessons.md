@@ -3,6 +3,8 @@
 
 ## L-2026-08-21dp — Eine Verschiebung, die nur im Bericht steht, zündet erst am nächsten `--beginne`
 
+**Beobachtung:** Bis eine Zusicherung diese Lehr-ID zitiert, wird sie ausdrücklich als Beobachtung geführt — gebuchte Entscheidung des Host-Laufs vom 22.08. (Auftraggeber, `platform/T-0070`); der Wortlaut bleibt unverändert stehen und wird mit seinem Vertreter bindend.
+
 *Anlass: Folgelauf 2026-08-21 (kein Sprint 36, Shell ausgefallen). Gefunden beim Lesen,
 nicht von einer Prüfung.*
 
@@ -34,6 +36,8 @@ die „Erste Aufgabe des Folgelaufs" bis zu dieser Lehre vorschrieb.
 ---
 
 ## L-2026-08-21dq — Ohne `git` ist die Ticketdatei tabu, der Rest des Hauses frei
+
+**Beobachtung:** Bis eine Zusicherung diese Lehr-ID zitiert, wird sie ausdrücklich als Beobachtung geführt — gebuchte Entscheidung des Host-Laufs vom 22.08. (Auftraggeber, `platform/T-0070`); der Wortlaut bleibt unverändert stehen und wird mit seinem Vertreter bindend. ⚠ Inhaltlich inzwischen BERICHTIGT durch `NOTBETRIEB-OHNE-SHELL.md`: seit Schritt [0/6] von `abschluss.cmd` verbucht der Host liegengebliebene Arbeitskopien — das Tabu gilt nur noch, solange der Host-Takt nicht läuft.
 
 *Anlass: derselbe Lauf. Die Lehre ist die scharfe Grenze zu `L-2026-08-21db`.*
 
@@ -165,6 +169,8 @@ nachgezogen). Betriebsmittelfrage: `pm/T-0086` (Klasse A). Verbleib dieses Nacht
 
 ## L-2026-08-21dj — Ein Sprint-Abschluss kann den Nachweis blockieren, den derselbe Sprint für unmöglich erklärt
 
+**Beobachtung:** Bis eine Zusicherung diese Lehr-ID zitiert, wird sie ausdrücklich als Beobachtung geführt — gebuchte Entscheidung des Host-Laufs vom 22.08. (Auftraggeber, `platform/T-0070`); der Wortlaut bleibt unverändert stehen und wird mit seinem Vertreter bindend.
+
 *Anlass: `platform/T-0060`, Sprint 35 (2026-08-21).*
 
 Vier Sprints lang trug die Frage „warum läuft Ollama nie?" vier verschiedene Antworten.
@@ -189,6 +195,8 @@ Umgebung erzeugt Arbeit an der eigenen Umgebung, und der Gegenstand bleibt unber
 ---
 
 ## L-2026-08-21dk — Die vierte Berührung zählt Terminierungen, nicht Verschiebungen
+
+**Beobachtung:** Bis eine Zusicherung diese Lehr-ID zitiert, wird sie ausdrücklich als Beobachtung geführt — gebuchte Entscheidung des Host-Laufs vom 22.08. (Auftraggeber, `platform/T-0070`); der Wortlaut bleibt unverändert stehen und wird mit seinem Vertreter bindend.
 
 *Anlass: Sprint-Planung 35 (2026-08-21).*
 

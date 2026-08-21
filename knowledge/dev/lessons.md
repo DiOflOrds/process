@@ -1,6 +1,8 @@
 
 ## L-2026-08-21dl — Ein Negativbeispiel, dem der Teil fehlt, an dem die Prüfung greift, prüft nichts
 
+**Beobachtung:** Bis eine Zusicherung diese Lehr-ID zitiert, wird sie ausdrücklich als Beobachtung geführt — gebuchte Entscheidung des Host-Laufs vom 22.08. (Auftraggeber, `platform/T-0070`); der Wortlaut bleibt unverändert stehen und wird mit seinem Vertreter bindend.
+
 **Anlass (Sprint 35, `SWR-213`, Befund 4 des Gegenlesens).** Die Erweiterung von
 `DATUM_IM_KOPF` bekam eine Gegenprobe: „die Klassifikation `_ist_beitragskopf` wandert
 NICHT". Sie nannte drei Negativbeispiele aus dem echten Bestand — und **alle drei hatten
@@ -17,6 +19,8 @@ auf **75** Beiträge, Testlauf **11/11 grün**.
 ---
 
 ## L-2026-08-21dm — Ein Feld, das den Wert seines Vorgängers erbt, behauptet einen Versuch, den es nicht gab
+
+**Beobachtung:** Bis eine Zusicherung diese Lehr-ID zitiert, wird sie ausdrücklich als Beobachtung geführt — gebuchte Entscheidung des Host-Laufs vom 22.08. (Auftraggeber, `platform/T-0070`); der Wortlaut bleibt unverändert stehen und wird mit seinem Vertreter bindend.
 
 **Anlass (Sprint 35, `SWR-212`, Befund 2 des Gegenlesens).** Der Gateway-Kern merkte sich
 das Modell des letzten Executors mit `getattr(e, "modell", "") or letztes_modell`. Bei der
@@ -35,6 +39,8 @@ in einer Anforderung, die genau gegen Falschaussagen in diesem Feld gebaut wurde
 
 ## L-2026-08-21dn — Wer eine Zerlegung teilt, prüfe im selben Bau, ob er dabei eine andere kopiert hat
 
+**Beobachtung:** Bis eine Zusicherung diese Lehr-ID zitiert, wird sie ausdrücklich als Beobachtung geführt — gebuchte Entscheidung des Host-Laufs vom 22.08. (Auftraggeber, `platform/T-0070`); der Wortlaut bleibt unverändert stehen und wird mit seinem Vertreter bindend.
+
 **Anlass (Sprint 35, `SWR-213`, Befund 8 des Gegenlesens).** Die DoD verlangte
 ausdrücklich, die Brief-Zerlegung zu **teilen** statt zu kopieren. Sie wurde geteilt. Im
 selben Bau entstand **zwanzig Zeilen tiefer** eine neue Kopie: die Zeitregel aus
@@ -51,6 +57,8 @@ jüngeren machte 1 Test rot statt 2.
 ---
 
 ## L-2026-08-21do — Erweitert man einen Ausdruck, kann nicht nur die Klassifikation wandern, sondern auch der WERT
+
+**Beobachtung:** Bis eine Zusicherung diese Lehr-ID zitiert, wird sie ausdrücklich als Beobachtung geführt — gebuchte Entscheidung des Host-Laufs vom 22.08. (Auftraggeber, `platform/T-0070`); der Wortlaut bleibt unverändert stehen und wird mit seinem Vertreter bindend.
 
 **Anlass (Sprint 35, `SWR-213`, Befund 17 des Gegenlesens).** `DATUM_IM_KOPF` musste die
 volle ISO-Zeit erfassen, damit eine Kennzahl die Uhrzeit eines Beitrags lesen kann. Die
