@@ -278,3 +278,27 @@ worden — im selben Sprint, der diese Fehlerfamilie schloss.
 
 **Verbleib:** Rollenkarte DEV, Vertreter
 `platform/tests/test_brief_discovery.py::test_eine_auslegung_von_offen`.
+
+
+## L-2026-08-21da
+
+**Regel:** „Kein Ende" heißt **abgebrochen**, nicht **aktiv**. Wer den „laufenden" Vorgang
+sucht, nimmt den **neuesten** und fragt ihn, ob er beendet ist — nicht den neuesten, der
+**kein** Ende trägt.
+
+Gefunden hat es die **Pflicht-Nachmessung am Sprint-Ende**, nicht der Bau und nicht das
+Gegenlesen: `_sprint_start` nahm den höchstnummerierten Sprint **ohne** `ende`. **15 von
+33** Sprints haben nie eine Endezeile bekommen (abgebrochene Läufe). Solange Sprint 33
+lief, war die Antwort richtig; in der Sekunde, in der er beendet wurde, fiel die Funktion
+auf ein altes, offen gebliebenes Fenster zurück und meldete **14 Briefe statt 0**.
+
+> **Eine Funktion, die nur solange richtig antwortet, wie der Normalfall gilt, ist im
+> Ausnahmefall nicht ungenau — sie ist beliebig. Und der Ausnahmefall war hier die
+> Mehrheit: 15 von 33.**
+
+⚠ `sprint_register` führt für genau diese Lage ein eigenes Merkmal (`abgebrochen`). Es zu
+haben und nicht zu lesen ist dieselbe Familie wie `SWR-198`: ein Zustand bekam einen
+Namen, und der neue Leser hat ihn nicht übernommen.
+
+**Verbleib:** Rollenkarte DEV, Vertreter
+`platform/tests/test_brief_discovery.py::test_nur_der_NEUESTE_sprint_kann_laufen`.
