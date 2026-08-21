@@ -66,3 +66,35 @@ kurzzeitig als „ohne Vertreter" da (92 statt 91), weil ihr Vertreter zuerst in
 
 Sie hat eine: `test_entscheidungslog_schreibwege.test_die_mehrheit_der_zeilen_stammt_
 NICHT_aus_dem_code_weg` prüft einen **Anteil** mit Schwelle statt einer Existenz.
+
+
+## L-2026-08-21dd
+
+**Regel:** Ein Lehrbuch wird **angehängt**, nie geschrieben. Und eine Prüfung, die eine
+Menge beobachtet, muss **Schrumpfen von Fortschritt unterscheiden können** — sonst meldet
+sie beides beim Namen des angenehmeren Falls.
+
+Der Abschluss-Commit von Sprint 32 (`process@a82f207`, Betreff *„Lehren cq-cv
+verankert"*) hat `knowledge/cm/lessons.md` von **1931 auf 26 Zeilen** und
+`knowledge/pl/lessons.md` von **871 auf 26** gekürzt: **91 Lehr-Abschnitte gelöscht, 2
+hinzugefügt.**
+
+> **⚠⚠ Ein Commit, der „verankert" im Betreff trägt, hat 91 Lehren entfernt — und die
+> Prüfung, die das hätte finden müssen, meldete es als FORTSCHRITT: „Diese Lehre(n) haben
+> einen Vertreter bekommen, bitte die Basis nachziehen." Ein Bestand kann verschwinden,
+> während sein Wächter Erfolg meldet.**
+
+⚠ Und die **Folgerung daraus war ebenfalls falsch**: `platform/T-0061` schloss in Sprint
+33, die Lehren hätten *„nie in einem Lehrbuch gelebt"* und lebten nur als Zitat. Sie haben
+dort gelebt, bis ein Commit sie überschrieb. **Zwei Sprints hintereinander hat dieselbe
+Lücke eine falsche Erklärung getragen, weil niemand in die Git-Historie der Datei gesehen
+hat.**
+
+⚠ Der Nachweis der Wiederherstellung ist eine Zahl, die niemand gewählt hat:
+`ohne_vertreter()` liefert wieder **exakt 91** — namentlich dieselbe Menge wie
+`OHNE_VERTRETER_BASIS` aus Sprint 31, in beide Richtungen leer. **Die Basis hatte die
+ganze Zeit recht.**
+
+**Verbleib:** Rollenkarte COACH, Vertreter
+`platform/tests/test_lehrbuch_verliert_nichts.py` (5 Zusicherungen, `SWR-209`) sowie die
+geschärfte Meldung in `test_lehren_vertreter::test_ein_gewonnener_vertreter…`.

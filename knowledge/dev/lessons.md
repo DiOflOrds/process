@@ -302,3 +302,30 @@ Namen, und der neue Leser hat ihn nicht übernommen.
 
 **Verbleib:** Rollenkarte DEV, Vertreter
 `platform/tests/test_brief_discovery.py::test_nur_der_NEUESTE_sprint_kann_laufen`.
+
+
+## L-2026-08-21db
+
+**Regel:** Eine Funktion, die einen **Bezugsrahmen** braucht (Organisationswurzel, Repo,
+Haus), holt ihn vom **Aufrufer** — nie aus `os.path.dirname(__file__)`. Ein Vorgabewert
+aus dem eigenen Standort ist kein Vorgabewert, sondern eine stille Annahme über die Welt.
+
+`inbox._naechste_d_id` sollte „alle Entscheidungslogs der Organisation" lesen und
+bestimmte damit selbst, welche Organisation gemeint war: immer die, in der der Quelltext
+zufällig liegt. Eine Vorrichtung baute ihr eigenes leeres Repo, erwartete `D001` und bekam
+`D030` — die nächste freie Nummer des **echten** Hauses. Sieben Zusicherungen waren
+deshalb seit Sprint 32 rot, und der Abschluss von Sprint 33 meldete *„alle 98 übrigen
+Testmodule sind einzeln gelaufen"*.
+
+> **⚠⚠ Der teuerste Teil war nicht die falsche Zahl, sondern der TOTE RÜCKFALL:
+> `SWR-203` hat den Rückfall auf das einzelne Log ausdrücklich vorgesehen und mit
+> `SWR-193` begründet. Er konnte nie greifen — die Wurzel war nie unbekannt, sie wurde
+> erfunden. Ein erfundener Vorgabewert löscht den vorgesehenen Ausnahmepfad, ohne dass
+> eine Prüfung das merkt.**
+
+⚠ Gezählt statt geschätzt: **drei** solche Stellen über `backend/` und `scripts/`, nicht
+die eine, die das Ticket nannte — bei 64 `__file__`-Fundstellen insgesamt. Die übrigen 61
+lösen **Code**-Pfade auf und sind zu Recht relativ zum eigenen Quelltext.
+
+**Verbleib:** Rollenkarte DEV, Vertreter
+`platform/tests/test_org_wurzel_vom_aufrufer.py` (9 Zusicherungen, `SWR-207`).
