@@ -507,3 +507,38 @@ Schranke seit ihrer ersten Zeile.
 `platform/tests/test_brief_discovery.py::_ruft_auf` (AST statt Text),
 `platform/tests/test_tote_sperre.py::test_kein_literal_ausserhalb_von_board` (eine Zeile
 statt einer Datei) und `::test_keine_toten_sperren_ausser_dem_bestand` (untere Schranke).
+
+
+## L-2026-08-21dg
+
+**Regel:** Jeder **Halbsatz** einer Anforderung braucht seine eigene Zusicherung. Eine
+Anforderung, die drei Dinge verlangt und zwei davon prüft, ist zu zwei Dritteln eine
+Absichtserklärung — und der ungeprüfte Teil ist erfahrungsgemäß der, der schon einmal
+gefehlt hat.
+
+`SWR-208` verlangte wörtlich, **jeder** Gründungsweg schreibe `status: aktiv`. Das
+unabhängige Gegenlesen entfernte den Halbsatz aus **beiden** Wegen und fuhr 139 Tests:
+**kein einziger wurde rot.**
+
+> **⚠⚠ Genau dieser Halbsatz hatte `projects/p13` sein Core Team gekostet. Die
+> Anforderung, die den Fehler repariert, hatte ihn selbst nicht abgesichert.**
+
+⚠ Zwei weitere Fälle derselben Sorte im selben Lauf:
+
+* **Eine Auflage, die nur im FEHLERTEXT steht,** gilt genau so lange, wie niemand sie
+  brechen will. *„Der Tag sitzt auf dem Abschluss-Commit, nie auf HEAD"* stand in der
+  Meldung einer anderen Prüfung — sie ist eine Bitte und keine Schranke.
+* **Eine Verfallsprüfung, die etwas anderes misst als das, was die Ausnahme verfallen
+  ließe,** ist ein zweiter Name für „grün". Die Ausnahme ließ sich spurlos löschen.
+
+⚠ Und der teuerste Einzelbefund war eine **selbst aufgestellte** Falle: derselbe Bau, der
+die B033-Doppelung benannte, legte eine neue an — mit einem **Kommentar**, der die
+Gleichheit zweier Mengen *behauptete*. **Ein Kommentar, der Gleichheit behauptet, stellt
+sie nicht her; `assertIs` tut es.**
+
+**Verbleib:** Rollenkarte TEST, Vertreter
+`platform/tests/test_datenklasse_platziert.py::test_jeder_gruendungsweg_schreibt_status_aktiv`,
+`::test_die_datenklassen_sind_EINE_menge_und_keine_kopie`,
+`platform/tests/test_baseline_folgt_der_abnahme.py::test_jede_namensausnahme_wird_tatsaechlich_gebraucht`,
+`::test_der_tag_ist_nicht_juenger_als_seine_abnahme` und
+`platform/tests/test_vertragsversion_eine_zahl.py`.
