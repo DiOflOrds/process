@@ -478,3 +478,32 @@ Eindeutigkeit, sondern Seltenheit. Die Grundmenge einer Namensauflösung ist der
 Schließen eines Tickets falsch werden.** Der Befund existierte vor diesem Lauf nicht und
 wäre ohne ihn nie entstanden. Wer Grundmengen aus dem Bestand bildet, ändert sie mit jeder
 Statusänderung mit.
+
+## L-2026-08-21cz
+
+**Regel:** Eine Zusicherung, die einen Namen im **Quelltext** sucht, muss den Docstring
+ausschließen — sonst ist sie durch **Prosa** erfüllt. Und eine Zusicherung, die eine ganze
+**Datei** von ihrer Prüfung ausnimmt, hat keinen Ausnahmefall, sondern einen blinden Fleck.
+
+Beides ist in Sprint 33 gleichzeitig eingetreten und beides hat das unabhängige Gegenlesen
+gefunden:
+
+* `test_kennzahlen_gehen_durch_die_tuer` suchte `"board.briefkasten_dateien"` als Text —
+  der Name stand bereits im Docstring derselben Funktion. Die Hauptzusicherung war erfüllt,
+  ohne dass ein Aufruf existieren musste.
+* `test_kein_literal_ausserhalb_von_board` nahm `board.py` **pauschal** aus und konnte
+  deshalb den **fünften** Namen derselben Menge (`board.GESCHLOSSEN`) strukturell nie
+  finden — er saß ausgerechnet dort, wo die Menge wohnt.
+
+> **Anwesenheit ist nicht Verwendung. Und eine Ausnahme für eine ganze Datei ist keine
+> Ausnahme, sondern ein blinder Fleck an der teuersten Stelle: dort, wo die Sache wohnt.**
+
+⚠ Dritter Fall im selben Lauf: `test_keine_toten_sperren_ausser_dem_bestand` war
+**vakuum-grün** — sie verglich `[] == []`, und ihr `except Exception` hätte ein komplett
+unladbares Haus grün gemacht. Die Schwester-Zusicherung nebenan trug die passende untere
+Schranke seit ihrer ersten Zeile.
+
+**Verbleib:** Rollenkarte TEST/QM, Vertreter
+`platform/tests/test_brief_discovery.py::_ruft_auf` (AST statt Text),
+`platform/tests/test_tote_sperre.py::test_kein_literal_ausserhalb_von_board` (eine Zeile
+statt einer Datei) und `::test_keine_toten_sperren_ausser_dem_bestand` (untere Schranke).

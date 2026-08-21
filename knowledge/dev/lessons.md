@@ -213,3 +213,68 @@ angewandt — `B033` mit einer **Begründung** als Kopie.
 
 **Verbleib:** Rollenkarte DEV, Vertreter
 `platform/tests/test_plan_nachlauf.py::test_die_verdrahtung_in_plan_wird_geprueft`.
+
+## L-2026-08-21cw
+
+**Regel:** Ein Zeitstempel ohne Zeitzone ist keine Zeit. Werden zwei Uhren verglichen, die
+nie miteinander verglichen wurden, gehört die Umrechnung (`astimezone`) in denselben
+Ausdruck wie der Vergleich — `replace(tzinfo=None)` wirft den Offset **weg** und sieht
+dabei aus wie eine Normalisierung.
+
+Sprint 33 hat `briefe_im_lauf` gebaut, um den Satz „keiner eingegangen" durch eine Messung
+zu ersetzen. Briefe tragen **UTC** (`briefkasten.py`), das Sprintregister trägt
+**Wanduhrzeit** (`sprint_register.py`). Der Vergleich schnitt den Offset ab: zwei Stunden
+Versatz bei CEST, **länger als ein ganzer Sprint**. Die Kennzahl hätte dauerhaft `0`
+gemeldet — und sie hatte, bevor jemand sie prüfte, bereits eine **Anforderung**
+(`SWR-206`), ein Ticket und eine eingefrorene Regressionsschranke mit der falschen
+Aussage gefüllt, das Ursprungsticket sei im Irrtum gewesen.
+
+> **Eine Zeitzone ist keine Formatfrage, sondern eine Maßeinheit. Und eine falsche
+> Messung, die eine Korrektur BEHAUPTET, ist teurer als gar keine: sie hat die richtige
+> Aussage überschrieben.**
+
+⚠ Gefunden hat es das unabhängige Gegenlesen. Weder der Autor noch eine der eigenen
+Zusicherungen — die zweite Zusicherung („im Fenster von Sprint 31 kam **kein** Brief") ist
+erst als Folge dieses Befunds entstanden.
+
+**Verbleib:** Rollenkarte DEV, Vertreter
+`platform/tests/test_brief_discovery.py::test_zeitzone_wird_umgerechnet_und_nicht_abgeschnitten`
+und `::test_das_gemessene_fenster_von_sprint_32`.
+
+
+## L-2026-08-21cx
+
+**Regel:** Eine Ausnahme braucht eine **Verfallsprüfung**. Wer eine Menge namentlich von
+einer Prüfung ausnimmt, sichert im selben Zug zu, dass jeder Eintrag am echten Bestand
+noch **beißt** — sonst meldet die Prüfung nicht zu viel, sondern für immer zu wenig.
+
+`SWR-204` hat vier Verweise namentlich ausgenommen, weil eine Entscheidung des
+Auftraggebers ausstand. Vier Stunden später war sie da (`pm/D029` = C), der Grund entfallen
+— und **nichts** hätte es gemeldet. Die Organisation hat diese Bauform bereits einmal
+gebaut (`test_uhrenprobe`: der eingefrorene Eintrag muss auf etwas Vorhandenes zeigen); sie
+wurde beim zweiten Mal nicht mitgedacht.
+
+> **Eine Ausnahme ohne Verfallsprüfung ist ein Dauerbefund mit umgekehrtem Vorzeichen.**
+
+⚠ Der Umkehrschluss ist der eigentliche Ertrag: **eine Ausnahmeliste, die man leer bekommt,
+war die richtige Bauform.** Der verworfene vierte Ticket-Zustand hätte 9 Quelldateien und
+153 Literale gekostet — für eine Lage, die keine vier Stunden bestanden hat.
+
+**Verbleib:** Rollenkarte DEV, Vertreter
+`platform/tests/test_tote_sperre.py::test_ausnahme_greift_oder_ist_weg`.
+
+
+## L-2026-08-21cy
+
+**Regel:** Wird eine Zuständigkeit in **eine** Funktion zusammengezogen, gehört die
+**Auslegung** mit — nicht nur der Zugriffsweg. Eine vereinheitlichte Tür mit zwei
+Schlüsseln ist derselbe Befund, eine Ebene tiefer.
+
+`SWR-206` hat die Brief-**Discovery** auf `board.briefkasten_dateien` vereinheitlicht und
+die Frage „ist dieser Brief offen?" doppelt gelassen: `preflight` las 300 Zeichen und
+suchte einen Teilstring, `kennzahlen` zerlegte das Frontmatter und verglich
+kleingeschrieben. Ein Brief mit längerem Kopf wäre von genau einem der beiden gezählt
+worden — im selben Sprint, der diese Fehlerfamilie schloss.
+
+**Verbleib:** Rollenkarte DEV, Vertreter
+`platform/tests/test_brief_discovery.py::test_eine_auslegung_von_offen`.
