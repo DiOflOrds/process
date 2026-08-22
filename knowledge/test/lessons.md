@@ -542,3 +542,33 @@ sie nicht her; `assertIs` tut es.**
 `platform/tests/test_baseline_folgt_der_abnahme.py::test_jede_namensausnahme_wird_tatsaechlich_gebraucht`,
 `::test_der_tag_ist_nicht_juenger_als_seine_abnahme` und
 `platform/tests/test_vertragsversion_eine_zahl.py`.
+
+---
+
+## L-2026-08-22q — Eine Mutationsprobe, die den mutierten Code nie geladen hat, meldet dieselbe Zahl wie eine, die alles fängt
+
+*Anlass: Sprint 40 (2026-08-22), Review von `team-dashboard/T-0007`. **Eigener Fehler des
+Reviews, benannt statt geglättet.***
+
+Drei Mutationen, drei Läufe, dreimal dasselbe Ergebnis: **„10 von 11 rot"**. Eine Zahl, die
+nach einer sehr scharfen Teststrecke aussieht — und die aus einer **fehlenden Datei** kam:
+`_app_laden.cjs` löst `<Wurzel>/platform/backend/static/app.js` auf, die Arbeitskopie lag
+unter `/tmp/mut`, also war `<Wurzel>` gleich `/tmp`.
+
+⚠ Die Diagnose stand **zehnmal wortgleich** im Protokoll (`ENOENT … /tmp/platform/...`)
+und wurde erst beim zweiten Hinsehen gelesen.
+
+Mit korrekter Wurzel wiederholt: **6 / 1 / 1 rot** — jede Mutation traf genau die
+Zusicherung, die sie treffen sollte. Das ist das Ergebnis, das die erste Messung nicht
+hatte, obwohl sie größer aussah.
+
+> **Eine gleichbleibende Zahl über verschiedene Eingriffe ist ein Hinweis auf den
+> Prüfaufbau, nicht auf die Schärfe der Prüfung. Drei verschiedene Eingriffe, die exakt
+> dasselbe Ergebnis liefern, messen etwas, das mit den Eingriffen nichts zu tun hat.**
+
+**Regel:** Vor jeder Mutationsprobe ein **Kontrolllauf am unveränderten Stand** — er muss
+grün sein. Ist er es nicht, misst die Probe den Aufbau. Und: gleicht sich das Ergebnis über
+mehrere Mutationen, ist das ein Befund über den Aufbau und kein Lob für die Tests.
+
+**Verbleib:** dieses Lehrbuch; sachlich verwandt mit `SWR-221`/`SWR-227`
+(`platform/tests/test_bestandswaechter.py` — *eine Zusicherung nennt ihre eigene Eingabe*).

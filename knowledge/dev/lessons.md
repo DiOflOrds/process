@@ -530,3 +530,27 @@ oder ruft sie nicht.
 **Verbleib:** Rollenkarte DEV (`process/roles/dev.md`, Lehre 8), Vertreter
 `platform/tests/test_uebergang_historie.py::test_im_laufenden_sprint_gibt_es_keinen_verstoss`
 (er hat genau diesen Verstoß gemeldet), `platform/docs/historie.md` (2026-08-22).
+
+---
+
+## L-2026-08-22s — Eine Anforderung, die erst nach dem Bau entsteht, beschreibt den Bau und nicht die Absicht
+
+**Beobachtung:** *Anlass: Sprint 40 (2026-08-22), `team-termine/T-0004` Teil A, `SWR-229`.*
+
+Das Ziel `Z3` von P16 hat ein Abnahmekriterium, das kein Text ist, sondern eine
+**Reihenfolge**: die Anforderung zur Bestätigungsstufe muss **älter** sein als der erste
+Commit des Schreibwegs — prüfbar am Git-Verlauf. Sprint 40 hat sie geschrieben, bevor es
+einen Schreibweg gibt; ab diesem Commit ist das Kriterium erfüllt und bleibt es.
+
+⚠ Als **Beobachtung** geführt und nicht als Regel: sie hat heute keinen Vertreter, und die
+Prüfung *„ist Commit A älter als Commit B"* gehört zu `G-Schreib`, nicht in die
+Teststrecke. Eine Regel ohne Prüfung wäre genau die „Festlegung ohne Vertreter", gegen die
+`platform/T-0070` läuft.
+
+⚠ **Und eine Annahme dieses Laufs war falsch:** die erste Überlegung lautete, eine SWR ohne
+Test breche `trace_matrix 0 Lücken`. Nachgelesen in der Lückenregel — gezählt werden nur
+**`reviewed`** SWRs ohne Abdeckung. Gemessen nach dem Eintrag: **229 SWRs, 0 Lücken.**
+Ohne das Nachlesen wäre `SWR-229` nicht geschrieben worden, und `Z3` bliebe unerfüllbar.
+
+> **Die bequemste Begründung, etwas nicht zu tun, ist eine Regel, die man nicht nachgelesen
+> hat.**

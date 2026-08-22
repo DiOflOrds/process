@@ -1177,3 +1177,67 @@ in dem sie gelesen wird — inklusive Entsperren der `blocked_by`-Nachbarn.
 **Verbleib:** Rollenkarte PL (`process/roles/pl.md`, Lehre 14), Vertreter
 `platform/tests/test_dr_verbuchung.py::test_kein_entschiedener_dr_ist_unverbucht`,
 `pm/docs/historie.md` (2026-08-22).
+
+---
+
+## L-2026-08-22r — Der automatische Takt darf keine Review-Entscheidung zurücknehmen können
+
+*Anlass: Sprint 40 (2026-08-22), `platform/T-0069`. Gefunden nicht durch eine Prüfung,
+sondern beim Sichten des Ticketstands: es war nicht mehr da, wo Sprint 39 es hingestellt hatte.*
+
+Aus dem Git-Verlauf gezählt, nicht erzählt:
+
+| Uhrzeit | Commit | Handlung |
+|---|---|---|
+| **19:34:23** | `41d0571` | QM-Review gibt `T-0069` mit **Auflage** zurück |
+| **20:10:44** | `2d9973d` | der Orchestrator-Takt wählt es |
+| **20:13:55** | `dde59ce` | `in_review`, Run-Registry `status: ok`, **dieselben zwei generischen Dateien wie 24 h zuvor** |
+
+> **Der automatische Takt hat die Entscheidung des Reviews in 36 Minuten zurückgenommen —
+> ohne sie zu kennen, ohne sie zu widerlegen und ohne dass es jemandem aufgefallen wäre:
+> im Protokoll steht beide Male `status: ok`.**
+
+⚠⚠ **Und die Ursache war der unzulässige Übergang selbst.** `UEBERGAENGE` kennt von
+`in_review` nur `in_progress`, `done`, `rejected` — Sprint 39 hat trotzdem `open` gesetzt,
+und `waehle_ticket` wählt **ausschließlich** `open`. Der ehrliche Weg existierte nicht, und
+der bequeme unehrliche legte das Ticket dem Takt in die Hand.
+
+**Regel:** Eine Rückgabe aus dem Review trägt ein **Feld** (`auflage: offen`), nicht nur
+einen Status — und der automatische Takt überspringt, was eine offene Auflage trägt oder
+wofür er schon einmal `status: ok` gemeldet hat. Erzwingen bleibt möglich (`--ticket`) und
+wird **gesagt**.
+
+**Verbleib:** `SWR-228`, Vertreter `platform/tests/test_tick_zweitlauf.py` (12
+Zusicherungen, zwei Mutationsproben); Übergangsfrage als `platform/T-0076`.
+
+---
+
+## L-2026-08-22p — Ein `in_review`-Stau ist kein Ordnungsproblem, sondern ein Lieferproblem: fertige Arbeit gilt nicht
+
+**Beobachtung:** *Anlass: Sprint 39 (2026-08-22). ⚠ **Nachgetragen in Sprint 40** — Sprint 39
+hat diese Lehre in seinem Bericht ausgesprochen und **nicht ins Lehrbuch geschrieben**.*
+
+Sprint 37 schloss null Tickets, Sprint 38 schloss null. Beide lieferten gute Arbeit und
+ließen sie auf `in_review` liegen. Erst Sprint 39 hat elf Reviews gefahren und neun Tickets
+geschlossen — **zwei der elf haben die Lieferung widerlegt**, es war also kein Formalismus.
+
+**Was daraus folgen müsste** (noch keine Regel, weil keine Prüfung sie trägt): Ein Lauf
+beginnt mit den fremden Reviews des Vorlaufs, nicht mit neuer Arbeit. Bauen und Freigeben
+gehören in **verschiedene** Läufe (Reviewer ≠ Autor) — das ist ein Rhythmus und kein Stau,
+**solange der Folgelauf ihn räumt**.
+
+⚠ Bewusst **ohne** `**Regel:**`-Zeile: eine Beobachtung, die wie eine Regel formuliert ist,
+lässt `grundmenge()` und den Regel-Filter auseinanderlaufen — `test_erweitern_und_weglassen`
+hat das in diesem Lauf sofort gemeldet. **Der Marker und der Wortlaut müssen dasselbe
+sagen.**
+
+⚠ **Ausdrücklich als Beobachtung geführt und in `test_lehren_vertreter` GEBUCHT**, weil sie
+heute keinen Vertreter hat. Der Marker ist hier kein bequemer Weg, einen Befund loszuwerden:
+er ist die einzige Form, in der Sprint 39 diese Lehre überhaupt hätte hinterlassen können —
+**sie stand bisher nur im Sprintbericht, und ein Sprintbericht altert.**
+
+⚠ Der Vertreter wäre eine Prüfung, die ein Ticket meldet, das eine **Sprintgrenze** auf
+`in_review` überlebt hat. Sie gibt es nicht; sie zu bauen ist Arbeit an `platform/T-0070`
+und nicht an dieser Zeile.
+
+**Verbleib:** dieses Lehrbuch (Beobachtung); Vertreter offen (`platform/T-0070`).

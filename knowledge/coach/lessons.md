@@ -98,3 +98,31 @@ ganze Zeit recht.**
 **Verbleib:** Rollenkarte COACH, Vertreter
 `platform/tests/test_lehrbuch_verliert_nichts.py` (5 Zusicherungen, `SWR-209`) sowie die
 geschärfte Meldung in `test_lehren_vertreter::test_ein_gewonnener_vertreter…`.
+
+---
+
+## L-2026-08-22t — Ein vollständiger Leser ohne Anlass hinzusehen ist dasselbe wie kein Leser
+
+*Anlass: Sprint 40 (2026-08-22), `platform/T-0067`. **Vier Belege an einem Tag, und zwei
+davon gehen auf das Konto des Laufs, der die Frage beantworten sollte.***
+
+| # | Vorfall | Wo der Befund stand | Wer ihn nicht las |
+|---|---|---|---|
+| 1 | rote CI von `projects` seit dem 20.08. | `CI-STATUS.md`, im Arbeitsordner | drei Sprints |
+| 2 | Mutationsprobe meldete dreimal „10 von 11 rot" | `ENOENT` mit vollem Pfad, **zehnmal wortgleich** | dieser Lauf |
+| 3 | Ursache der sieben `index.lock` | `preflight.py` Z. 8–9 **und** alle 15 Min im Schnelltakt-Log | dieser Lauf — er schrieb ein Ticket über einen „unbenannten" Befund |
+| 4 | Blockerliste `provider` (11 von 16) | `auswertung.bericht` | seit dem 20.08. |
+
+Fall 4 ist der klarste, weil er sich zählen ließ: `telemetrie.blocker` →
+`auswertung.rollen_aggregat` → `auswertung.bericht` → `scripts/telemetrie_report.py` →
+**und dieses Skript ruft niemand auf.** 0 `.cmd`, 0 Takt, 0 CI, 0 Frontend.
+
+> **Das ist kein fehlender Leser, sondern ein vollständiger Leser ohne Anlass, hinzusehen.**
+
+**Regel:** Ein Befund gehört dorthin, wo der Lauf **ohnehin** hinsieht — nicht in einen
+Bericht, den jemand holen muss, und **nicht unter eine Erfolgsmeldung**. Und: das
+gefährlichste Ergebnis ist nicht das rote, sondern das **veraltete grüne** — eine rote CI
+wird irgendwann gelesen, ein veraltetes Grün nie.
+
+**Verbleib:** `SWR-230`, Vertreter `platform/tests/test_ci_gelesen.py` (10 Zusicherungen);
+Zählbarkeit der Regel als `platform/T-0078`.
