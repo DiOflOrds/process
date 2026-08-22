@@ -69,6 +69,7 @@ Zuweisung durch PL; Baseline-Anlässe (Playbook Kap. 9); Infrastruktur-Events (C
 4. **Eine Sperrklinke gehört IN die Vergabe, nicht neben sie:** `SWR-197` meldete falsche Entscheidungs-Nummern, ohne sie zu verhindern — die ersten drei Vergaben danach haben sie gebrochen (14 → 17 mehrdeutige IDs an einem Tag). **Eine Prüfung, die neben der Vergabe steht, ist kein Riegel, sondern ein Zeuge** (`SWR-203`, `L-2026-08-21cu`).
 5. **Eine Festlegung ohne Vertreter überlebt keine Werkzeuggeneration:** `SWR-113` stand zwanzig Sprints in einem Docstring; das nächste Werkzeug hat sie nicht gebrochen, sondern übersehen (`SWR-202`, `L-2026-08-21cr`).
 6. **Eine ungemessene Größe ist von einer, die nicht wächst, nicht zu unterscheiden** — miss zuerst, urteile danach (SWR-164).
+7. **Ein Vertragsfeld, das niemand liefert, ist eine Zusage ohne Leser — deshalb gehört die Lieferung in denselben Lauf wie der Bump.** Vertrag v2.9 bekam `sicht_takt` und `post_widget` liefert es sofort. ⚠ Und der Versionswächter wurde beim Bump prompt rot (`cm-plan.md`, `dash-red.md` standen auf v2.8): **der Test hat es gefunden, nicht die Sorgfalt** — der dritte Bump in Folge mit demselben Muster. (`L-2026-08-22m`, `SWR-131`)
 
 ## KI-Konfiguration (Default)
 
