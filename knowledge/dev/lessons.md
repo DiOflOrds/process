@@ -1,3 +1,48 @@
+---
+
+## L-2026-08-22g — Eine Mutationsprobe, die GRÜN bleibt, ist der einzige Weg, einen Test zu finden, der sich selbst bestätigt
+
+*Anlass: Sprint 37 (2026-08-22), `SWR-216` / `test_projektkennung`.*
+
+Fünf Proben waren geplant, vier wurden rot. Die fünfte — „jeder `p*`-Ordner ist eine
+Kennung" statt `p<Ziffern>` — blieb **grün**. Der Grund war nicht die Probe, sondern der
+Test: er stellte `projects/p13x` und `projects/gemeinsam` neben eine **echte**
+`p13`-Kollision und prüfte, dass die Ausgabe `["p13"]` lautet. Mit der laxen Regel wird
+`p13x` zwar zur Kennung — aber sie kollidiert mit nichts, die Ausgabe bleibt gleich.
+
+> **Der Test prüfte die AUSGABE, nicht die REGEL. Er hätte jede Fassung bestanden, die
+> zufällig dieselbe Liste produziert.**
+
+Geschärft auf `projects/pilot` gegen eine Registry-Zeile `projekt: pilot`: mit der laxen
+Regel eine Kollision, mit der richtigen keine. Danach 4 von 4 rot.
+
+**Regel:** Eine grüne Mutationsprobe wird nie als „die Änderung war harmlos" abgelegt. Sie
+ist ein Befund über den **Test**, und der Befund lautet immer dasselbe: die Zusicherung
+misst eine Ausgabe, wo sie eine Regel messen müsste. ⚠ Wer die Probe streicht statt den
+Test zu schärfen, hat die einzige Stelle entfernt, die den Selbstbetrug sichtbar macht.
+
+---
+
+## L-2026-08-22h — Ein Messwert ohne Messer ist eine Absichtserklärung mit Zeitstempel
+
+*Anlass: Sprint 37 (2026-08-22). Zwei unabhängige Tickets, dieselbe Ursache —
+`platform/T-0055` (`SWR-215`) und `platform/T-0066` (`SWR-214`).*
+
+| Fall | Der Messwert | Sein Ort | Ergebnis |
+|---|---|---|---|
+| Wächter | `herzschlag` alle 30 s in `waechter-status.json`; `waechter.py` begründet damit im eigenen Kopf, Frage 4 sei beantwortet: *„sein Ausbleiben ist für jeden Leser messbar"* | eine JSON-Datei, die niemand öffnet | **14 Stunden** ausgeblieben, gefunden von Hand |
+| Ollama-Takt | *„Kein bearbeitbares Ticket (Besetzung)"* | `ollama-schnelltakt.log` | **87 Läufe** dieselbe wahre Aussage, null Wirkung |
+
+> **Beide Aussagen waren die ganze Zeit richtig. „Für jeden Leser messbar" hat nur keinen
+> Leser bekommen — und eine wahre Aussage an einem ungelesenen Ort ist von Schweigen nicht
+> zu unterscheiden.**
+
+**Regel:** Wer eine Prüfung baut, benennt im selben Zug ihren **Leser** — die Stelle, die
+sie im Takt liest. Steht kein Leser fest, ist die Prüfung nicht fertig. ⚠ Und der Leser
+entscheidet über die Bauform: beide Zeilen sind hier **kein Befund**, weil ein toter
+Wächter und ein leerer Takt den Push des Auftraggebers nicht anhalten dürfen (`SWR-166`:
+ein Dauerbefund ohne Weg nach vorn hat 83 Läufe gekostet). Sie **nennen deshalb das
+Ticket**, nicht nur den Zustand.
 
 ## L-2026-08-21dl — Ein Negativbeispiel, dem der Teil fehlt, an dem die Prüfung greift, prüft nichts
 

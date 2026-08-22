@@ -1,3 +1,59 @@
+---
+
+## L-2026-08-22e — Ticket und Plantabelle werden im SELBEN Schritt nachgezogen, sonst tauscht man einen Befund gegen den anderen
+
+*Anlass: Sprint 37 (2026-08-22). Gefunden nicht von der Planung, sondern beim Lesen des
+Host-Protokolls `abschluss-20260822-142500.log` — Fenster `[1/6]`…`[2/6]`.*
+
+`L-2026-08-21dp` hat gelehrt, Verschiebungen **im Ticket** zu tragen, und Sprint 36 hat das
+vorbildlich getan: 30 Tickets auf `geplant_sprint: 37`, **vor** `--beende`. Seine eigene
+Plantabelle hat er stehen lassen.
+
+    [org] BEFUND: 12 Planzeile(n) nennen eine andere Sprintnummer als ihr Ticket
+
+> **Damit war `plan_drift` (SWR-109/122) von der anderen Seite ausgelöst: nicht der Plan
+> lief dem Ticket davon, sondern das Ticket dem Plan.** Der Auto-Abschluss des Hosts brach
+> daran **stundenlang** bei Schritt `[1/6]` mit Exit 1 ab — kein Push, keine Teststrecke,
+> kein CI. Sprint 36 hat den Befund in seinem eigenen Bericht als „nicht identifiziert"
+> vermerkt und ist damit in den Feierabend gegangen.
+
+**Das ist `pl.md` Lehre 8 zum dritten Mal in vier Sprints — und diesmal war die Ursache
+eine Vorsichtsmaßnahme gegen genau denselben Fehler.**
+
+**Regel:** `geplant_sprint` im Ticket und die Fälligkeitsspalte der Plantabelle sind zwei
+Aussagen zu **einer** Frage (B033). Sie werden in **einem** Schritt nachgezogen, und danach
+wird gemessen — `plan_drift`, `sprint_vergangen`, `status_drift`, `plan_nachlauf`,
+`nicht_geplant` müssen **alle fünf** 0 sein, und zwar **bevor** der Sprint endet. Erst
+dann ist der Zustand unabhängig davon grün, ob der alte Sprint noch läuft.
+
+⚠ Die Gegenprobe gehört dazu: Sprint 37 hat nach dem Nachziehen mit **laufendem** Sprint 37
+und Tickets auf **38** gemessen — alle fünf 0. Das ist die erste Sprintübergabe dieses
+Hauses, die in beiden Zuständen grün ist.
+
+---
+
+## L-2026-08-22f — Eine Prüfung, die nichts LIEST, meldet dasselbe wie eine, die nichts FINDET
+
+*Anlass: Sprint 37 (2026-08-22), eigener Fehler beim Schreiben der Sprint-37-Plantabelle.*
+
+Der erste Entwurf stellte die Befund-Tabelle („was seit dem letzten Lauf entstanden ist")
+**über** die Plantabelle. `sprint.plan_tabelle()` liest die **erste** Tabelle nach der
+Sprint-Plan-Überschrift und nimmt alles davor bewusst nicht.
+
+Das Ergebnis war ein Grün mit dem falschen Grund:
+
+| Kennzahl | Meldung | Wahrheit |
+|---|---|---|
+| `plan_drift` | **0** | 0 Planzeilen geparst |
+| `nicht_geplant` | **39** | *alle* offenen Tickets ohne Planzeile |
+
+> **Die Zahl, die zählt, war grün; die Zahl daneben hat es widerlegt. Wäre nur die erste
+> gelesen worden, wäre der blockierende Befund des Hosts „behoben" gemeldet und
+> unverändert geblieben.**
+
+**Regel:** Nach einer Änderung an einer Quelle, die geparst wird, wird **die Gegenzahl**
+mitgelesen — die, die groß wird, wenn nichts ankommt. Ein `0` ohne seine Gegenzahl ist
+keine Messung, sondern eine Hoffnung.
 
 ---
 
