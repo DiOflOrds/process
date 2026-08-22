@@ -1068,3 +1068,56 @@ namentlich in der Liste der fortgeschriebenen Übergänge, die damit von **4 auf
 **Verbleib:** Rollenkarte PL (`process/roles/pl.md`, Lehre 1 — sie stand dort bereits und
 hat nicht getragen; ergänzt um das Wort **committet**), Vertreter
 `platform/tests/test_uebergang_historie.py::test_im_laufenden_sprint_gibt_es_keinen_verstoss`.
+
+
+---
+
+## L-2026-08-22a — Ein Nachweis, den eine Maschine im Takt führt, ist erst geführt, wenn ihn jemand ABHOLT
+
+*Anlass: Sprint 36, `platform/T-0060`.*
+
+Der erfolgreiche Ollama-Tick lag **seit dem 2026-08-21 20:59** in
+`platform/management/runs/run-registry.jsonl` — `status: ok`, `modell: ollama/gemma3:27b`,
+zwei geschriebene Artefakte, 221,2 s. Das Ticket, dessen DoD genau **einen** solchen Lauf
+verlangt, blieb rund **16 Stunden und mehrere Läufe** auf `in_review`.
+
+Drei Sprints hatten zuvor die *Erreichbarkeit* von Ollama diskutiert. Der Beweis ist
+nicht durch Argumentieren entstanden, sondern durch den Takt — und wäre ohne diesen Lauf
+weiter liegen geblieben.
+
+> **Ein Haus, das seine Maschinen arbeiten lässt, muss ihre Ergebnisse zur Bringschuld des
+> Sprint-Anfangs machen. Sonst produziert es Belege, die niemand einlöst.**
+
+**Regel:** Der Sprintanfang liest **zuerst** die Belege, die seit dem letzten Lauf von
+allein entstanden sind — Run-Registry, Decision-Log, Takt-Protokolle —, **bevor** er plant.
+
+**Verbleib:** Rollenkarte PL (`process/roles/pl.md`, Lehre 13), Vertreter
+`platform/tests/test_dr_verbuchung.py::test_kein_entschiedener_dr_ist_unverbucht`
+(dieselbe Familie: ein maschinell erzeugter Stand, den niemand abholt) sowie
+`platform/docs/historie.md` (2026-08-22).
+
+---
+
+## L-2026-08-22c — Eine Entscheidung des Menschen ist erst angekommen, wenn ein TICKET sie trägt
+
+*Anlass: Sprint 36, `pm/T-0086` / `pm/D030`.*
+
+Der Auftraggeber entschied am 2026-08-22 um **00:23** (`pm/D030` = C). Die Zeile stand im
+Decision-Log; das Ticket blieb `open` und zählte **13 Stunden** in `wartet_auf_mensch`
+mit. **Der DR wartete in der Buchführung auf jemanden, der längst geantwortet hatte** —
+und `wartet_auf_mensch` ist genau die Zahl, mit der dieses Haus dem Menschen sagt, woran
+er dran ist.
+
+Gefunden hat es die Zusicherung `test_dr_verbuchung`, die für exakt diesen Fall gebaut
+wurde (SWR-131, zweite Hälfte) — und die **vier Sprints lang nicht gefahren** worden ist.
+
+> **Zwei Buchführungen über dieselbe Tatsache driften immer; die Frage ist nur, wer es
+> merkt. Hier war es keine Rolle, sondern ein Test.**
+
+**Regel:** Das Decision-Log gehört zum **Briefkasten-Schritt** (Schritt 1 der Session),
+nicht zum Berichtsschritt. Eine entschiedene Klasse-A-Frage wird im selben Lauf verbucht,
+in dem sie gelesen wird — inklusive Entsperren der `blocked_by`-Nachbarn.
+
+**Verbleib:** Rollenkarte PL (`process/roles/pl.md`, Lehre 14), Vertreter
+`platform/tests/test_dr_verbuchung.py::test_kein_entschiedener_dr_ist_unverbucht`,
+`pm/docs/historie.md` (2026-08-22).

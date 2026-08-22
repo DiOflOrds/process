@@ -431,3 +431,57 @@ ist genau die Stelle, an der ein Lesegate hingehört.**
 
 **Verbleib:** Rollenkarte DEV, Vertreter `platform/tests/test_widget_raster.py` (14
 Zusicherungen) und `platform/tests/js/widget_raster.test.cjs` (7), `SWR-210`.
+
+
+---
+
+## L-2026-08-22b — Eine Reparatur, die neue Zweige baut, ist erst fertig, wenn die neuen Zweige eine eigene Zusicherung haben
+
+*Anlass: Sprint 36, `platform/T-0068`.*
+
+Der Host-Lauf reparierte `goldset._maengel_herkunft_form` und ergänzte **drei** neue
+Prüfformen: führender Backslash, Laufwerksbuchstabe, `..` in Backslash-Schreibweise.
+**Keine davon hatte eine Zusicherung.**
+
+Der vorhandene Test prüfte `/etc/passwd` und `../geheim.md`. Beide wären auch **ohne** die
+Erweiterung wieder grün geworden, sobald `os.path.isabs` auf dem Läufer anschlägt — der
+Bestand hätte drei ungeprüft gebaute Zweige getragen.
+
+> **Der Test, der einen Defekt FINDET, deckt die Reparatur nicht ab. Er beweist die
+> Krankheit, nicht die Heilung.**
+
+Dazu die Gegenprobe: „weist ab" ist ohne sie mit `return True` erfüllbar. In Sprint 36
+ergänzt (`test_gegenprobe_ein_echter_repo_relativer_pfad_bleibt_zulaessig`).
+**Mutationsprobe:** alter Code → **5 rot**; reparierter Code → **34 grün**.
+
+**Verbleib:** Rollenkarte DEV (`process/roles/dev.md`, Lehre 7), Vertreter
+`platform/tests/test_goldset.py::test_auch_in_WINDOWS_schreibweise_abgelehnt`,
+`platform/docs/historie.md` (2026-08-22).
+
+---
+
+## L-2026-08-22d — Eine Validierung, die NEBEN dem Commit läuft, ist kein Tor
+
+*Anlass: Sprint 36, selbst verursacht, `platform/T-0068`, Commit `04da965`.*
+
+Die Befehlszeile lautete sinngemäß `board.py ; git add -A && git commit`. `board.py`
+meldete **`VALIDIERUNG FEHLGESCHLAGEN: unzulässiger Status-Übergang open -> in_review`** —
+und der Commit lief **trotzdem** durch, weil `;` den Exit-Code nicht auswertet. Zusätzlich
+stand die Prüfung **vor** der letzten Änderung statt zwischen Änderung und Commit.
+
+Ergebnis: `platform/T-0068` ging `open -> in_review` ohne den Zwischenschritt
+`in_progress`. Der Verstoß steht unlöschbar in der Historie (Kap. 16: Historie wird nicht
+umgeschrieben) und hält `test_uebergang_historie` für den Rest von Sprint 36 rot.
+
+> **Die Prüfung hat funktioniert. Gelesen hat ihren Exit-Code niemand — und damit war sie
+> eine Meinung, keine Schranke. Dieselbe Familie wie `platform/T-0064` (Ausgabe nach
+> `/dev/null`) und `platform/T-0067` (benannter Blocker ohne Leser), diesmal an uns
+> selbst und innerhalb einer einzigen Befehlszeile.**
+
+**Regel:** Prüfen und Verbuchen gehören in **dieselbe Kette mit `&&`**, und die Prüfung
+läuft **nach** der letzten Änderung. Wer eine Prüfung ruft, wertet ihren Exit-Code aus
+oder ruft sie nicht.
+
+**Verbleib:** Rollenkarte DEV (`process/roles/dev.md`, Lehre 8), Vertreter
+`platform/tests/test_uebergang_historie.py::test_im_laufenden_sprint_gibt_es_keinen_verstoss`
+(er hat genau diesen Verstoß gemeldet), `platform/docs/historie.md` (2026-08-22).
